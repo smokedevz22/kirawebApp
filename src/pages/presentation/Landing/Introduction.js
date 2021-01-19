@@ -111,8 +111,7 @@ function Introduction() {
           <Grid item xs={12} sm={9} md={8} lg={7}>
             <Content>
               <Title variant="h1" gutterBottom>
-                Modern, Flexible and Responsive <span>Material-UI</span> Admin
-                Template
+                Modern, Flexible and Responsive <span>FRGROUP</span> SEGUROS
               </Title>
               <Grid container justify="center" spacing={4}>
                 <Grid item xs={12} lg={10}>

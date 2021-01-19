@@ -329,7 +329,7 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <BrandIcon />{" "}
           <Box ml={1}>
-            KIRAWEBAPP<BrandChip style={{ marginLeft: '3px', marginTop: 0 }} label="DEV" />
+            FRGROUP<BrandChip style={{ marginLeft: '3px', marginTop: 0 }} label="DEV" />
           </Box>
         </div>
       </Brand>

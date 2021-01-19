@@ -59,13 +59,13 @@ function JoinUs() {
             <Spacer mb={4} />
 
             <Button
-              href="https://material-ui.com/store/items/material-app/"
+              href="/pages/flujo_compra"
               variant="contained"
               color="primary"
               size="large"
               target="_blank"
             >
-              Get Material App
+              CONTRATAR SEGURO
             </Button>
           </Grid>
         </Grid>

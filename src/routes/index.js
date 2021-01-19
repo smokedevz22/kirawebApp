@@ -160,7 +160,7 @@ const pagesRoutes = {
     },
     {
       path: "/pages/catalogo",
-      name: "Catalogo",
+      name: "Nuestros Seguros",
       id: "Private",
       icon: <List />,
       component: Projects,
@@ -230,7 +230,7 @@ const pagesRoutes = {
       name: "Notificaciones",
       id: "Private",
       icon: <List />,
-      component: Changelog,
+      component: Chat,
     }
   ],
   component: null,
@@ -256,7 +256,7 @@ const invoiceRoutes = {
       component: InvoiceList,
     },
     {
-      path: "/invoices/detail",
+      path: "/pages/seguros/detalles/:id",
       name: "Details",
       component: InvoiceDetails,
     },
@@ -639,42 +639,42 @@ export const sidebarRoutes = [
   },
   {
     path: "/pages/catalogo",
-    name: "Catalogo",
-    id: "Catalogo",
+    name: "Nuestros Seguros",
+    id: "Nuestros Seguros",
     icon: <Storefront />,
     component: Projects,
     children: null,
 
   },
-
+  /*
+   {
+     path: "/pages/flujo_compras",
+     name: "Flujo compra",
+     id: "Flujo Compra",
+     icon: <AddShoppingCart />,
+     component: FlujoCompra,
+   },
+   {
+     path: "/pages/seguros",
+     name: "Mis Seguros",
+     id: "Mis Seguros",
+     icon: <LocalHospital />,
+     component: ListaSeguros,
+   },
+   {
+     path: "/pages/siniestros",
+     name: "Siniestros",
+     id: "Siniestros",
+     icon: <NewReleases />,
+     component: ListaSiniestros,
+   },
   {
-    path: "/pages/flujo_compras",
-    name: "Flujo compra",
-    id: "Flujo Compra",
-    icon: <AddShoppingCart />,
-    component: FlujoCompra,
-  },
-  {
-    path: "/pages/seguros",
-    name: "Mis Seguros",
-    id: "Mis Seguros",
-    icon: <LocalHospital />,
-    component: ListaSeguros,
-  },
-  {
-    path: "/pages/siniestros",
-    name: "Siniestros",
-    id: "Siniestros",
-    icon: <NewReleases />,
-    component: ListaSiniestros,
-  },
-  {
-    path: "/pages/flujo_siniestro",
-    name: "Flujo siniestro",
-    id: "Declaracion Siniestro",
-    icon: <QueuePlayNext />,
-    component: DeclaracionSiniestro,
-  },
+     path: "/pages/flujo_siniestro",
+     name: "Flujo siniestro",
+     id: "Declaracion Siniestro",
+     icon: <QueuePlayNext />,
+     component: DeclaracionSiniestro,
+   },*/
   {
     path: "/pages/mi_cuenta",
     name: "Mi Cuenta",
@@ -689,18 +689,12 @@ export const sidebarRoutes = [
     icon: <AssignmentInd />,
     component: SignIn,
   },
-  {
-    path: "/pages/registrar",
-    name: "Registrar",
-    id: "Registrar",
-    icon: <PersonAdd />,
-    component: SignUp,
-  },
+
   {
     path: "/pages/notificacion",
-    name: "Notificaciones",
-    id: "Notificaciones",
+    name: "Mensajes",
+    id: "Mensajes",
     icon: <Notifications />,
-    component: Changelog,
+    component: Chat,
   }
 ];

@@ -48,39 +48,41 @@ const AppBarComponent = () => (
             </Grid>
             <Grid item xs />
             <Grid item>
-              <Hidden smDown>
 
-
-                <Button
-                  ml={2}
-                  color="inherit"
-                  component={Link}
-                  to="/"
-                >
-                  QUIENES SOMOS
+              <Button
+                ml={2}
+                color="inherit"
+                component={Link}
+                to="/"
+              >
+                INICIO
+                </Button>
+              <Button
+                ml={2}
+                color="inherit"
+                component={Link}
+                to="/"
+              >
+                QUIENES SOMOS
                 </Button>
 
-                <Button
-                  ml={2}
-                  color="inherit"
-                  component={Link}
-                  to="/pages/catalogo"
-                >
-                  SEGUROS
+              <Button
+                ml={2}
+                color="inherit"
+                component={Link}
+                to="/pages/catalogo"
+              >
+                NUESTROS SEGUROS
                 </Button>
 
-                <Button ml={2} color="inherit" href="mailto:info@bootlab.io">
-                  CONTACTO
-                </Button>
-              </Hidden>
               <Button
                 ml={2}
                 color="primary"
                 variant="contained"
                 component={Link}
-                href="/pages/flujo_compras"
+                to="/pages/mi_cuenta"
               >
-                COTIZAR
+                MI CUENTA
               </Button>
             </Grid>
           </Grid>

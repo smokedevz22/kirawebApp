@@ -69,26 +69,12 @@ function InvoiceDetails() {
           <Shadow>
             <Card px={6} pt={6}>
               <CardContent>
-                <Grid container spacing={6}>
-                  <Grid item xs={12}>
-                    <Typography variant="body2" gutterBottom>
-                      Hello Anna Walley,
-                      <br />
-                      This is the receipt for a payment of $268.85 (USD) you
-                      made to Material App.
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="caption">Payment No.</Typography>
-                    <Typography variant="body2">741037024</Typography>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="caption" align="right" display="block">
-                      Payment Date
-                    </Typography>
-                    <Typography variant="body2" align="right">
-                      January 2, 2020 - 03:45 pm
-                    </Typography>
+                <Grid xl={12} container spacing={6}>
+                  <Grid style={{ marginTop: '12px' }}>
+                    <div style={{ width: '100%', height: '160px', background: 'red' }}>
+                      <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
+
+                    </div>
                   </Grid>
                   <Grid item xs={12}>
                     <Divider />

@@ -31,9 +31,9 @@ const TypographyOverline = styled(Typography)`
 const Accordion = styled(MuiAccordion)`
   border: 1px solid
     ${(props) =>
-      props.theme.palette.type === "dark"
-        ? `rgba(255, 255, 255, .15)`
-        : `rgba(0, 0, 0, .15)`};
+    props.theme.palette.type === "dark"
+      ? `rgba(255, 255, 255, .15)`
+      : `rgba(0, 0, 0, .15)`};
   border-radius: 6px;
   box-shadow: 0;
   text-align: left;
@@ -64,10 +64,10 @@ function FAQ() {
     <Wrapper pt={20} pb={16}>
       <Container>
         <TypographyOverline variant="body2" gutterBottom>
-          Material App
+          FRGROUP
         </TypographyOverline>
         <Typography variant="h2" component="h3" gutterBottom>
-          Frequently asked questions
+          PREGUNTAS FRECUENTES
         </Typography>
         <Typography variant="subtitle1" color="textSecondary" gutterBottom>
           The questions below have been selected from those most commonly asked

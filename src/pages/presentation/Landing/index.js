@@ -1,6 +1,6 @@
 import React from "react";
 
-import AppBar from "./AppBar";
+import AppBar from "./HomeBar";
 import Introduction from "./Introduction";
 import Variants from "./Variants";
 import Dashboards from "./Dashboards";
@@ -13,8 +13,6 @@ function Presentation() {
     <React.Fragment>
       <AppBar />
       <Introduction />
-      <Variants />
-      <Dashboards />
       <Features />
       <FAQ />
       <JoinUs />

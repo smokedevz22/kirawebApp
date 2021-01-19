@@ -28,6 +28,7 @@ import {
   ExpandMore as ExpandMoreIcon,
   Image as ImageIcon,
   Inbox as InboxIcon,
+  CheckCircle as CheckCircle,
   Work as WorkIcon,
   Send as SendIcon,
   StarBorder as StarBorderIcon,

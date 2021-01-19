@@ -1,6 +1,8 @@
-import React from "react";
+import React, { Fragment, useState, Suspense, useEffect } from 'react';
 import styled, { withTheme } from "styled-components/macro";
 import { NavLink } from "react-router-dom";
+import { Route } from 'react-router-dom'
+import AppBar from "../presentation/Landing/HomeBar";
 
 import Helmet from "react-helmet";
 
@@ -30,6 +32,7 @@ import {
 } from "@material-ui/core";
 
 import { spacing } from "@material-ui/system";
+import { AddShoppingCart, NoteAdd, Storefront, LocalHospital, NewReleases, QueuePlayNext, Contacts, PersonAdd, AssignmentInd, Notifications } from "@material-ui/icons";
 
 import {
   Briefcase,
@@ -114,7 +117,7 @@ function Details() {
     <Card mb={6}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Profile Details
+          PERFIL
         </Typography>
 
         <Spacer mb={4} />
@@ -126,12 +129,6 @@ function Details() {
             <Box fontWeight="fontWeightRegular">Lead Developer</Box>
           </Typography>
 
-          <Button mr={2} variant="contained" size="small">
-            Follow
-          </Button>
-          <Button mr={2} variant="contained" color="primary" size="small">
-            Message
-          </Button>
         </Centered>
       </CardContent>
     </Card>
@@ -143,7 +140,7 @@ function Skills() {
     <Card mb={6}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Skills
+          ACTIVIDADES
         </Typography>
 
         <Spacer mb={4} />
@@ -169,7 +166,7 @@ function About() {
     <Card mb={6}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          About
+          CONTACTO
         </Typography>
 
         <Spacer mb={4} />
@@ -218,7 +215,7 @@ function Elsewhere() {
     <Card mb={6}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Elsewhere
+          REDES SOCIALES
         </Typography>
 
         <Spacer mb={4} />
@@ -295,7 +292,10 @@ function Earnings() {
   );
 }
 
-function Orders() {
+function Orders(props) {
+
+
+  console.log(props)
   return (
     <Box position="relative">
       <Card mb={6} pt={2}>
@@ -304,11 +304,11 @@ function Orders() {
             <Box fontWeight="fontWeightRegular">30</Box>
           </Typography>
           <Typography variant="body2" gutterBottom mt={3} mb={0}>
-            Orders Today
+            SEGUROS CONTRATADOS
           </Typography>
 
           <StatsIcon>
-            <ShoppingBag />
+            <LocalHospital />
           </StatsIcon>
           <LinearProgress
             variant="determinate"
@@ -316,26 +316,29 @@ function Orders() {
             color="secondary"
             mt={4}
           />
+          <Button onClick={() => { props.onClick.functionClickListaSeguros() }} size="small" color="primary">
+            LISTA DE SEGUROS
+            </Button>
         </CardContent>
       </Card>
     </Box>
   );
 }
 
-function Revenue() {
+function Revenue(props) {
   return (
     <Box position="relative">
       <Card mb={6} pt={2}>
         <CardContent>
           <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">$ 1.224</Box>
+            <Box fontWeight="fontWeightRegular">1.224</Box>
           </Typography>
           <Typography variant="body2" gutterBottom mt={3} mb={0}>
-            Total Revenue
+            SINIESTROS DECLARADOS
           </Typography>
 
           <StatsIcon>
-            <DollarSign />
+            <NewReleases />
           </StatsIcon>
           <LinearProgress
             variant="determinate"
@@ -343,99 +346,78 @@ function Revenue() {
             color="secondary"
             mt={4}
           />
+
+          <Button onClick={() => { props.onClick.functionClickListaSiniestros() }} size="small" color="primary">
+            LISTA DE SINIESTROS
+            </Button>
+
         </CardContent>
       </Card>
     </Box>
   );
 }
 
-function Products() {
+const renderLista = (tipoListaRender) => {
+
+
+  switch (tipoListaRender) {
+    case 1:
+      return <Seguros />
+
+      break;
+    case 2:
+      return <Siniestros />
+
+      break;
+  }
+
+
+}
+
+function Seguros() {
+
+
+
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Products
+        <Typography variant="h2" gutterBottom>
+          SEGUROS CONTRATADOS
         </Typography>
         <TableWrapper>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Tech</TableCell>
-                <TableCell>License</TableCell>
-                <TableCell>Sales</TableCell>
+                <TableCell style={{ width: '20%' }}>SEGURO</TableCell>
+                <TableCell style={{ width: '20%' }}>ACTIVIDAD</TableCell>
+                <TableCell style={{ width: '60%' }}>OPCIONES</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell component="th" scope="row">
-                  AppStack
+                <TableCell component="th" scope="row" style={{ width: '20%' }}>
+                  #NOMBRESEGURO
                 </TableCell>
-                <TableCell>
+                <TableCell style={{ width: '20%' }}>
                   <ProductsChip
                     size="small"
                     label="HTML"
                     rgbcolor={blue[500]}
                   />
                 </TableCell>
-                <TableCell>Single License</TableCell>
-                <TableCell>76</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Material App
-                </TableCell>
-                <TableCell>
-                  <ProductsChip
-                    size="small"
-                    label="React"
-                    rgbcolor={green[500]}
-                  />
-                </TableCell>
-                <TableCell>Single License</TableCell>
-                <TableCell>38</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Milo
-                </TableCell>
-                <TableCell>
-                  <ProductsChip
-                    size="small"
-                    label="HTML"
-                    rgbcolor={blue[500]}
-                  />
-                </TableCell>
-                <TableCell>Single License</TableCell>
-                <TableCell>43</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Robust UI Kit
-                </TableCell>
-                <TableCell>
-                  <ProductsChip
-                    size="small"
-                    label="Angular"
-                    rgbcolor={red[500]}
-                  />
-                </TableCell>
-                <TableCell>Single License</TableCell>
-                <TableCell>27</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row">
-                  Spark
-                </TableCell>
-                <TableCell>
-                  <ProductsChip
-                    size="small"
-                    label="React"
-                    rgbcolor={green[500]}
-                  />
-                </TableCell>
-                <TableCell>Single License</TableCell>
-                <TableCell>12</TableCell>
+
+                <TableCell style={{ width: '60%' }}>
+                  <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                    <Button onClick={() => { history.push(`/pages/seguros/detalles/000`) }} size="small" color="primary">
+                      FICHA
+                    </Button>
+                  )} />
+
+                  <Route render={({ history }) => (
+                    <Button onClick={() => { history.push('/pages/flujo_siniestro') }} size="small" color="primary">
+                      NUEVO SINIESTRO
+                    </Button>
+                  )} /></TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -445,6 +427,59 @@ function Products() {
   );
 }
 
+function Siniestros() {
+
+
+
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <Typography variant="h2" gutterBottom>
+          SINIESTROS DECLARADOS
+        </Typography>
+        <TableWrapper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ width: '20%' }}>SEGURO</TableCell>
+                <TableCell style={{ width: '20%' }}>ESTADO</TableCell>
+                <TableCell style={{ width: '20%' }}>FECHA INGRESO</TableCell>
+                <TableCell style={{ width: '20%' }}>RESUMEN</TableCell>
+                <TableCell style={{ width: '20%' }}>DETALLE</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell style={{ width: '20%' }} component="th" scope="row">
+                  #SEGURO
+                </TableCell>
+                <TableCell style={{ width: '20%' }}>
+                  <ProductsChip
+                    size="small"
+                    label="HTML"
+                    rgbcolor={blue[500]}
+                  />
+                </TableCell>
+                <TableCell style={{ width: '20%' }} component="th" scope="row">
+                  #FECHAINGRESO
+                </TableCell>
+
+                <TableCell style={{ width: '40%' }}>Single License</TableCell>
+                <TableCell style={{ width: '20%' }}>   <Route style={{ width: '30%' }} render={({ history }) => (
+                  <Button onClick={() => { history.push(`/pages/seguros/detalles/000`) }} size="small" color="primary">
+                    FICHA
+                  </Button>
+                )} /></TableCell>
+
+
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableWrapper>
+      </CardContent>
+    </Card>
+  );
+}
 const SalesRevenue = withTheme(({ theme }) => {
   const data = {
     labels: [
@@ -531,49 +566,78 @@ const SalesRevenue = withTheme(({ theme }) => {
   );
 });
 
+
+
+
+
+let itemRender = 'cargando'
+
 function Profile() {
+  const [tipoLista, setTipoLista] = useState(1);
+
+  //itemRender = renderLista(1);
+
+
+
+  if (tipoLista) {
+    itemRender = renderLista(tipoLista)
+  }
+
+  const functionClickListaSeguros = () => {
+    setTipoLista(1)
+
+  }
+  const functionClickListaSiniestros = () => {
+    setTipoLista(2)
+  }
+
+
+
   return (
     <React.Fragment>
       <Helmet title="Profile" />
+      <AppBar />
 
-      <Typography variant="h3" gutterBottom display="inline">
-        MI CUENTA
+      <Grid style={{ padding: '22px' }}>
+        <Typography variant="h3" gutterBottom display="inline">
+          MI CUENTA
       </Typography>
 
-      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
-          KIRAWEBAPP
+        <Breadcrumbs aria-label="Breadcrumb" mt={2}>
+          <Link component={NavLink} exact to="/">
+            KIRAWEBAPP
         </Link>
 
-        <Typography>MI CUENTA</Typography>
-      </Breadcrumbs>
+          <Typography>MI CUENTA</Typography>
+        </Breadcrumbs>
 
-      <Divider my={6} />
+        <Divider my={6} />
 
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={4} xl={3}>
-          <Details />
-          <Skills />
-          <About />
-          <Elsewhere />
-        </Grid>
-        <Grid item xs={12} lg={8} xl={9}>
-
-          <Grid container spacing={6}>
-            <Grid item xs={12} lg={4}>
-              <Earnings />
-            </Grid>
-            <Grid item xs={12} lg={4}>
-              <Orders />
-            </Grid>
-            <Grid item xs={12} lg={4}>
-              <Revenue />
-            </Grid>
+        <Grid container spacing={6}>
+          <Grid item xs={12} lg={4} xl={3}>
+            <Details />
+            <About />
+            <Elsewhere />
+            <Skills />
           </Grid>
-          <Products />
+          <Grid item xs={12} lg={8} xl={9}>
+
+            <Grid container spacing={6}>
+
+              <Grid item xs={12} lg={6}>
+                <Orders onClick={{ functionClickListaSeguros }} />
+              </Grid>
+              <Grid item xs={12} lg={6}>
+                <Revenue onClick={{ functionClickListaSiniestros }} />
+              </Grid>
+            </Grid>
+            {itemRender}
+          </Grid>
         </Grid>
+
       </Grid>
-    </React.Fragment>
+
+    </React.Fragment >
   );
 }
 

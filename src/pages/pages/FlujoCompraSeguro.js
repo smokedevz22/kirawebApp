@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useState, Suspense, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -6,9 +6,21 @@ import StepButton from '@material-ui/core/StepButton';
 import Button from '@material-ui/core/Button';
 import Helmet from "react-helmet";
 import * as Yup from "yup";
-import styled from "styled-components/macro";
+import styled, { createGlobalStyle } from "styled-components/macro";
 import { NavLink } from "react-router-dom";
 import { Formik } from "formik";
+import { API } from "aws-amplify";
+import { Route } from 'react-router-dom'
+import AppBar from "../presentation/Landing/HomeBar";
+
+
+import {
+
+  CheckCircle as CheckCircle,
+
+} from "@material-ui/icons";
+
+
 import {
   Box,
   Breadcrumbs as MuiBreadcrumbs,
@@ -17,20 +29,53 @@ import {
   CardContent,
   CircularProgress,
   Divider as MuiDivider,
+  CardActions,
+  CardContent as MuiCardContent,
+  CardMedia as MuiCardMedia,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   Link,
+  Paper as MuiPaper,
+
   TextField as MuiTextField,
   Typography,
+  Select,
 } from "@material-ui/core";
 
-import { spacing } from "@material-ui/system";
+import { color, spacing } from "@material-ui/system";
 import { Alert as MuiAlert } from "@material-ui/lab";
+import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
 
+const Spacer = styled.div(spacing);
 const Divider = styled(MuiDivider)(spacing);
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Alert = styled(MuiAlert)(spacing);
 const TextField = styled(MuiTextField)(spacing);
 const Card = styled(MuiCard)(spacing);
+const Paper = styled(MuiPaper)(spacing);
+const Shadow = styled.div`
+  box-shadow: ${(props) => props.theme.shadows[1]};
+`;
+
+const CardMedia = styled(MuiCardMedia)`
+  height: 220px;
+`;
+
+const GlobalStyleDropzone = createGlobalStyle`
+  [class^="DropzoneArea-dropZone"] {
+    min-height: 160px;
+  }
+`;
+
 const timeOut = (time) => new Promise((res) => setTimeout(res, time));
 
 
@@ -42,6 +87,7 @@ const initialValues = {
   password: "mypassword123",
   confirmPassword: "mypassword123",
 };
+
 
 const validationSchema = Yup.object().shape({
   firstName: Yup.string().required("Required"),
@@ -59,6 +105,324 @@ const validationSchema = Yup.object().shape({
     ),
   }),
 });
+
+
+function Project({ id, image, title, description, chip }) {
+  return (
+    <Card mb={6}>
+      {image ? <CardMedia image={image} title="Contemplative Reptile" /> : null}
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {title}
+        </Typography>
+
+        {chip}
+
+        <Typography mb={4} component="p">
+          {description}
+        </Typography>
+
+
+      </CardContent>
+      <CardActions>
+
+        <Route render={({ history }) => (
+          <Button onClick={() => { history.push('/pages/detalle_seguro') }} size="small" color="primary">
+            COTIZACION
+          </Button>)} />
+
+        <Route render={({ history }) => (
+          <Button onClick={() => { history.push('/pages/flujo_compras') }} size="small" color="primary">
+            COMPRAR
+          </Button>
+        )} />
+
+        <Route render={({ history }) => (
+          <Button onClick={() => { history.push(`/pages/seguros/detalles/${id}`) }} size="small" color="primary">
+            DETALLES
+          </Button>
+        )} />
+
+      </CardActions>
+    </Card>
+  );
+}
+
+
+function DefaultDropzone() {
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          ADJUNTAR ARCHIVOS
+        </Typography>
+        <Typography variant="body2" gutterBottom>
+          Material-UI-Dropzone is a React component using Material-UI and is
+          based on the excellent react-dropzone library.
+        </Typography>
+
+        <Spacer mb={4} />
+        <DropzoneArea showFileNamesInPreview={true} showFileNames={true} />
+      </CardContent>
+    </Card>
+  );
+}
+
+function AlertDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <Paper mt={4}>
+          <span style={{ cursor: 'pointer', color: '#376fd0' }} variant="contained" color="primary" onClick={handleClickOpen}>
+            #COMO CONSEGUIR IMEI DEL TELEFONO
+          </span>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Use Google's location service?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Let Google help apps determine location. This means sending
+                anonymous location data to Google, even when no apps are
+                running.
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                CERRAR
+              </Button>
+              <Button onClick={handleClose} color="primary" autoFocus>
+                ACEPTAR
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Paper>
+      </CardContent>
+    </Card >
+  );
+}
+
+
+let listPlanes = [];
+let listSubPlanes = [];
+
+let itemRender = 'cargando';
+let itemRenderSubPlan = 'cargando';
+let itemRenderDetallePlan = 'cargando'
+let itemRenderDetalleSubPlan = 'cargando'
+
+let planSeleccionado = {};
+let subPlanSeleccionado = {};
+
+
+let itemDatosAsegurado = {};
+let userAccountData = {};
+
+
+function SaveValue(key, value) {
+  itemDatosAsegurado[key] = value
+}
+
+
+function SaveValueAccount(key, value) {
+  userAccountData[key] = value
+}
+
+
+const ListaRender = (functionRenderDetalle) => {
+  const [productos, setProductos] = useState('undefined');
+  const [error, setError] = useState('undefined');
+
+
+  // console.log("listaProductos", listaProductos)
+
+  useEffect(async () => {
+
+
+    const queryListaActividadGraphql = `
+ query MyQuery {
+      listasPlanes {
+  codigo_producto
+    plan
+    nombre_plan
+    caracteristicas
+    brief
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    await API.graphql({
+      query: queryListaActividadGraphql
+    }).then(result => {
+      console.log(result);
+      setProductos(result);
+
+
+    }
+    )
+
+  }, []);
+
+
+  if (productos && productos['data']) {
+
+    console.log("productos", productos['data']['listasPlanes']);
+
+    let listaPlanes = productos['data']['listasPlanes'];
+    listPlanes = listaPlanes;
+
+    console.log("listaProductos", listaPlanes)
+
+
+
+    return < select style={{ width: '100%', height: '40px' }} onChange={functionRenderDetalle} >
+      < option value="_" > SELECCIONAR PLAN</option >
+
+      {
+        listaPlanes.map(item => {
+          console.log(item);
+          return <option value={item['codigo_producto']}> {item['nombre_plan']}</option>
+
+        })
+      }
+    </select >
+  } else {
+
+    return productos && 'cargando...'
+
+  }
+}
+
+const ListaRenderSubPlan = (functionRenderDetalle) => {
+  const [productos, setProductos] = useState('undefined');
+  const [error, setError] = useState('undefined');
+
+
+  // console.log("listaProductos", listaProductos)
+
+  useEffect(async () => {
+
+
+    const queryListaActividadGraphql = `
+ query MyQuery {
+    listasSubPlanes {
+  codigo_producto
+    plan
+    nombre_plan
+    caracteristicas
+    brief
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    await API.graphql({
+      query: queryListaActividadGraphql
+    }).then(result => {
+      console.log(result);
+      setProductos(result);
+
+
+    }
+    )
+
+  }, []);
+
+
+  if (productos && productos['data']) {
+
+    console.log("productos", productos['data']['listasSubPlanes']);
+
+    let listaSubPlanes = productos['data']['listasSubPlanes'];
+    listSubPlanes = listaSubPlanes;
+    console.log("listaProductos", listaSubPlanes)
+
+
+
+    return < select style={{ width: '100%', height: '40px' }} onChange={functionRenderDetalle} >
+      < option value="_"  > SELECCIONAR PLAN</option >
+
+      {
+        listaSubPlanes.map(item => {
+          console.log(item);
+          return <option value={item['codigo_producto']}> {item['nombre_plan']}</option>
+
+        })
+      }
+    </select >
+  } else {
+
+    return productos && 'cargando...'
+
+  }
+}
+
+function RenderDetallePlan(detalle) {
+  // const [detallePlan, setDetallePlan] = useState({});
+
+  console.log("DETALLE_PLAN", detalle)
+  if (detalle) {
+    //setDetallePlan(detalle)
+    return (<Grid>
+      <Grid>
+        <Grid style={{ marginTop: '12px' }}>
+          <div style={{ width: '100%', height: '160px', background: 'red' }}>
+            <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
+
+          </div>
+        </Grid>
+        <Typography variant="h6" gutterBottom>
+
+          <h2>NOMBRE PLAN : {detalle['nombre_plan']}</h2>
+          <p>CARACTERISTICAS : {detalle['caracteristicas']}</p>
+          <p>BRIEF : {detalle['brief']}</p>
+
+        </Typography>
+      </Grid>
+    </Grid>)
+  }
+  return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
+}
+
+function RenderDetalleSubPlan(detalle) {
+  // const [detallePlan, setDetallePlan] = useState({});
+
+  console.log("DETALLE_PLAN", detalle)
+  if (detalle) {
+    //setDetallePlan(detalle)
+    return (<Grid>
+      <Grid>
+
+        <Typography variant="h6" gutterBottom>
+
+          <h2>NOMBRE SUBPLAN : {detalle['nombre_plan']}</h2>
+          <p>CARACTERISTICAS : {detalle['caracteristicas']}</p>
+          <p>BRIEF : {detalle['brief']}</p>
+
+        </Typography>
+      </Grid>
+    </Grid>)
+  }
+  return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
+}
 
 function BasicForm() {
   const handleSubmit = async (
@@ -111,31 +475,783 @@ function BasicForm() {
             ) : (
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={6}>
+
                     <Grid item md={6}>
                       <TextField
-                        name="firstName"
-                        label="First Name"
-                        value={values.firstName}
+                        name="rut_persona"
+                        label="RUT PERSONA"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={event => SaveValue("rut_persona", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+
+                    </Grid>
+                    <Grid item md={6}>
+                      <TextField
+                        name="nombre_persona"
+                        label="NOMBRES "
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={event => SaveValue("nombre_persona", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="apellido_persona"
+                        label="APELLIDOS "
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={event => SaveValue("apellido_persona", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="marca_equipo"
+                        label="MARCA EQUIPO"
+                        fullWidth
+                        onBlur={handleBlur}
+                        onChange={event => SaveValue("marca_equipo", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item md={6}>
+                    <TextField
+                      name="numero_serie"
+                      label="NUMERO SERIE"
+                      fullWidth
+                      onBlur={handleBlur}
+                      onChange={event => SaveValue("numero_serie", event.target.value)}
+                      variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+                  <Grid item md={6}>
+                    <TextField
+                      name="imei"
+                      label="IMEI"
+                      fullWidth
+                      onBlur={handleBlur}
+                      onChange={event => SaveValue("imei", event.target.value)}
+                      variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+                  <Grid md={6}>
+
+                    <AlertDialog />
+
+                  </Grid>
+
+                </form>
+              )}
+          </CardContent>
+        </Card>
+      )}
+    </Formik>
+  );
+}
+
+function ResumenDetail() {
+  const handleSubmit = async (
+    values,
+    { resetForm, setErrors, setStatus, setSubmitting }
+  ) => {
+    try {
+      await timeOut(1500);
+      resetForm();
+      setStatus({ sent: true });
+      setSubmitting(false);
+    } catch (error) {
+      setStatus({ sent: false });
+      setErrors({ submit: error.message });
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values,
+        status,
+      }) => (
+        <Card mb={6}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+
+
+            </Typography>
+
+
+            {isSubmitting ? (
+              <Box display="flex" justifyContent="center" my={6}>
+                <CircularProgress />
+              </Box>
+            ) : (
+                <Grid container spacing={6} justify="center">
+
+
+
+                  <Grid container justify="center">
+                    <Grid item xs={12} lg={10}>
+                      <Shadow>
+
+                        <Card px={6} pt={6}>
+                          <CardContent>
+                            <Grid container spacing={6}>
+
+
+
+
+
+                              <Grid item md={6}>
+                                <h2>RESUMEN</h2>
+                              </Grid>
+                              <Grid md={6} >
+
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                                  <Button variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }}>
+                                    GUARDAR COTIZACION
+                </Button>
+                                </div>
+
+
+                              </Grid>
+
+                              <Grid item xs={12}>
+                                <Typography variant="h2" gutterBottom>
+                                  {'NOMBRE SUBPLAN:  ' + planSeleccionado['nombre_plan']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'BRIEF SUBPLAN:  ' + planSeleccionado['brief']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'CARACTERISTICAS SUBPLAN:  ' + planSeleccionado['caracteristicas']}
+
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="body2" gutterBottom>
+                                  Hello Anna Walley,
+                      <br />
+                      This is the receipt for a payment of $268.85 (USD) you
+                      made to Material App.
+                    </Typography>
+                              </Grid>
+
+                              <Grid item xs={12}>
+                                <Typography variant="h2" gutterBottom>
+                                  {'NOMBRE SUBPLAN:  ' + subPlanSeleccionado['nombre_plan']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'BRIEF SUBPLAN:  ' + subPlanSeleccionado['brief']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'CARACTERISTICAS SUBPLAN:  ' + subPlanSeleccionado['caracteristicas']}
+
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Divider />
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <Typography variant="caption">CLIENTE</Typography>
+                                <Typography variant="h4">
+                                  {itemDatosAsegurado['rut_persona']}
+                                  <br />
+                                  {itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_persona']}
+                                  <br />
+                                  {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
+                                  <br />
+                                  {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
+                                  <br />
+                                  {'IMEI: ' + itemDatosAsegurado['imei']}
+                                  <br />
+                                </Typography>
+                              </Grid>
+
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                        <Card px={6}>
+                          <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Description</TableCell>
+                                <TableCell>Quantity</TableCell>
+                                <TableCell align="right">Amount</TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  Material App Theme Customization
+                    </TableCell>
+                                <TableCell>2</TableCell>
+                                <TableCell align="right">$150.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  Monthly Subscription
+                    </TableCell>
+                                <TableCell>3</TableCell>
+                                <TableCell align="right">$25.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  Additional Service
+                    </TableCell>
+                                <TableCell>2</TableCell>
+                                <TableCell align="right">$100.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Subtotal</TableCell>
+                                <TableCell align="right">$275.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Shipping</TableCell>
+                                <TableCell align="right">$8.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Discount</TableCell>
+                                <TableCell align="right">5%</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Total</TableCell>
+                                <TableCell align="right">$268.85</TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </Card>
+
+                      </Shadow>
+                    </Grid>
+                  </Grid>
+
+                </Grid>
+              )}
+          </CardContent>
+        </Card>
+      )}
+    </Formik>
+  );
+}
+
+
+function FlujoTerminadoRender() {
+  const handleSubmit = async (
+    values,
+    { resetForm, setErrors, setStatus, setSubmitting }
+  ) => {
+    try {
+      await timeOut(1500);
+      resetForm();
+      setStatus({ sent: true });
+      setSubmitting(false);
+    } catch (error) {
+      setStatus({ sent: false });
+      setErrors({ submit: error.message });
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values,
+        status,
+      }) => (
+        <Card mb={6}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+
+
+            </Typography>
+
+
+            {isSubmitting ? (
+              <Box display="flex" justifyContent="center" my={6}>
+                <CircularProgress />
+              </Box>
+            ) : (
+                <Grid container spacing={6} justify="center">
+
+
+
+                  <Grid container justify="center">
+                    <Grid item xs={12} lg={10}>
+                      <Shadow>
+
+                        <Card px={6} pt={6}>
+                          <CardContent>
+                            <Grid container spacing={6}>
+
+
+
+                              <Grid item xs={12} >
+
+                                <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+
+                                  <Typography variant="h2" gutterBottom>
+                                    <CheckCircle style={{ color: 'green', fontSize: 80 }}></CheckCircle>
+                                  </Typography>
+
+                                  <Typography variant="h2" gutterBottom>
+                                    <h2>POLIZA REGISTRADA</h2>
+                                  </Typography>
+                                  <Typography variant="body2" gutterBottom>
+                                    This is the receipt for a payment of $268.85 (USD) you
+                                    made to Material App.
+
+                                   </Typography>
+                                  <Typography variant="body2" gutterBottom>
+
+                                    <a href="#">DESCARGAR CONTRATO</a>
+                                  </Typography>
+
+                                </div>
+                              </Grid>
+
+                              <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+
+                                <Typography variant="h2" gutterBottom>
+                                  <h2>RESUMEN</h2>
+                                </Typography>
+                              </div>
+                              <Grid xl={12} style={{ marginTop: '12px' }}>
+                                <div style={{ width: '100%', height: '160px', background: 'red' }}>
+                                  <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
+
+                                </div>
+                              </Grid>
+                              <Grid item xs={6}>
+
+
+
+                                <Typography variant="h2" gutterBottom>
+
+                                  NOMBRE PLAN
+                                  <br />
+                                  {planSeleccionado['nombre_plan']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'BRIEF PLAN:  ' + planSeleccionado['brief']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'CARACTERISTICAS PLAN:  ' + planSeleccionado['caracteristicas']}
+
+                                </Typography>
+                              </Grid>
+
+                              <Grid item xs={6}>
+                                <Typography variant="h2" gutterBottom>
+
+                                  NOMBRE SUBPLAN
+                                 <br />
+                                  {subPlanSeleccionado['nombre_plan']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'BRIEF SUBPLAN:  ' + subPlanSeleccionado['brief']}
+
+                                </Typography>
+                                <Typography variant="body2" gutterBottom>
+                                  {'CARACTERISTICAS SUBPLAN:  ' + subPlanSeleccionado['caracteristicas']}
+
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Divider />
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <Typography variant="caption">CLIENTE</Typography>
+                                <Typography variant="h4">
+                                  {itemDatosAsegurado['rut_persona']}
+                                  <br />
+                                  {itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_persona']}
+                                  <br />
+                                  {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
+                                  <br />
+                                  {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
+                                  <br />
+                                  {'IMEI: ' + itemDatosAsegurado['imei']}
+                                  <br />
+                                </Typography>
+                              </Grid>
+
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                        <Card px={6}>
+                          <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell>Description</TableCell>
+                                <TableCell>Quantity</TableCell>
+                                <TableCell align="right">Amount</TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  Material App Theme Customization
+                    </TableCell>
+                                <TableCell>2</TableCell>
+                                <TableCell align="right">$150.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  Monthly Subscription
+                    </TableCell>
+                                <TableCell>3</TableCell>
+                                <TableCell align="right">$25.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell component="th" scope="row">
+                                  Additional Service
+                    </TableCell>
+                                <TableCell>2</TableCell>
+                                <TableCell align="right">$100.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Subtotal</TableCell>
+                                <TableCell align="right">$275.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Shipping</TableCell>
+                                <TableCell align="right">$8.00</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Discount</TableCell>
+                                <TableCell align="right">5%</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell />
+                                <TableCell>Total</TableCell>
+                                <TableCell align="right">$268.85</TableCell>
+                              </TableRow>
+                            </TableBody>
+                          </Table>
+                        </Card>
+
+                      </Shadow>
+                    </Grid>
+                  </Grid>
+
+                </Grid>
+              )}
+          </CardContent>
+        </Card>
+      )
+      }
+    </Formik >
+  );
+}
+function PlanesForm() {
+
+  const [dplan, setDplan] = useState('');
+  const [splan, setSplan] = useState('');
+
+
+  function handleChangePlan(event) {
+    console.log(event)
+
+    let plan = listPlanes.find(u => u['codigo_producto'] === event.target.value);
+    console.log("planSeleccionado", plan)
+    setDplan(plan)
+    planSeleccionado = plan;
+    // this.setState({ value: event.target.value });
+    // RenderDetallePlan(user)
+  };
+
+  function handleChangeSubPlan(event) {
+    console.log(event.target.value)
+
+    let subPlan = listSubPlanes.find((u) =>
+      u['codigo_producto'] === String(event.target.value));
+    console.log("subPlaneSeleccionado", subPlan)
+    subPlanSeleccionado = subPlan;
+    setSplan(subPlan)
+    // this.setState({ value: event.target.value });
+    // RenderDetallePlan(user)
+  };
+
+  itemRender = ListaRender(handleChangePlan)
+  itemRenderSubPlan = ListaRenderSubPlan(handleChangeSubPlan)
+  itemRenderDetallePlan = dplan && RenderDetallePlan(dplan)
+  itemRenderDetalleSubPlan = splan && RenderDetalleSubPlan(splan)
+
+
+
+  const handleSubmit = async (
+    values,
+    { resetForm, setErrors, setStatus, setSubmitting }
+  ) => {
+    try {
+      await timeOut(1500);
+      resetForm();
+      setStatus({ sent: true });
+      setSubmitting(false);
+    } catch (error) {
+      setStatus({ sent: false });
+      setErrors({ submit: error.message });
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values,
+        status,
+      }) => (
+        <Card mb={6}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+
+            </Typography>
+            <Typography variant="body2" gutterBottom>
+
+
+            </Typography>
+
+
+            {isSubmitting ? (
+              <Box display="flex" justifyContent="center" my={6}>
+                <CircularProgress />
+              </Box>
+            ) : (
+                <Grid container spacing={6} justify="center">
+
+
+                  <Grid container justify="center">
+                    <Grid item xs={12} lg={10}>
+                      <Shadow>
+
+                        <Card px={6} pt={6}>
+                          <CardContent>
+                            <Grid container spacing={6}>
+
+                              <Grid item md={12}>
+                                {itemRender}
+
+
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="body2" gutterBottom>
+                                  {itemRenderDetallePlan}
+                                </Typography>
+                              </Grid>
+
+                              <Grid item md={12}>
+                                {itemRenderSubPlan}
+
+                              </Grid>
+                              <Grid item xs={12}>
+                                <Typography variant="body2" gutterBottom>
+                                  {itemRenderDetalleSubPlan}
+
+                                </Typography>
+                              </Grid>
+
+                              <Grid item xs={12}>
+                                <Divider />
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <Typography variant="caption">Client</Typography>
+                                <Typography variant="body2">
+                                  Anna Walley
+                      <br />
+                      4183 Forest Avenue
+                      <br />
+                      New York City
+                      <br />
+                      10011
+                      <br />
+                      USA
+                      <br />
+                                  <Link href="mailto:anna@walley.com">anna@walley.com</Link>
+                                </Typography>
+                              </Grid>
+                              <Grid item xs={12} md={6}>
+                                <Typography variant="caption" align="right" display="block">
+                                  Payment To
+                    </Typography>
+                                <Typography variant="body2" align="right">
+                                  Material App LLC
+                      <br />
+                      354 Roy Alley
+                      <br />
+                      Denver
+                      <br />
+                      80202
+                      <br />
+                      USA
+                      <br />
+                                  <Link href="mailto:info@material-app.com">
+                                    info@material-app.com
+                      </Link>
+                                </Typography>
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                        </Card>
+                      </Shadow>
+                    </Grid>
+                  </Grid>
+
+                </Grid>
+              )}
+          </CardContent>
+        </Card>
+      )}
+    </Formik>
+  );
+}
+
+function RegistrarPerfil() {
+  const handleSubmit = async (
+    values,
+    { resetForm, setErrors, setStatus, setSubmitting }
+  ) => {
+    try {
+      await timeOut(1500);
+      resetForm();
+      setStatus({ sent: true });
+      setSubmitting(false);
+    } catch (error) {
+      setStatus({ sent: false });
+      setErrors({ submit: error.message });
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values,
+        status,
+      }) => (
+        <Card mb={6}>
+          <CardContent>
+            <Typography variant="h6" gutterBottom>
+              REGISTRAR CUENTA USUARIO
+            </Typography>
+            <Typography variant="body2" gutterBottom style={{ marginBottom: '60px' }}>
+            </Typography>
+
+            {status && status.sent && (
+              <Alert severity="success" my={3}>
+                [CUENTA REGISTRADA] La cuenta de usuario ha sido registrada exitosamente!
+              </Alert>
+            )}
+
+            {isSubmitting ? (
+              <Box display="flex" justifyContent="center" my={6}>
+                <CircularProgress />
+              </Box>
+            ) : (
+                <form onSubmit={handleSubmit}>
+                  <Grid container spacing={6}>
+                    <Grid item md={6}>
+                      <TextField
+                        name="nombre_persona"
+                        label="NOMBRE PERSONA"
+                        value={itemDatosAsegurado['nombre_persona']}
                         error={Boolean(touched.firstName && errors.firstName)}
                         fullWidth
                         helperText={touched.firstName && errors.firstName}
                         onBlur={handleBlur}
-                        onChange={handleChange}
+
+                        onChange={event => SaveValueAccount("nombre_persona", event.target.value)}
                         variant="outlined"
                         my={2}
                       />
                     </Grid>
                     <Grid item md={6}>
                       <TextField
-                        name="lastName"
-                        label="Last Name"
-                        value={values.lastName}
+                        name="apellido_persona"
+                        label="APELLIDO PERSONA"
                         error={Boolean(touched.lastName && errors.lastName)}
                         fullWidth
                         helperText={touched.lastName && errors.lastName}
                         onBlur={handleBlur}
-                        onChange={handleChange}
-                        variant="outlined"
+                        value={itemDatosAsegurado['apellido_persona']}
+
+                        onChange={event => SaveValueAccount("apellido_persona", event.target.value)} variant="outlined"
                         my={2}
                       />
                     </Grid>
@@ -144,12 +1260,10 @@ function BasicForm() {
                   <TextField
                     name="email"
                     label="Email"
-                    value={values.email}
-                    error={Boolean(touched.email && errors.email)}
+                    onChange={event => SaveValueAccount("email", event.target.value)}
                     fullWidth
                     helperText={touched.email && errors.email}
                     onBlur={handleBlur}
-                    onChange={handleChange}
                     type="email"
                     variant="outlined"
                     my={2}
@@ -158,12 +1272,10 @@ function BasicForm() {
                   <TextField
                     name="password"
                     label="Password"
-                    value={values.password}
-                    error={Boolean(touched.password && errors.password)}
                     fullWidth
                     helperText={touched.password && errors.password}
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    onChange={event => SaveValueAccount("password", event.target.value)}
                     type="password"
                     variant="outlined"
                     my={2}
@@ -172,26 +1284,24 @@ function BasicForm() {
                   <TextField
                     name="confirmPassword"
                     label="Confirm password"
-                    value={values.confirmPassword}
-                    error={Boolean(
-                      touched.confirmPassword && errors.confirmPassword
-                    )}
+
                     fullWidth
                     helperText={touched.confirmPassword && errors.confirmPassword}
                     onBlur={handleBlur}
-                    onChange={handleChange}
+                    onChange={event => SaveValueAccount("repassword", event.target.value)}
                     type="password"
                     variant="outlined"
                     my={2}
                   />
 
                   <Button
+                    style={{ marginTop: '60px' }}
                     type="submit"
                     variant="contained"
                     color="primary"
                     mt={3}
                   >
-                    Save changes
+                    REGISTRAR USUARIO
                 </Button>
                 </form>
               )}
@@ -202,8 +1312,72 @@ function BasicForm() {
   );
 }
 
+function ResumenSeguro() {
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <ResumenDetail />
 
+      </CardContent>
+    </Card>
+  );
+}
+
+function FlujoTerminado() {
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <FlujoTerminadoRender />
+
+      </CardContent>
+    </Card>
+  );
+}
 function EmptyCard() {
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <PlanesForm />
+
+      </CardContent>
+    </Card>
+  );
+}
+
+function FormularioPerfil() {
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <RegistrarPerfil />
+
+      </CardContent>
+    </Card>
+  );
+}
+
+function FormularioAnexos() {
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <DefaultDropzone />
+
+      </CardContent>
+    </Card>
+  );
+}
+
+function FormularioPlanes() {
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <PlanesForm />
+
+      </CardContent>
+    </Card>
+  );
+}
+
+function FormulariosIngreso() {
   return (
     <Card mb={6}>
       <CardContent>
@@ -231,23 +1405,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['DATOS DEL ASEGURADO', 'METODO DE PAGO', 'RESUMEN DEL PRODUCTO', 'PRECIOS', 'CONTRATO', 'POLIZA'];
+  return ['DATOS USUARIOS', 'SEGURO', 'ADJUNTOS', ' RESUMEN', 'PERFIL'];
 }
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return EmptyCard();
+      return FormulariosIngreso();
     case 1:
-      return EmptyCard();
+      return FormularioPlanes();
     case 2:
-      return EmptyCard();
+      return FormularioAnexos();
     case 3:
-      return EmptyCard();
+      return ResumenSeguro();
     case 4:
-      return EmptyCard();
-    case 5:
-      return EmptyCard();
+      return FormularioPerfil();
+
     default:
       return 'Unknown step';
   }
@@ -275,6 +1448,9 @@ function HorizontalNonLinearStepper() {
     return completedSteps() === totalSteps();
   };
 
+
+
+
   const handleNext = () => {
     const newActiveStep =
       isLastStep() && !allStepsCompleted()
@@ -283,6 +1459,13 @@ function HorizontalNonLinearStepper() {
         steps.findIndex((step, i) => !(i in completed))
         : activeStep + 1;
     setActiveStep(newActiveStep);
+
+    console.log("itemdatosasegurados", itemDatosAsegurado)
+    console.log("planSeleccionado", planSeleccionado)
+    console.log("subPlanSeleccionado", subPlanSeleccionado)
+    console.log("userAccountLogin", userAccountData)
+
+
   };
 
   const handleBack = () => {
@@ -307,6 +1490,35 @@ function HorizontalNonLinearStepper() {
 
   return (
     <div className={classes.root}>
+
+      <div style={{ marginTop: '16px', marginBottom: '10px', display: 'flex', flexDirection: 'row', }}>
+        <div style={{ flex: 1 }}>
+          <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+            ATRAS
+              </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleNext}
+            className={classes.button}
+          >
+            SIGUIENTE
+              </Button>
+        </div>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          {activeStep !== steps.length &&
+            (completed[activeStep] ? (
+              <Typography variant="caption" className={classes.completed}>
+                Paso {activeStep + 1} completado
+              </Typography>
+            ) : (
+                <Button variant="contained" color="primary" onClick={handleComplete}>
+                  {completedSteps() === totalSteps() - 1 ? 'FINALIZAR' : 'COMPLETAR'}
+                </Button>
+              ))}
+        </div>
+      </div>
+
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
           <Step key={label}>
@@ -321,42 +1533,17 @@ function HorizontalNonLinearStepper() {
           <div>
             <Card mb={6}>
               <CardContent>
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                  <Typography className={classes.instructions}>
-                    Formulario completo
-            </Typography>
-                </div>
+                <FlujoTerminado />
               </CardContent>
             </Card>
 
             <Button onClick={handleReset}>Reiniciar</Button>
           </div>
         ) : (
-            <div>
+            <div  >
+
+
               <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
-              <div>
-                <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                  ATRAS
-              </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleNext}
-                  className={classes.button}
-                >
-                  SIGUIENTE
-              </Button>
-                {activeStep !== steps.length &&
-                  (completed[activeStep] ? (
-                    <Typography variant="caption" className={classes.completed}>
-                      Paso {activeStep + 1} completado
-                    </Typography>
-                  ) : (
-                      <Button variant="contained" color="primary" onClick={handleComplete}>
-                        {completedSteps() === totalSteps() - 1 ? 'Finalizar' : 'Completar paso'}
-                      </Button>
-                    ))}
-              </div>
             </div>
           )}
       </div>
@@ -366,27 +1553,39 @@ function HorizontalNonLinearStepper() {
 
 
 function FlujoCompra() {
+
+
+
   return (
     <React.Fragment>
       <Helmet title="Flujo de compra" />
-      <Typography variant="h3" gutterBottom display="inline">
-        Flujo de compra
+      <AppBar />
+
+      <Grid style={{ padding: '22px' }}>
+        <Typography variant="h3" gutterBottom display="inline">
+          Flujo de compra
       </Typography>
 
-      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
-          KIRAWEBAPP
+        <Breadcrumbs aria-label="Breadcrumb" mt={2}>
+          <Link component={NavLink} exact to="/">
+            KIRAWEBAPP
         </Link>
-        <Link component={NavLink} exact to="/">
-          SEGUROS
+          <Link component={NavLink} exact to="/">
+            SEGUROS
         </Link>
-        <Typography>FLUJO DE COMPRA</Typography>
-      </Breadcrumbs>
+          <Typography>FLUJO DE COMPRA</Typography>
+        </Breadcrumbs>
+        <Grid style={{ marginTop: '12px' }}>
+          <div style={{ width: '100%', height: '210px', background: 'red' }}>
+            <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
-      <Divider my={6} />
-      <HorizontalNonLinearStepper>
+          </div>
+        </Grid>
+        <Divider my={6} />
+        <HorizontalNonLinearStepper>
 
-      </HorizontalNonLinearStepper>
+        </HorizontalNonLinearStepper>
+      </Grid>
 
     </React.Fragment>
   );

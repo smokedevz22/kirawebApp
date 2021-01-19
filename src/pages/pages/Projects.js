@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Fragment, useState, Suspense, useEffect } from 'react';
 import styled from "styled-components/macro";
 import { NavLink } from "react-router-dom";
-
+import { API } from "aws-amplify";
 import Helmet from "react-helmet";
+import AppBar from "../presentation/Landing/HomeBar";
 
 import {
   Avatar,
@@ -53,7 +54,12 @@ const AvatarGroup = styled(MuiAvatarGroup)`
   margin-left: ${(props) => props.theme.spacing(2)}px;
 `;
 
-function Project({ image, title, description, chip }) {
+
+
+
+
+
+function Project({ id, image, title, description, chip }) {
   return (
     <Card mb={6}>
       {image ? <CardMedia image={image} title="Contemplative Reptile" /> : null}
@@ -65,111 +71,179 @@ function Project({ image, title, description, chip }) {
         {chip}
 
         <Typography mb={4} component="p">
-          {description}
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book
         </Typography>
 
 
       </CardContent>
       <CardActions>
 
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/pages/detalle_seguro') }} size="small" color="primary">
-            COMPARTIR
-          </Button>)} />
+        <div style={{ display: 'flex', width: '100%', justifyContent: 'flex-end' }}>
 
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/pages/flujo_compras') }} size="small" color="primary">
-            COMPRAR
-          </Button>
-        )} />
+          <Route render={({ history }) => (
+            <Button onClick={() => { history.push('/pages/flujo_compras') }} size="small" color="primary">
+              COMPRAR
+            </Button>
+          )} />
+
+          <Route render={({ history }) => (
+            <Button onClick={() => { history.push(`/pages/seguros/detalles/${id}`) }} size="small" color="primary">
+              DETALLES
+            </Button>
+          )} />
+        </div>
 
       </CardActions>
     </Card>
   );
 }
 
+
+const ListaRender = () => {
+  const [productos, setProductos] = useState('undefined');
+  const [error, setError] = useState('undefined');
+
+
+  // console.log("listaProductos", listaProductos)
+
+  useEffect(async () => {
+
+
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   listasProductos {
+     id
+    anexo_cp
+    descripcion
+    carta_cp
+    descripcion_larga
+    fecha_inicio
+    fecha_termino
+    imagen
+    logo
+    nombre_comercial
+    nombre_tecnico
+    periodo
+    producto_cp
+    valor_minimo
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    await API.graphql({
+      query: queryListaActividadGraphql
+    }).then(result => {
+      console.log(result);
+      setProductos(result);
+
+
+    }
+    )
+
+  }, []);
+
+
+  if (productos && productos['data']) {
+
+    console.log("productos", productos['data']['listasProductos']);
+
+    let listProductos = productos['data']['listasProductos'];
+    console.log("listaProductos", listProductos)
+
+    return <Grid container spacing={6}>
+
+      {
+        listProductos.map(item => {
+          console.log(item);
+          return < Grid item xs={12} lg={6} xl={6} >
+            <Project
+              id={item['id']}
+
+              title={item['nombre_comercial']}
+              description={item['descripcion']}
+              //  chip={<Chip label="In progress" rgbcolor={orange[500]} />}
+              image={item['imagen']}
+            />
+          </Grid>
+        })
+      }
+    </Grid >
+  } else {
+
+    return productos && 'cargando...'
+
+  }
+}
+
+let itemRender = 'cargando';
+
+
+
 function Projects() {
+
+
+  itemRender = ListaRender()
+
+  console.log(itemRender)
+
   return (
     <React.Fragment>
-      <Helmet title="Projects" />
+      <Helmet title="Catalogo" />
+      <AppBar />
 
-      <Typography variant="h3" gutterBottom display="inline">
-        CATALOGO
+
+      <Grid style={{ padding: '22px' }}>
+        <Typography variant="h3" gutterBottom display="inline">
+          CATALOGO
       </Typography>
 
-      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
-          KIRAWEBAPP
+        <Breadcrumbs aria-label="Breadcrumb" mt={2}>
+          <Link component={NavLink} exact to="/">
+            KIRAWEBAPP
         </Link>
 
-        <Typography>CATALOGO</Typography>
-      </Breadcrumbs>
+          <Typography>CATALOGO</Typography>
+        </Breadcrumbs>
 
-      <Divider my={6} />
+        <Divider my={6} />
 
-      <Grid container spacing={6}>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="Landing page redesign"
-            description="Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum."
-            chip={<Chip label="Finished" rgbcolor={green[500]} />}
-          />
+        {itemRender}
+
+
+        <Grid container spacing={6}>
+
+
+
+          <Grid item xs={12} lg={6} xl={6}>
+            <Project
+              title="New company logo"
+              description="Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum."
+              //chip={<Chip label="On hold" rgbcolor={red[500]} />}
+              image="/static/img/unsplash/unsplash-2.jpg"
+            />
+          </Grid>
+          <Grid item xs={12} lg={6} xl={6}>
+            <Project
+              title="Upgrade to latest Maps API"
+              description="Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris."
+              //  chip={<Chip label="Finished" rgbcolor={green[500]} />}
+              image="/static/img/unsplash/unsplash-3.jpg"
+            />
+          </Grid>
+          <Grid item xs={12} lg={6} xl={6}>
+            <Project
+              title="Refactor backend templates"
+              description="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat at massa."
+              // chip={<Chip label="On hold" rgbcolor={red[500]} />}
+              image="/static/img/unsplash/unsplash-4.jpg"
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="Company posters"
-            description="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat at massa."
-            chip={<Chip label="In progress" rgbcolor={orange[500]} />}
-          />
-        </Grid>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="Product page design"
-            description="Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum."
-            chip={<Chip label="Finished" rgbcolor={green[500]} />}
-          />
-        </Grid>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="Upgrade CRM software"
-            description="Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris."
-            chip={<Chip label="In progress" rgbcolor={orange[500]} />}
-          />
-        </Grid>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="Fix form validation"
-            description="Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris."
-            chip={<Chip label="In progress" rgbcolor={orange[500]} />}
-            image="/static/img/unsplash/unsplash-1.jpg"
-          />
-        </Grid>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="New company logo"
-            description="Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum."
-            chip={<Chip label="On hold" rgbcolor={red[500]} />}
-            image="/static/img/unsplash/unsplash-2.jpg"
-          />
-        </Grid>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="Upgrade to latest Maps API"
-            description="Nam pretium turpis et arcu. Duis arcu tortor, suscipit eget, imperdiet nec, imperdiet iaculis, ipsum. Sed aliquam ultrices mauris."
-            chip={<Chip label="Finished" rgbcolor={green[500]} />}
-            image="/static/img/unsplash/unsplash-3.jpg"
-          />
-        </Grid>
-        <Grid item xs={12} lg={6} xl={3}>
-          <Project
-            title="Refactor backend templates"
-            description="Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat at massa."
-            chip={<Chip label="On hold" rgbcolor={red[500]} />}
-            image="/static/img/unsplash/unsplash-4.jpg"
-          />
-        </Grid>
+
       </Grid>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
 
