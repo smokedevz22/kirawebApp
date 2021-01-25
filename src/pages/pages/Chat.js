@@ -1,7 +1,20 @@
-import React from "react";
+import React, { Fragment, useState, Suspense, useEffect } from 'react';
 import styled from "styled-components/macro";
 import { Helmet } from "react-helmet";
 import { NavLink } from "react-router-dom";
+import { API } from "aws-amplify";
+
+import {
+  Done as DoneIcon,
+  Face as FaceIcon,
+  TagFaces as TagFacesIcon,
+} from "@material-ui/icons";
+
+
+
+import { red, green, orange } from "@material-ui/core/colors";
+
+
 import {
   Badge,
   Box,
@@ -15,6 +28,9 @@ import {
   ListItemText,
   Avatar,
   Fab,
+  Chip as MuiChip,
+
+
   Breadcrumbs as MuiBreadcrumbs,
   Divider as MuiDivider,
   Link,
@@ -25,6 +41,7 @@ import { spacing } from "@material-ui/system";
 import SendIcon from "@material-ui/icons/Send";
 
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
+const Chip = styled(MuiChip)(spacing);
 
 const Divider = styled(MuiDivider)(spacing);
 
@@ -98,7 +115,7 @@ const Online = styled(Badge)`
   margin-right: ${(props) => props.theme.spacing(1)}px;
   span {
     background-color: ${(props) =>
-      props.theme.sidebar.footer.online.background};
+    props.theme.sidebar.footer.online.background};
     border: 1.5px solid ${(props) => props.theme.palette.common.white};
     height: 12px;
     width: 12px;
@@ -131,63 +148,97 @@ function ChatMessageComponent({
   );
 }
 
+
+
+
+const ListaRenderSiniestros = (obtenerListaProductos) => {
+  const [siniestros, setSiniestros] = useState('undefined');
+
+
+  useEffect(async () => {
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   listasSiniestros {
+     id
+    data_siniestro
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    const data = await API.graphql({
+      query: queryListaActividadGraphql
+    });
+    console.log("data from GraphQL:", data);
+    setSiniestros(data)
+
+  }, [])
+
+  console.log("polizaaa", siniestros)
+  if (siniestros && siniestros['data']) {
+
+    console.log("productos", siniestros['data']);
+    let listProductos = siniestros['data']['listasSiniestros'];
+    console.log("listaProductos", listProductos)
+
+    return <List lg={12} >
+      {
+        listProductos.map((item, index) => {
+          console.log(item);
+
+          let itemTemporal = JSON.parse(item['data_siniestro']);
+
+
+          console.log(itemTemporal)
+
+          return (
+            <ListItem button >
+
+              <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'start' }} lg={12}>
+                <Grid>
+
+                  <Typography style={{ fontWeight: 'bold' }} >
+                    {"SINIESTRO N° #" + item['id']}
+                  </Typography>
+                </Grid>
+                <Grid>
+                  <ListItemText primary={'FECHA DECLARACION: ' + itemTemporal['detalle']['fecha_siniestro']} />
+                </Grid>
+                <Grid>
+                  <Chip label="EN PROCESO" rgbcolor={green[500]} />
+                </Grid>
+              </Grid>
+            </ListItem>
+          )
+        })
+      }
+
+    </List>
+  } else {
+
+    return siniestros && 'cargando...'
+
+  }
+
+
+
+}
+
+
+let itemRender = 'cargando'
+
 function ChatWindow() {
+
+  itemRender = ListaRenderSiniestros();
+
+
   return (
     <ChatContainer container component={Card}>
       <ChatSidebar item xs={12} md={4} lg={3}>
-        <Grid item xs={12}>
-          <Box p={2}>
-            <TextField label="Search contacts" variant="outlined" fullWidth />
-          </Box>
-        </Grid>
+
         <Divider />
-        <List>
-          <ListItem button>
-            <ListItemIcon>
-              <Online
-                overlap="circle"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                variant="dot"
-              >
-                <Avatar
-                  alt="Lucy Lavender"
-                  src="/static/img/avatars/avatar-1.jpg"
-                />
-              </Online>
-            </ListItemIcon>
-            <ListItemText primary="Lucy Lavender" secondary="Sent a photo" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Online
-                overlap="circle"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                variant="dot"
-              >
-                <Avatar
-                  alt="Remy Sharp"
-                  src="/static/img/avatars/avatar-2.jpg"
-                />
-              </Online>
-            </ListItemIcon>
-            <ListItemText primary="Remy Sharp" secondary="Coffee?" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Avatar
-                alt="Cassandra Mixon"
-                src="/static/img/avatars/avatar-3.jpg"
-              />
-            </ListItemIcon>
-            <ListItemText primary="Cassandra Mixon" secondary="Hello! 👋" />
-          </ListItem>
-        </List>
+        {itemRender}
       </ChatSidebar>
       <ChatMain item xs={12} md={8} lg={9}>
         <ChatMessages>
@@ -265,7 +316,12 @@ function Chat() {
       </Breadcrumbs>
 
       <Divider my={6} />
+      <Grid style={{ marginTop: '12px' }}>
+        <div style={{ width: '100%', height: '320px', background: 'red' }}>
+          <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
+        </div>
+      </Grid>
       <ChatWindow />
     </React.Fragment>
   );

@@ -51,6 +51,16 @@ const AppBarComponent = () => (
               <Hidden smDown>
 
 
+
+                <Button
+                  ml={2}
+                  color="inherit"
+                  component={Link}
+                  to="/"
+                >
+                  INICIO
+                </Button>
+
                 <Button
                   ml={2}
                   color="inherit"

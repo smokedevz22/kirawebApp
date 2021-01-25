@@ -476,6 +476,7 @@ function BasicForm() {
                         label="FECHA SINIESTRO "
                         fullWidth
                         onBlur={handleBlur}
+                        value={itemDatosAsegurado['fecha_siniestro']}
                         onChange={event => SaveValue("fecha_siniestro", event.target.value)}
                         variant="outlined"
                         my={2}
@@ -486,10 +487,11 @@ function BasicForm() {
                         rows="12"
                         placeholder="INGRESE DESCRIPCION DEL ACCIDENTE"
                         style={{ width: '100%' }}
-                        name="descripcion_caso"
+                        name="descripcion_siniestro"
                         fullWidth
+                        value={itemDatosAsegurado['descripcion_siniestro']}
                         onBlur={handleBlur}
-                        onChange={event => SaveValue("descripcion_caso", event.target.value)}
+                        onChange={event => SaveValue("descripcion_siniestro", event.target.value)}
 
                       />
                     </Grid>
@@ -1186,9 +1188,14 @@ function HorizontalNonLinearStepper() {
   };
 
   const allStepsCompleted = () => {
-    return completedSteps() === totalSteps();
-  };
+    if (completedSteps() === totalSteps()) {
 
+      registrarProducto()
+      return true
+    }
+
+    return false
+  };
 
 
 
@@ -1292,7 +1299,32 @@ function HorizontalNonLinearStepper() {
   );
 }
 
+async function registrarProducto() {
 
+  const mutation = `
+  mutation MyMutation($bank:registrarNuevoSiniestroInput!) {
+  registrarNuevoSiniestro (input:$bank){
+    data_poliza
+  }
+}
+`;
+
+  await API.graphql({
+    query: mutation,
+    variables: {
+      bank: {
+        data_siniestro: JSON.stringify({
+          detalle: itemDatosAsegurado,
+
+        }),
+
+      }
+    }
+
+  });
+  console.log("SINIESTRO REGISTRADO EXITOSAMENTE!");
+
+}
 function DeclaracionSiniestro() {
 
 

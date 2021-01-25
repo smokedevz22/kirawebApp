@@ -106,70 +106,10 @@ function Introduction() {
   return (
     <Wrapper>
       <Container>
-        <Grid container >
-          <Grid item xs={12} sm={9} md={8} lg={12}>
-            <Content>
 
-              <Grid style={{ display: 'flex', textAlign: 'start', display: 'flex', flexDirection: 'column' }}>
-
-                <Grid style={{ display: 'flex', flexDirection: 'column' }}>
-                  <Grid>
-
-                    <span gutterBottom style={{ background: '#0fb6e9', fontSize: 32, fontWeight: 'bold', color: 'white', padding: 6 }}>
-                      NUESTRA EXPERIENCIA ES SU RESPALDO
-                     </span>
-                  </Grid>
-
-
-                </Grid>
-
-              </Grid>
-
-
-            </Content>
-            <Grid lg={12} style={{ display: 'flex', textAlign: 'start', display: 'flex', flexDirection: 'column', marginTop: 22 }}>
-
-              <Grid style={{ display: 'flex', flexDirection: 'column' }} lg={12}>
-                <Grid lg={12} style={{ background: '#0fb6e9', display: 'flex', height: '250px' }}>
-
-                  <Grid lg={6} style={{ display: 'flex', paddingLeft: 12, justifyContent: 'center', flexDirection: 'column' }}>
-                    <Grid style={{ paddingLeft: 12 }}>
-
-                      <span gutterBottom style={{ background: '#0fb6e9', fontSize: 48, color: 'white', fontWeight: 'bold' }}>
-                        PROTEGE TU
-              </span></Grid>
-
-                    <Grid style={{ paddingLeft: 12 }}>
-
-                      <span gutterBottom style={{ background: '#0fb6e9', fontSize: 48, color: 'white', fontWeight: 'bold' }}>
-                        CELULAR
-              </span>
-                    </Grid>
-                  </Grid>
-
-                  <Grid lg={6} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <NavLink to="/dashboard/analytics" target="_blank">
-                      <ImageWrapper style={{ padding: 16 }}>
-
-
-                        <Avatar style={{ height: 225, width: 225 }} alt="Remy Sharp" src={`/static/img/screenshots/dashboard-analytics-large.jpg`} />
-
-                      </ImageWrapper>
-                    </NavLink>
-                  </Grid>
-                </Grid>
-
-
-              </Grid>
-
-            </Grid>
-
-          </Grid>
-
-        </Grid>
         <Grid item xs={12} xl={10} style={{ display: 'flex', marginTop: 42 }}>
           <Typography variant="h2" component="h3" gutterBottom>
-            NUESTROS SEGUROS
+            QUIENES SOMOS
         </Typography>
 
         </Grid>
@@ -184,13 +124,13 @@ function Introduction() {
                 <Grid>
 
                   <span gutterBottom style={{ background: '#0fb6e9', fontSize: 32, fontWeight: 'bold', padding: 4, color: 'white' }}>
-                    PROTEGE TU
+                    EXPERIENCIA
               </span></Grid>
 
                 <Grid style={{ marginTop: 6 }}>
 
                   <span gutterBottom style={{ background: '#0fb6e9', fontSize: 32, fontWeight: 'bold', padding: 4, color: 'white' }}>
-                    CELULAR
+                    TRAYECTORIA
               </span>
                 </Grid>
               </Grid>
@@ -203,13 +143,14 @@ function Introduction() {
                   </Subtitle>
             </Grid>
 
+
           </Grid>
           <Grid lg={1}>
 
 
           </Grid>
 
-          <Grid lg={5} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Grid lg={5} style={{ display: 'flex', justifyContent: 'center', }}>
             <NavLink to="/dashboard/analytics" target="_blank">
               <ImageWrapper>
 

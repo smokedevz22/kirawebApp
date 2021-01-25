@@ -33,9 +33,9 @@ const DemoButton = styled.div`
   position: relative;
   border: 1px solid
     ${(props) =>
-      !props.active
-        ? props.theme.palette.action.selected
-        : props.theme.palette.action.active};
+    !props.active
+      ? props.theme.palette.action.selected
+      : props.theme.palette.action.active};
 `;
 
 const DemoButtonInner = styled.div`
@@ -186,12 +186,7 @@ function Settings() {
 
   return (
     <React.Fragment>
-      <Fab color="primary" aria-label="Edit" onClick={toggleDrawer(true)}>
-        <PaletteIcon />
-      </Fab>
-      <Drawer anchor="right" open={state.isOpen} onClose={toggleDrawer(false)}>
-        <Demos />
-      </Drawer>
+
     </React.Fragment>
   );
 }

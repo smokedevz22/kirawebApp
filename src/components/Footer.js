@@ -36,23 +36,18 @@ const ListItemText = styled(MuiListItemText)`
 
 function Footer() {
   return (
-    <Wrapper>
-      <Grid container spacing={0}>
+    <Wrapper style={{ borderTop: '1px solid black' }}>
+      <Grid container spacing={0} >
         <Hidden smDown>
-          <Grid container item xs={12} md={6}>
+          <Grid container item xs={12} md={6} >
             <List>
               <ListItem button={true} component="a" href="#">
-                <ListItemText primary="Support" />
+                <ListItemText
+                  primary="- "
+                />
+                <ListItemText primary="info@email.cl" />
               </ListItem>
-              <ListItem button={true} component="a" href="#">
-                <ListItemText primary="Help Center" />
-              </ListItem>
-              <ListItem button={true} component="a" href="#">
-                <ListItemText primary="Privacy" />
-              </ListItem>
-              <ListItem button={true} component="a" href="#">
-                <ListItemText primary="Terms of Service" />
-              </ListItem>
+
             </List>
           </Grid>
         </Hidden>
@@ -60,7 +55,10 @@ function Footer() {
           <List>
             <ListItem button={true}>
               <ListItemText
-                primary={`© ${new Date().getFullYear()} - Material App`}
+                primary="CONTACTANOS "
+              />
+              <ListItemText
+                primary="email@email.com"
               />
             </ListItem>
           </List>

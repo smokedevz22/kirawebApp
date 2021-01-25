@@ -19,7 +19,6 @@ function App() {
     <React.Fragment>
       <Helmet
         titleTemplate="%s | Kirawebapp"
-        defaultTitle="Cargando..."
       />
       <StylesProvider injectFirst>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>

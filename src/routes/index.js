@@ -73,6 +73,10 @@ const DeclaracionSiniestro = async(() => import("../pages/pages/FlujoDeclaracion
 
 
 const InvoiceDetails = async(() => import("../pages/pages/InvoiceDetails"));
+const DetalleSeguro = async(() => import("../pages/pages/DetalleSeguro"));
+const DetalleSiniestro = async(() => import("../pages/pages/DetalleSiniestro"));
+const DetalleCotizacion = async(() => import("../pages/pages/DetalleCotizacion"));
+
 const InvoiceList = async(() => import("../pages/pages/InvoiceList"));
 const ListaSeguros = async(() => import("../pages/pages/ListaSeguros"));
 const ListaSiniestros = async(() => import("../pages/pages/ListaSiniestros"));
@@ -116,6 +120,8 @@ const Changelog = async(() => import("../pages/docs/Changelog"));
 
 // Landing
 const Landing = async(() => import("../pages/presentation/Landing"));
+const Somos = async(() => import("../pages/somos"));
+const Seguros = async(() => import("../pages/seguros"));
 
 // Protected routes
 const ProtectedPage = async(() => import("../pages/protected/ProtectedPage"));
@@ -188,7 +194,14 @@ const pagesRoutes = {
       name: "Mis Seguros",
       id: "Private",
       icon: <List />,
-      component: ListaSeguros,
+      component: Seguros,
+    },
+    {
+      path: "/pages/somos",
+      name: "Mis Seguros",
+      id: "Private",
+      icon: <List />,
+      component: Somos,
     },
     {
       path: "/pages/siniestros",
@@ -259,6 +272,21 @@ const invoiceRoutes = {
       path: "/pages/seguros/detalles/:id",
       name: "Details",
       component: InvoiceDetails,
+    },
+    {
+      path: "/pages/cotizaciones/:id",
+      name: "Details",
+      component: DetalleCotizacion,
+    },
+    {
+      path: "/pages/siniestros/:id",
+      name: "Details",
+      component: DetalleSiniestro,
+    },
+    {
+      path: "/pages/polizas/:id",
+      name: "Details",
+      component: DetalleSeguro,
     },
   ],
   component: null,
@@ -638,56 +666,58 @@ export const sidebarRoutes = [
     component: Landing,
   },
   {
-    path: "/pages/catalogo",
+    path: "/pages/somos",
+    name: "Quienes somos",
+    id: "Quienes somos",
+    icon: <Storefront />,
+    component: Somos,
+    children: null,
+
+  },
+  {
+    path: "/pages/seguros",
     name: "Nuestros Seguros",
     id: "Nuestros Seguros",
     icon: <Storefront />,
-    component: Projects,
+    component: Seguros,
     children: null,
 
   },
   /*
-   {
-     path: "/pages/flujo_compras",
-     name: "Flujo compra",
-     id: "Flujo Compra",
-     icon: <AddShoppingCart />,
-     component: FlujoCompra,
-   },
-   {
-     path: "/pages/seguros",
-     name: "Mis Seguros",
-     id: "Mis Seguros",
-     icon: <LocalHospital />,
-     component: ListaSeguros,
-   },
-   {
-     path: "/pages/siniestros",
-     name: "Siniestros",
-     id: "Siniestros",
-     icon: <NewReleases />,
-     component: ListaSiniestros,
-   },
-  {
-     path: "/pages/flujo_siniestro",
-     name: "Flujo siniestro",
-     id: "Declaracion Siniestro",
-     icon: <QueuePlayNext />,
-     component: DeclaracionSiniestro,
-   },*/
+    {
+      path: "/pages/flujo_compras",
+      name: "Flujo compra",
+      id: "Flujo Compra",
+      icon: <AddShoppingCart />,
+      component: FlujoCompra,
+    }, 
+     {
+       path: "/pages/seguros",
+       name: "Mis Seguros",
+       id: "Mis Seguros",
+       icon: <LocalHospital />,
+       component: ListaSeguros,
+     },
+     {
+       path: "/pages/siniestros",
+       name: "Siniestros",
+       id: "Siniestros",
+       icon: <NewReleases />,
+       component: ListaSiniestros,
+     },
+    {
+       path: "/pages/flujo_siniestro",
+       name: "Flujo siniestro",
+       id: "Declaracion Siniestro",
+       icon: <QueuePlayNext />,
+       component: DeclaracionSiniestro,
+     },*/
   {
     path: "/pages/mi_cuenta",
     name: "Mi Cuenta",
     id: "Mi Cuenta",
     icon: <Contacts />,
     component: Profile,
-  },
-  {
-    path: "/pages/login",
-    name: "Login",
-    id: "Login",
-    icon: <AssignmentInd />,
-    component: SignIn,
   },
 
   {

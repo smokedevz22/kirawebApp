@@ -41,12 +41,13 @@ const Drawer = styled(MuiDrawer)`
 `;
 
 const Scrollbar = styled(PerfectScrollbar)`
-  background-color: ${(props) => props.theme.sidebar.background};
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+background-color: #212121;
+border-right: 1px solid rgba(0, 0, 0, 0.12);
 `;
 
 const List = styled(MuiList)`
-  background-color: ${(props) => props.theme.sidebar.background};
+  background-color: #212121;
+  padding-top:42px;
 `;
 
 const Items = styled.div`
@@ -58,21 +59,22 @@ const Brand = styled(ListItem)`
   font-size: ${(props) => props.theme.typography.h5.fontSize};
   font-weight: ${(props) => props.theme.typography.fontWeightMedium};
   color: ${(props) => props.theme.sidebar.header.color};
-  background-color: ${(props) => props.theme.sidebar.header.background};
+  background-color: #212121;
   font-family: ${(props) => props.theme.typography.fontFamily};
   min-height: 56px;
-  padding-left: ${(props) => props.theme.spacing(6)}px;
+  padding-left: ${(props) => props.theme.spacing(10)}px;
   padding-right: ${(props) => props.theme.spacing(6)}px;
-  justify-content: center;
-  cursor: pointer;
+    padding-top: ${(props) => props.theme.spacing(16)}px;
+
+   cursor: pointer;
 
   ${(props) => props.theme.breakpoints.up("sm")} {
     min-height: 64px;
   }
 
   &:hover {
-    background-color: ${(props) => props.theme.sidebar.header.background};
-  }
+    background-color: #212121;
+   }
 `;
 
 const BrandIcon = styled(Logo)`
@@ -102,10 +104,10 @@ const BrandChip = styled(Chip)`
 const Category = styled(ListItem)`
   padding-top: ${(props) => props.theme.spacing(3)}px;
   padding-bottom: ${(props) => props.theme.spacing(3)}px;
-  padding-left: ${(props) => props.theme.spacing(8)}px;
+  padding-left: ${(props) => props.theme.spacing(6)}px;
   padding-right: ${(props) => props.theme.spacing(7)}px;
   font-weight: ${(props) => props.theme.typography.fontWeightRegular};
-
+text-transform:uppercase;
   svg {
     color: ${(props) => props.theme.sidebar.color};
     font-size: 20px;
@@ -116,6 +118,7 @@ const Category = styled(ListItem)`
 
   &:hover {
     background: rgba(0, 0, 0, 0.08);
+    color:red;
   }
 
   &.${(props) => props.activeClassName} {
@@ -326,10 +329,10 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
   return (
     <Drawer variant="permanent" {...rest}>
       <Brand component={NavLink} to="/" button>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', }}>
           <BrandIcon />{" "}
           <Box ml={1}>
-            FRGROUP<BrandChip style={{ marginLeft: '3px', marginTop: 0 }} label="DEV" />
+            FRDIRECT
           </Box>
         </div>
       </Brand>
@@ -348,7 +351,6 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
                       isOpen={!openRoutes[index]}
                       isCollapsable={true}
                       name={category.id}
-                      icon={category.icon}
                       button={true}
                       onClick={() => toggle(index)}
                     />
@@ -363,7 +365,6 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
                           key={index}
                           name={route.name}
                           to={route.path}
-                          icon={route.icon}
                           badge={route.badge}
                         />
                       ))}
@@ -376,7 +377,6 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
                     to={category.path}
                     activeClassName="active"
                     component={NavLink}
-                    icon={category.icon}
                     exact
                     button
                     badge={category.badge}
@@ -387,31 +387,6 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
           </Items>
         </List>
       </Scrollbar>
-      <SidebarFooter>
-        <Grid container spacing={2}>
-          <Grid item>
-            <SidebarFooterBadge
-              overlap="circle"
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              variant="dot"
-            >
-              <Avatar
-                alt="Lucy Lavender"
-                src="/static/img/avatars/avatar-1.jpg"
-              />
-            </SidebarFooterBadge>
-          </Grid>
-          <Grid item>
-            <SidebarFooterText variant="body2">Lucy Lavender</SidebarFooterText>
-            <SidebarFooterSubText variant="caption">
-              UX Designer
-            </SidebarFooterSubText>
-          </Grid>
-        </Grid>
-      </SidebarFooter>
     </Drawer>
   );
 };

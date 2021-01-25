@@ -3,6 +3,7 @@ import styled, { withTheme } from "styled-components/macro";
 import { NavLink } from "react-router-dom";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
+import { API } from "aws-amplify";
 
 import Helmet from "react-helmet";
 
@@ -114,8 +115,8 @@ const TableWrapper = styled.div`
 
 function Details() {
   return (
-    <Card mb={6}>
-      <CardContent>
+    <Card mb={6} style={{ background: '#0fb6e9' }}>
+      <CardContent >
         <Typography variant="h6" gutterBottom>
           PERFIL
         </Typography>
@@ -125,8 +126,8 @@ function Details() {
         <Centered>
           <Avatar alt="Lucy Lavender" src="/static/img/avatars/avatar-1.jpg" />
           <Typography variant="body2" component="div" gutterBottom>
-            <Box fontWeight="fontWeightMedium">Lucy Lavender</Box>
-            <Box fontWeight="fontWeightRegular">Lead Developer</Box>
+            <Box style={{ color: 'white' }} fontWeight="fontWeightMedium">Lucy Lavender</Box>
+            <Box style={{ color: 'white' }} fontWeight="fontWeightRegular">Lead Developer</Box>
           </Typography>
 
         </Centered>
@@ -134,6 +135,8 @@ function Details() {
     </Card>
   );
 }
+
+
 
 function Skills() {
   return (
@@ -357,6 +360,37 @@ function Revenue(props) {
   );
 }
 
+function CotizacionesCard(props) {
+  return (
+    <Box position="relative">
+      <Card mb={6} pt={2}>
+        <CardContent>
+          <Typography variant="h2" gutterBottom>
+            <Box fontWeight="fontWeightRegular">1.224</Box>
+          </Typography>
+          <Typography variant="body2" gutterBottom mt={3} mb={0}>
+            Cotizaciones Realizadas
+          </Typography>
+
+          <StatsIcon>
+            <NewReleases />
+          </StatsIcon>
+          <LinearProgress
+            variant="determinate"
+            value={50}
+            color="secondary"
+            mt={4}
+          />
+
+          <Button onClick={() => { props.onClick.functionClickListaCotizaciones() }} size="small" color="primary">
+            LISTA DE COTIZACINES
+            </Button>
+
+        </CardContent>
+      </Card>
+    </Box>
+  );
+}
 const renderLista = (tipoListaRender) => {
 
 
@@ -369,13 +403,307 @@ const renderLista = (tipoListaRender) => {
       return <Siniestros />
 
       break;
+    case 3:
+      return <Cotizaciones />
+
+      break;
   }
+
+
+}
+
+
+
+const ListaRenderCotizaciones = (obtenerListaProductos) => {
+  const [polizas, setPolizas] = useState('undefined');
+
+
+
+  useEffect(async () => {
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   listasCotizaciones {
+     id
+    data_cotizacion
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    const data = await API.graphql({
+      query: queryListaActividadGraphql
+    });
+    console.log("data from GraphQL:", data);
+    setPolizas(data)
+
+  }, [])
+
+  console.log("polizaaa", polizas)
+
+  if (polizas && polizas['data']) {
+
+    console.log("productos", polizas['data']['listasCotizaciones']);
+
+    let listProductos = polizas['data']['listasCotizaciones'];
+    console.log("listaProductos", listProductos)
+
+    return <TableBody style={{ width: '100%' }}>
+
+      {listProductos &&
+        listProductos.map((item, index) => {
+          console.log(item);
+
+          let itemTemporal = JSON.parse(item['data_cotizacion']);
+          let itemPlan = JSON.parse(itemTemporal['plan']['data_plan'])
+          let itemSubPlan = JSON.parse(itemTemporal['subplan']['data_sub_plan'])
+
+          console.log(itemTemporal)
+
+          return (<TableRow style={{ width: '100%' }} key={index}>
+            <TableCell style={{ width: '5%' }}>
+              <ProductsChip
+                size="small"
+                label="ACTIVO"
+                rgbcolor={blue[500]}
+              />
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '20%' }}>
+              <Typography variant="h6" gutterBottom>
+                {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['numero_serie'] + ' - ' + itemTemporal['asegurado']['imei']}
+              </Typography>
+            </TableCell>
+
+            <TableCell component="th" scope="row" style={{ width: '30%' }}>
+              <Typography style={{
+                textTransform: 'uppercase'
+              }} variant="h6" gutterBottom>
+                {itemPlan['nombre_plan']}
+              </Typography>
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '30%' }}>
+              <Typography variant="h6" gutterBottom>
+                {itemSubPlan['plan']}
+              </Typography>
+            </TableCell>
+
+            <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
+              <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                <Button onClick={() => { history.push(`/pages/cotizaciones/${item['id']}`) }} size="small" color="primary">
+                  COMPRAR
+                </Button>
+              )} />
+
+            </TableCell>
+          </TableRow>
+          )
+        })
+      }
+    </TableBody>
+  } else {
+
+    return polizas && 'cargando...'
+
+  }
+
+
+
+}
+
+
+const ListaRenderPolizas = (obtenerListaProductos) => {
+  const [polizas, setPolizas] = useState('undefined');
+
+
+
+  useEffect(async () => {
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   listasPolizas {
+     id
+    data_poliza
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    const data = await API.graphql({
+      query: queryListaActividadGraphql
+    });
+    console.log("data from GraphQL:", data);
+    setPolizas(data)
+
+  }, [])
+
+  console.log("polizaaa", polizas)
+
+  if (polizas && polizas['data']) {
+
+    console.log("productos", polizas['data']['listasPolizas']);
+
+    let listProductos = polizas['data']['listasPolizas'];
+    console.log("listaProductos", listProductos)
+
+    return <TableBody style={{ width: '100%' }}>
+
+      {listProductos &&
+        listProductos.map((item, index) => {
+          console.log(item);
+
+          let itemTemporal = JSON.parse(item['data_poliza']);
+          let itemPlan = JSON.parse(itemTemporal['plan']['data_plan'])
+          let itemSubPlan = JSON.parse(itemTemporal['subplan']['data_sub_plan'])
+
+
+          console.log(itemTemporal)
+
+          return (<TableRow style={{ width: '100%' }} key={index}>
+            <TableCell style={{ width: '5%' }}>
+              <ProductsChip
+                size="small"
+                label="ACTIVO"
+                rgbcolor={blue[500]}
+              />
+            </TableCell>
+
+            <TableCell component="th" scope="row" style={{ width: '20%' }}>
+              <Typography variant="h6" gutterBottom>
+                {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['numero_serie'] + ' - ' + itemTemporal['asegurado']['imei']}
+              </Typography>
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '30%' }}>
+              <Typography variant="h6" gutterBottom>
+                {itemPlan['nombre_plan']}
+              </Typography>
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '30%' }}>
+              <Typography variant="h6" gutterBottom>
+                {itemSubPlan['plan']}
+              </Typography>
+            </TableCell>
+
+            <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
+              <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                <Button onClick={() => { history.push(`/pages/polizas/${item['id']}`) }} size="small" color="primary">
+                  FICHA
+                </Button>
+              )} />
+
+              <Route render={({ history }) => (
+                <Button onClick={() => { history.push('/pages/flujo_siniestro') }} size="small" color="primary">
+                  SINIESTRO
+                </Button>
+              )} /></TableCell>
+          </TableRow>
+          )
+        })
+      }
+    </TableBody>
+  } else {
+
+    return polizas && 'cargando...'
+
+  }
+
+
+
+}
+
+
+
+const ListaRenderSiniestros = (obtenerListaProductos) => {
+  const [siniestros, setSiniestros] = useState('undefined');
+
+
+  useEffect(async () => {
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   listasSiniestros {
+     id
+    data_siniestro
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    const data = await API.graphql({
+      query: queryListaActividadGraphql
+    });
+    console.log("data from GraphQL:", data);
+    setSiniestros(data)
+
+  }, [])
+
+  console.log("polizaaa", siniestros)
+  if (siniestros && siniestros['data']) {
+    console.log("productos", siniestros['data']['listasSiniestros']);
+    let listProductos = siniestros['data']['listasSiniestros'];
+    console.log("listaProductos", listProductos)
+
+    return <TableBody style={{ width: '100%' }}>
+
+      {listProductos &&
+        listProductos.map((item, index) => {
+          console.log(item);
+
+          let itemTemporal = JSON.parse(item['data_siniestro']);
+
+
+          console.log(itemTemporal)
+
+          return (<TableRow style={{ width: '100%' }} key={index}>
+            <TableCell style={{ width: '5%' }}>
+              <ProductsChip
+                size="small"
+                label="ACTIVO"
+                rgbcolor={blue[500]}
+              />
+            </TableCell>
+
+            <TableCell component="th" scope="row" style={{ width: '20%' }}>
+              <Typography variant="h6" gutterBottom>
+
+              </Typography>
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '30%' }}>
+              <Typography variant="h6" gutterBottom>
+
+              </Typography>
+            </TableCell>
+            <TableCell component="th" scope="row" style={{ width: '30%' }}>
+              <Typography variant="h6" gutterBottom>
+
+              </Typography>
+            </TableCell>
+
+            <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
+              <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
+                  FICHA
+                </Button>
+              )} />
+
+            </TableCell>
+          </TableRow>
+          )
+        })
+      }
+    </TableBody>
+  } else {
+
+    return siniestros && 'cargando...'
+
+  }
+
 
 
 }
 
 function Seguros() {
 
+  let data = ListaRenderPolizas();
 
 
   return (
@@ -388,38 +716,18 @@ function Seguros() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: '20%' }}>SEGURO</TableCell>
-                <TableCell style={{ width: '20%' }}>ACTIVIDAD</TableCell>
-                <TableCell style={{ width: '60%' }}>OPCIONES</TableCell>
+                <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
+                <TableCell style={{ width: '20%' }}>EQUIPO</TableCell>
+                <TableCell style={{ width: '30%' }}>PLAN</TableCell>
+                <TableCell style={{ width: '30%' }}>COBERTURA</TableCell>
+                <TableCell style={{ width: '15%' }}>OPCIONES</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell component="th" scope="row" style={{ width: '20%' }}>
-                  #NOMBRESEGURO
-                </TableCell>
-                <TableCell style={{ width: '20%' }}>
-                  <ProductsChip
-                    size="small"
-                    label="HTML"
-                    rgbcolor={blue[500]}
-                  />
-                </TableCell>
 
-                <TableCell style={{ width: '60%' }}>
-                  <Route style={{ marginRight: '6px' }} render={({ history }) => (
-                    <Button onClick={() => { history.push(`/pages/seguros/detalles/000`) }} size="small" color="primary">
-                      FICHA
-                    </Button>
-                  )} />
 
-                  <Route render={({ history }) => (
-                    <Button onClick={() => { history.push('/pages/flujo_siniestro') }} size="small" color="primary">
-                      NUEVO SINIESTRO
-                    </Button>
-                  )} /></TableCell>
-              </TableRow>
-            </TableBody>
+            {data}
+
+
           </Table>
         </TableWrapper>
       </CardContent>
@@ -429,6 +737,7 @@ function Seguros() {
 
 function Siniestros() {
 
+  let data = ListaRenderSiniestros();
 
 
   return (
@@ -448,32 +757,39 @@ function Siniestros() {
                 <TableCell style={{ width: '20%' }}>DETALLE</TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
+            {data}
+
+          </Table>
+        </TableWrapper>
+      </CardContent>
+    </Card>
+  );
+}
+
+function Cotizaciones() {
+
+  let data = ListaRenderCotizaciones();
+
+
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <Typography variant="h2" gutterBottom>
+          COTIZACIONES REALIZADAS
+        </Typography>
+        <TableWrapper>
+          <Table>
+            <TableHead>
               <TableRow>
-                <TableCell style={{ width: '20%' }} component="th" scope="row">
-                  #SEGURO
-                </TableCell>
-                <TableCell style={{ width: '20%' }}>
-                  <ProductsChip
-                    size="small"
-                    label="HTML"
-                    rgbcolor={blue[500]}
-                  />
-                </TableCell>
-                <TableCell style={{ width: '20%' }} component="th" scope="row">
-                  #FECHAINGRESO
-                </TableCell>
-
-                <TableCell style={{ width: '40%' }}>Single License</TableCell>
-                <TableCell style={{ width: '20%' }}>   <Route style={{ width: '30%' }} render={({ history }) => (
-                  <Button onClick={() => { history.push(`/pages/seguros/detalles/000`) }} size="small" color="primary">
-                    FICHA
-                  </Button>
-                )} /></TableCell>
-
-
+                <TableCell style={{ width: '20%' }}>ESTADO</TableCell>
+                <TableCell style={{ width: '20%' }}>EQUIPO</TableCell>
+                <TableCell style={{ width: '20%' }}>PLAN</TableCell>
+                <TableCell style={{ width: '20%' }}>SUBPLAN</TableCell>
+                <TableCell style={{ width: '20%' }}>DETALLE</TableCell>
               </TableRow>
-            </TableBody>
+            </TableHead>
+            {data}
+
           </Table>
         </TableWrapper>
       </CardContent>
@@ -579,6 +895,8 @@ function Profile() {
 
 
 
+
+
   if (tipoLista) {
     itemRender = renderLista(tipoLista)
   }
@@ -591,7 +909,9 @@ function Profile() {
     setTipoLista(2)
   }
 
-
+  const functionClickListaCotizaciones = () => {
+    setTipoLista(3)
+  }
 
   return (
     <React.Fragment>
@@ -624,11 +944,15 @@ function Profile() {
 
             <Grid container spacing={6}>
 
-              <Grid item xs={12} lg={6}>
+              <Grid item xs={12} lg={4}>
                 <Orders onClick={{ functionClickListaSeguros }} />
               </Grid>
-              <Grid item xs={12} lg={6}>
+              <Grid item xs={12} lg={4}>
                 <Revenue onClick={{ functionClickListaSiniestros }} />
+              </Grid>
+
+              <Grid item xs={12} lg={4}>
+                <CotizacionesCard onClick={{ functionClickListaCotizaciones }} />
               </Grid>
             </Grid>
             {itemRender}
