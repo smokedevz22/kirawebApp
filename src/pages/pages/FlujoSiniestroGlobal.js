@@ -538,6 +538,16 @@ function BasicForm() {
                         my={2}
                       />
                     </Grid>
+                    <Grid item md={6}>
+                      <select style={{ height: 50, width:'100%', marginTop:10 }}
+                        onChange={event => SaveValue("tipo_siniestro", event.target.value)}
+                      >
+                        <option value="parcial">DAÑO PARCIAL</option>
+                        <option value="total">DAÑO TOTAL</option>
+                        <option value="perdida">PERDIDA</option>
+
+                      </select>
+                    </Grid>
                     <Grid item md={12}>
                       <textarea
                         rows="12"

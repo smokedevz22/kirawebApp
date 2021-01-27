@@ -587,12 +587,10 @@ function RenderDetallePlan(item) {
                  <br />
                 FECHA TERMINO
                 <br />
-            
-            CAPITAL ASEGURADO
-                          <br />
-                    
-                          PRECIO MENSUAL
-                          <br />
+                CAPITAL ASEGURADO
+                <br />
+                PRECIO MENSUAL
+                <br />
 
           </Typography>
         </Grid>
@@ -865,12 +863,13 @@ function BasicForm() {
                         my={2}
                       />
                     </Grid>
-                    
+                    <Grid item md={6}>
+                     </Grid>
                     <Grid item md={6}>
                       
 
                       <select onChange={event => SaveValue("marca_equipo", event.target.value)} style={{ width:'100%', height:'40px'}}>
-                        <option > SEELECCIONAR MARCA </option>
+                        <option > SELECCIONAR MARCA </option>
                         <option value="samsung"> SAMSUNG </option>
                       </select>
                     </Grid>
@@ -1706,8 +1705,47 @@ function RegistrarPerfil() {
                     </Grid>
 
                    
+                    <Grid item md={12}>
+                      <TextField
+                        name="direccion_persona"
+                        label="DIRECCION "
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['direccion_persona']}
 
+                        onChange={event => SaveValueAccount("direccion_persona", event.target.value)} variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
                      
+                    <Grid item md={6}>
+                      <TextField
+                        name="region_persona"
+                        label="REGION"
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['region_persona']}
+
+                        onChange={event => SaveValueAccount("region_persona", event.target.value)} variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="comuna_persona"
+                        label="COMUNDA"
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['comuna_persona']}
+
+                        onChange={event => SaveValueAccount("comuna_persona", event.target.value)} variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
                   </Grid>
 
                   <TextField
