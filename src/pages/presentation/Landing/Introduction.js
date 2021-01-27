@@ -148,14 +148,13 @@ function Introduction() {
                   </Grid>
 
                   <Grid lg={6} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <NavLink to="/dashboard/analytics" target="_blank">
-                      <ImageWrapper style={{ padding: 16 }}>
+                    <ImageWrapper style={{ padding: 16 }}>
 
 
-                        <Avatar style={{ height: 225, width: 225 }} alt="Remy Sharp" src={`/static/img/screenshots/dashboard-analytics-large.jpg`} />
+                      <Avatar style={{ height: 225, width: 225 }} alt="Remy Sharp" src={`/static/img/primera_imagen_landing.jpg`} />
 
-                      </ImageWrapper>
-                    </NavLink>
+                    </ImageWrapper>
+
                   </Grid>
                 </Grid>
 
@@ -210,17 +209,15 @@ function Introduction() {
           </Grid>
 
           <Grid lg={5} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <NavLink to="/dashboard/analytics" target="_blank">
-              <ImageWrapper>
+            <ImageWrapper>
 
-                <Image
-                  alt="Material App - React Admin Template"
-                  src={`/static/img/screenshots/dashboard-analytics-large.jpg`}
-                />
+              <Image
+                alt="Material App - React Admin Template"
+                src={`/static/img/segunda_imagen_landing.jpg`}
+              />
 
 
-              </ImageWrapper>
-            </NavLink>
+            </ImageWrapper>
           </Grid>
         </Grid >
 

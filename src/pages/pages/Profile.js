@@ -124,7 +124,7 @@ function Details() {
         <Spacer mb={4} />
 
         <Centered>
-          <Avatar alt="Lucy Lavender" src="/static/img/avatars/avatar-1.jpg" />
+          <Avatar alt="Lucy Lavender" src="/static/img/profile.jpg" />
           <Typography variant="body2" component="div" gutterBottom>
             <Box style={{ color: 'white' }} fontWeight="fontWeightMedium">Lucy Lavender</Box>
             <Box style={{ color: 'white' }} fontWeight="fontWeightRegular">Lead Developer</Box>

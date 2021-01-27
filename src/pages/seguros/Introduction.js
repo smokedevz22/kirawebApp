@@ -193,17 +193,15 @@ function Introduction() {
           </Grid>
 
           <Grid lg={5} style={{ display: 'flex', justifyContent: 'center', }}>
-            <NavLink to="/dashboard/analytics" target="_blank">
-              <ImageWrapper>
+            <ImageWrapper>
 
-                <Image
-                  alt="Material App - React Admin Template"
-                  src={`/static/img/screenshots/dashboard-analytics-large.jpg`}
-                />
+              <Image
+                alt="Material App - React Admin Template"
+                src={`/static/img/imagen_prote.jpg`}
+              />
 
 
-              </ImageWrapper>
-            </NavLink>
+            </ImageWrapper>
           </Grid>
         </Grid >
 

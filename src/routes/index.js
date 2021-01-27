@@ -70,6 +70,7 @@ const FeatherIcons = async(() => import("../pages/icons/FeatherIcons"));
 const Blank = async(() => import("../pages/pages/Blank"));
 const FlujoCompra = async(() => import("../pages/pages/FlujoCompraSeguro"));
 const DeclaracionSiniestro = async(() => import("../pages/pages/FlujoDeclaracionSiniestro"));
+const DeclaracionSiniestroGlobal = async(() => import("../pages/pages/FlujoSiniestroGlobal"));
 
 
 const InvoiceDetails = async(() => import("../pages/pages/InvoiceDetails"));
@@ -287,6 +288,13 @@ const invoiceRoutes = {
       path: "/pages/polizas/:id",
       name: "Details",
       component: DetalleSeguro,
+    },
+    {
+      path: "/pages/siniestro_global",
+      name: "Declarar siniestro",
+      id: "Declarar siniestro",
+      icon: <AddShoppingCart />,
+      component: DeclaracionSiniestroGlobal,
     },
   ],
   component: null,
@@ -683,35 +691,36 @@ export const sidebarRoutes = [
     children: null,
 
   },
+
+  {
+    path: "/pages/siniestro_global",
+    name: "Declarar siniestro",
+    id: "Declarar siniestro",
+    icon: <AddShoppingCart />,
+    component: DeclaracionSiniestroGlobal,
+  },
   /*
-    {
-      path: "/pages/flujo_compras",
-      name: "Flujo compra",
-      id: "Flujo Compra",
-      icon: <AddShoppingCart />,
-      component: FlujoCompra,
-    }, 
-     {
-       path: "/pages/seguros",
-       name: "Mis Seguros",
-       id: "Mis Seguros",
-       icon: <LocalHospital />,
-       component: ListaSeguros,
-     },
-     {
-       path: "/pages/siniestros",
-       name: "Siniestros",
-       id: "Siniestros",
-       icon: <NewReleases />,
-       component: ListaSiniestros,
-     },
-    {
-       path: "/pages/flujo_siniestro",
-       name: "Flujo siniestro",
-       id: "Declaracion Siniestro",
-       icon: <QueuePlayNext />,
-       component: DeclaracionSiniestro,
-     },*/
+   {
+     path: "/pages/seguros",
+     name: "Mis Seguros",
+     id: "Mis Seguros",
+     icon: <LocalHospital />,
+     component: ListaSeguros,
+   },
+   {
+     path: "/pages/siniestros",
+     name: "Siniestros",
+     id: "Siniestros",
+     icon: <NewReleases />,
+     component: ListaSiniestros,
+   },
+  {
+     path: "/pages/flujo_siniestro",
+     name: "Flujo siniestro",
+     id: "Declaracion Siniestro",
+     icon: <QueuePlayNext />,
+     component: DeclaracionSiniestro,
+   },*/
   {
     path: "/pages/mi_cuenta",
     name: "Mi Cuenta",

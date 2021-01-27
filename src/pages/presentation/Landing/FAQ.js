@@ -83,14 +83,13 @@ function FAQ() {
 
               <Grid style={{ display: 'flex', }}>
                 <Typography variant="h4" style={{ textTransform: 'uppercase', color: '#0fb6e9' }}>
-                  En que consiste la reposición?
+                  ¿Qué se entiende por robo?
                 </Typography>
               </Grid>
 
               <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
                 <Typography variant="p" style={{ color: 'white', }}>
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  .
+                  Se entiende como pérdida total por robo cuando el teléfono haya sido objeto de un robo con violencia en las personas o fuerza en las cosas, y en ambos casos no existieren antecedentes que hicieren factible su pronta recuperación.
                 </Typography>
               </Grid>
 
@@ -100,14 +99,28 @@ function FAQ() {
 
               <Grid style={{ display: 'flex', }}>
                 <Typography variant="h4" style={{ textTransform: 'uppercase', color: '#0fb6e9' }}>
-                  En que consiste la reposición?
+                  ¿Qué se entiende por daño accidental?
                 </Typography>
               </Grid>
 
               <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
                 <Typography variant="p" style={{ color: 'white', }}>
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  .
+                  Se entiende como daño accidental el daño provocado fortuitamente (excluyendo todo daño por el uso regular o habitual del teléfono según su manual de funcionamiento), que afecte al normal funcionamiento del equipo. </Typography>
+              </Grid>
+
+            </Grid>
+
+            <Grid item xs={12} xl={12} style={{ display: 'flex', flexDirection: 'column', marginTop: 22 }}>
+
+              <Grid style={{ display: 'flex', }}>
+                <Typography variant="h4" style={{ textTransform: 'uppercase', color: '#0fb6e9' }}>
+                  ¿Qué se entiende por pérdida total?
+                </Typography>
+              </Grid>
+
+              <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
+                <Typography variant="p" style={{ color: 'white', }}>
+                  Se entenderá que existe pérdida total por daño accidental, cuando los gastos de reparación del equipo celular igualan o excedan el 75% del valor de reposición del mismo..
                 </Typography>
               </Grid>
 
@@ -117,15 +130,13 @@ function FAQ() {
 
               <Grid style={{ display: 'flex', }}>
                 <Typography variant="h4" style={{ textTransform: 'uppercase', color: '#0fb6e9' }}>
-                  En que consiste la reposición?
+                  ¿Qué se entiende por similar a nuevo?
                 </Typography>
               </Grid>
 
               <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
                 <Typography variant="p" style={{ color: 'white', }}>
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  .
-                </Typography>
+                  Se entiende por “equipo similar a nuevo” un equipo que ha sido inspeccionado, probado y restaurado en una fábrica o centro de servicio autorizado y que se encuentra certificado para su utilización.                </Typography>
               </Grid>
 
             </Grid>

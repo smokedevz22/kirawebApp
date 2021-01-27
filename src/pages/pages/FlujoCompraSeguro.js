@@ -229,42 +229,75 @@ function DefaultDropzone() {
 
         <Spacer mb={4} />
 
-        <Grid xl={12} style={{ marginTop: '22px' }}>
-          <Typography variant="h6" gutterBottom>
-            ADJUNTAR FOTO BOLETA
+        <Grid container lg={12}  >
+          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }} >
+              ADJUNTAR FOTO BOLETA
+            
         </Typography>
-          <input type="file" ></input>
+            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
+               Material-UI-Dropzone is a React component using Material-UI and is
+              based on the excellent react-dropzone library.
+        </Typography>
+            <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+
+
+          </Grid>
+
+          <Grid lg={6} style={{ marginTop: '22px' }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+              ADJUNTAR FOTO EQUIPO
+            
+        </Typography>
+            <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
+               Material-UI-Dropzone is a React component using Material-UI and is
+              based on the excellent react-dropzone library.
+        </Typography>
+            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
+          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6  }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+              ADJUNTAR FOTO SERIE
+            
+        </Typography>
+            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
+               Material-UI-Dropzone is a React component using Material-UI and is
+              based on the excellent react-dropzone library.
+        </Typography>
+            <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
+          <Grid lg={6} style={{ marginTop: '22px' }}>
+            <Typography variant="h6" style={{ color:'#0fb6e9'}} >
+              ADJUNTAR FOTO IMEI
+            
+        </Typography>
+            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }}>
+               Material-UI-Dropzone is a React component using Material-UI and is
+              based on the excellent react-dropzone library.
+        </Typography>
+            <DropzoneArea   
+ dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
 
         </Grid>
 
-        <Grid xl={12} style={{ marginTop: '22px' }}>
-          <Typography variant="h6" gutterBottom>
-            ADJUNTAR FOTO EQUIPO
-        </Typography>
-          <input type="file" ></input>
 
-        </Grid>
-
-        <Grid xl={12} style={{ marginTop: '22px' }}>
-          <Typography variant="h6" gutterBottom>
-            ADJUNTAR FOTO SERIE
-        </Typography>
-          <input type="file" ></input>
-
-        </Grid>
-
-        <Grid xl={12} style={{ marginTop: '22px' }}>
-          <Typography variant="h6" gutterBottom>
-            ADJUNTAR FOTO IMEI
-        </Typography>
-          <input type="file" ></input>
-        </Grid>
       </CardContent>
     </Card>
   );
 }
 
-function AlertDialog() {
+function AlertDialogImei() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -289,13 +322,11 @@ function AlertDialog() {
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"Use Google's location service?"}
+              {"COMO CONSEGUIR IMEI DEL TELEFONO"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Let Google help apps determine location. This means sending
-                anonymous location data to Google, even when no apps are
-                running.
+*#06#
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -313,7 +344,52 @@ function AlertDialog() {
   );
 }
 
+function AlertDialogNroSerie() {
+  const [open, setOpen] = React.useState(false);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <Paper mt={4}>
+          <span style={{ cursor: 'pointer', color: '#376fd0' }} variant="contained" color="primary" onClick={handleClickOpen}>
+            #COMO CONSEGUIR NRO DE SERIE DEL TELEFONO
+          </span>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"COMO CONSEGUIR NUMERO DE SERIE DEL TELEFONO"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+               *#06#
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                CERRAR
+              </Button>
+              <Button onClick={handleClose} color="primary" autoFocus>
+                ACEPTAR
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Paper>
+      </CardContent>
+    </Card >
+  );
+}
 let listPlanes = [];
 let listSubPlanes = [];
 
@@ -507,12 +583,14 @@ function RenderDetallePlan(item) {
           <br />
 
           <Typography variant="h6">
+                FECHA INICIO
+                 <br />
+                FECHA TERMINO
+                <br />
+            
             CAPITAL ASEGURADO
                           <br />
-                CAPITAL ASEGURADO ATM
-                          <br />
-             COMISION
-                                 <br />
+                    
                           PRECIO MENSUAL
                           <br />
 
@@ -528,13 +606,14 @@ function RenderDetallePlan(item) {
           <br />
 
           <Typography variant="h6" align="right">
-
+            {''}
+            <br />
+            {''}
+            <br />
             {detalle['capital_asegurado_basico']}
             <br />
-            {detalle['capital_asegurado_bolso_atm']}
+            {detalle['precio_mensual']}
             <br />
-            {detalle['capital_asegurado_bolso_atm']}                                    <br />
-            {detalle['precio_mensual']}                                    <br />
 
           </Typography>
         </Grid>
@@ -562,12 +641,6 @@ function RenderDetalleSubPlan(item) {
     return (<Grid lg={12}>
 
       <Grid lg={12}>
-        <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '160px', background: 'red' }}>
-            <img src={detalle['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
-
-          </div>
-        </Grid>
         <Typography variant="h6" gutterBottom>
 
           <h2 style={{
@@ -595,15 +668,12 @@ function RenderDetalleSubPlan(item) {
           <br />
 
           <Typography variant="h4">
-            FECHA INICIO
-                 <br />
-                FECHA TERMINO
-                <br />
-                POL_CAD_COBERTURA
+        
+                DAÑO PARCIAL
                <br />
-                RAMO_FECU
+                DAÑO TOTAL
                 <br />
-                DEDUCIBLE
+                PERDIDA
                 <br />
           </Typography>
         </Grid>
@@ -693,16 +763,46 @@ function BasicForm() {
             ) : (
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={6}>
+                    <Grid lg={12} style={{ paddingLeft: 12 }}>
+                      <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</span>
+                    </Grid>
 
                     <Grid item md={12}>
+                      <span style={{ fontWeight: 'bold', fontSize: '22px' , marginTop:12}}> INFORMACION PERSONAL</span>
+                    </Grid>
+                    <Grid item md={6}>
                       <TextField
                         name="rut_persona"
                         value={itemDatosAsegurado['rut_persona']}
                         label="RUT PERSONA"
                         fullWidth
-                        onBlur={handleBlur}
                         onChange={event => SaveValue("rut_persona", event.target.value)}
                         variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="nro_serie"
+                        value={itemDatosAsegurado['nro_serie']}
+                        label="NUMERO DE SERIE CARNET"
+                        fullWidth
+                        onChange={event => SaveValue("nro_serie", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+                      <TextField
+                        name="fecha_nacimiento"
+                        label="FECHA NACIMIENTO"
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['fecha_nacimiento']}
+
+                        onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
                         my={2}
                       />
                     </Grid>
@@ -713,7 +813,6 @@ function BasicForm() {
                         label="NOMBRES "
                         value={itemDatosAsegurado['nombre_persona']}
                         fullWidth
-                        onBlur={handleBlur}
                         onChange={event => SaveValue("nombre_persona", event.target.value)}
                         variant="outlined"
                         my={2}
@@ -722,69 +821,136 @@ function BasicForm() {
 
                     <Grid item md={6}>
                       <TextField
-                        name="apellido_persona"
-                        label="APELLIDOS "
-                        value={itemDatosAsegurado['apellido_persona']}
+                        name="apellido_paterno"
+                        label="APELLIDO PATERNO "
+                        value={itemDatosAsegurado['apellido_paterno']}
                         fullWidth
-                        onBlur={handleBlur}
-                        onChange={event => SaveValue("apellido_persona", event.target.value)}
+                        onChange={event => SaveValue("apellido_paterno", event.target.value)}
                         variant="outlined"
                         my={2}
                       />
                     </Grid>
 
-                    <Grid item md={12}>
+                    <Grid item md={6}>
                       <TextField
-                        name="marca_equipo"
-                        label="MARCA EQUIPO"
-                        value={itemDatosAsegurado['marca_equipo']}
+                        name="apellido_materno"
+                        label="APELLIDO MATERNO "
+                        value={itemDatosAsegurado['apellido_materno']}
                         fullWidth
-                        onBlur={handleBlur}
-                        onChange={event => SaveValue("marca_equipo", event.target.value)}
+                        onChange={event => SaveValue("apellido_materno", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+
+
+                      <select onChange={event => SaveValue("marca_equipo", event.target.value)} style={{ width: '100%', height: '40px' }}>
+                        <option > SELECCIONAR GENERO </option>
+                        <option value="femenino"> FEMENINO </option>
+                        <option value="masculino"> MASCULINO </option>
+                      </select>
+                    </Grid>
+                    <Grid item md={12}>
+                      <span style={{ fontWeight: 'bold', fontSize: '22px' }}> INFORMACION EQUIPO</span>
+                    </Grid>
+                    <Grid item md={6}>
+                      <TextField
+                        name="telefono_persona"
+                        value={itemDatosAsegurado['telefono_persona']}
+                        label="N° CELULAR"
+                        fullWidth
+                        onChange={event => SaveValue("telefono_persona", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    
+                    <Grid item md={6}>
+                      
+
+                      <select onChange={event => SaveValue("marca_equipo", event.target.value)} style={{ width:'100%', height:'40px'}}>
+                        <option > SEELECCIONAR MARCA </option>
+                        <option value="samsung"> SAMSUNG </option>
+                      </select>
+                    </Grid>
+
+                    
+                    <Grid item md={6}>
+
+
+                      <select onChange={event => SaveValue("modelo_equipo", event.target.value)} style={{ width: '100%', height: '40px' }}>
+                        <option > SEELECCIONAR MODELO </option>
+                        <option value="samsung"> SAMSUNG </option>
+
+
+                        <option value="samsung"> Galaxy S5</option>
+                           <option value="samsung">Galaxy S6</option>
+                           <option value="samsung">Galaxy S7</option>
+                           <option value="samsung">Galaxy S8</option>
+                           <option value="samsung">Galaxy S9</option>
+                           <option value="samsung">Galaxy S10</option>
+                          <option value="samsung">Galaxy S10 +</option>
+                           <option value="samsung">Galaxy S20</option>
+                          <option value="samsung">Galaxy S20+</option>
+                          <option value="samsung">Galaxy S20+ Ultra</option>
+                           <option value="samsung">Galaxy A10</option>
+                           <option value="samsung">Galaxy A20</option>
+                           <option value="samsung">Galaxy A30</option>
+                           <option value="samsung">Galaxy A40</option>
+                           <option value="samsung">Galaxy A50</option>
+                           <option value="samsung">Galaxy A60</option>
+                           <option value="samsung">Galaxy A70</option>
+                           <option value="samsung">Galaxy A80</option>
+                           <option value="samsung">Galaxy A90</option>
+                      </select>
+                    </Grid>
+
+
+ 
+
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="numero_serie"
+                        label="NUMERO SERIE"
+                        value={itemDatosAsegurado['numero_serie']}
+                        fullWidth
+                        onChange={event => SaveValue("numero_serie", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="imei"
+                        label="IMEI"
+                        fullWidth
+                        value={itemDatosAsegurado['imei']}
+                        onChange={event => SaveValue("imei", event.target.value)}
                         variant="outlined"
                         my={2}
                       />
                     </Grid>
                   </Grid>
+                  <Grid style={{ display: 'flex' }} lg={12}>
 
-                  <Grid item md={12}>
-                    <TextField
-                      name="numero_serie"
-                      label="NUMERO SERIE"
-                      value={itemDatosAsegurado['numero_serie']}
-                      fullWidth
-                      onBlur={handleBlur}
-                      onChange={event => SaveValue("numero_serie", event.target.value)}
-                      variant="outlined"
-                      my={2}
-                    />
-                  </Grid>
-
-                  <Grid item md={12}>
-                    <TextField
-                      name="imei"
-                      label="IMEI"
-                      fullWidth
-                      value={itemDatosAsegurado['imei']}
-                      onBlur={handleBlur}
-                      onChange={event => SaveValue("imei", event.target.value)}
-                      variant="outlined"
-                      my={2}
-                    />
-                  </Grid>
-
-                  <Grid md={6}>
-
-                    <AlertDialog />
+                    <Grid lg={6}>
+                      <AlertDialogNroSerie />
+                    </Grid>
+                    <Grid lg={6}>
+                      <AlertDialogImei />                     
+                    </Grid>
 
                   </Grid>
-
                 </form>
               )}
           </CardContent>
         </Card>
-      )}
-    </Formik>
+      )
+      }
+    </Formik >
   );
 }
 
@@ -885,6 +1051,10 @@ function ResumenDetail() {
                                 NOMBRE:  {itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_persona']}
                                   <br />
                                   {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
+                                  <br />
+                                  {'MODELO: ' + itemDatosAsegurado['modelo_equipo']}
+                                  <br />
+
                                   {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
                                   <br />
                                   {'IMEI: ' + itemDatosAsegurado['imei']}
@@ -939,7 +1109,7 @@ function ResumenDetail() {
                             </Grid>
                           </CardContent>
                         </Card>
-                        <Card lg={12}>
+                        <Card item lg={12}>
                           <Table>
                             <TableHead>
                               <TableRow>
@@ -1137,7 +1307,7 @@ function FlujoTerminadoRender() {
                                 </Typography>
                               </div>
                               <Grid xl={12} style={{ marginTop: '12px' }}>
-                                <div style={{ width: '100%', height: '260px', background: 'red' }}>
+                                <div style={{ width: '100%', height: '210px', background: 'red' }}>
                                   <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
                                 </div>
@@ -1423,7 +1593,7 @@ function PlanesForm() {
                               </Grid>
                               <Grid item xs={12}>
                                 <Typography variant="body2" gutterBottom>
-                                  {itemRenderDetallePlan}
+                                  {itemRenderDetalleSubPlan &&  itemRenderDetallePlan}
                                 </Typography>
                               </Grid>
 
@@ -1515,7 +1685,6 @@ function RegistrarPerfil() {
                         error={Boolean(touched.firstName && errors.firstName)}
                         fullWidth
                         helperText={touched.firstName && errors.firstName}
-                        onBlur={handleBlur}
 
                         onChange={event => SaveValueAccount("nombre_persona", event.target.value)}
                         variant="outlined"
@@ -1529,13 +1698,16 @@ function RegistrarPerfil() {
                         error={Boolean(touched.lastName && errors.lastName)}
                         fullWidth
                         helperText={touched.lastName && errors.lastName}
-                        onBlur={handleBlur}
                         value={itemDatosAsegurado['apellido_persona']}
 
                         onChange={event => SaveValueAccount("apellido_persona", event.target.value)} variant="outlined"
                         my={2}
                       />
                     </Grid>
+
+                   
+
+                     
                   </Grid>
 
                   <TextField
@@ -1867,7 +2039,7 @@ function FlujoCompra() {
           <Typography>FLUJO DE COMPRA</Typography>
         </Breadcrumbs>
         <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '260px', background: 'red' }}>
+          <div style={{ width: '100%', height: '210px', background: 'red' }}>
             <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
           </div>
