@@ -556,7 +556,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
           console.log(itemTemporal)
 
           return (<TableRow style={{ width: '100%' }} key={index}>
-            <TableCell style={{ width: '5%' }}>
+            <TableCell >
               <ProductsChip
                 size="small"
                 label="ACTIVO"
@@ -564,23 +564,23 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
               />
             </TableCell>
 
-            <TableCell component="th" scope="row" style={{ width: '5%' }}>
+            <TableCell component="th" scope="row"  >
               <Typography variant="body2" gutterBottom>
                 {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo']}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '40%' }}>
+            <TableCell component="th" scope="row" >
               <Typography variant="body2" gutterBottom>
                 {itemPlan['nombre_plan']}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '40%' }}>
+            <TableCell component="th" scope="row" >
               <Typography variant="body2" gutterBottom>
                 {itemSubPlan['plan']}
               </Typography>
             </TableCell>
 
-            <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
+            <TableCell component="th" scope="row" style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Route style={{ marginRight: '6px' }} render={({ history }) => (
                 <Button onClick={() => { history.push(`/pages/polizas/${item['id']}`) }} size="small" color="primary">
                   FICHA
@@ -596,7 +596,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
           )
         })
       }
-    </TableBody>
+    </TableBody >
   } else {
 
     return polizas && 'cargando...'
@@ -651,7 +651,7 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
           console.log(itemTemporal)
 
           return (<TableRow style={{ width: '100%' }} key={index}>
-            <TableCell style={{ width: '5%' }}>
+            <TableCell  >
               <ProductsChip
                 size="small"
                 label="ACTIVO"
@@ -659,23 +659,18 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
               />
             </TableCell>
 
-            <TableCell component="th" scope="row" style={{ width: '20%' }}>
-              <Typography variant="h6" gutterBottom>
-
+            <TableCell component="th" scope="row"  >
+              <Typography variant="body2" gutterBottom>
+                {itemTemporal['detalle']['fecha_siniestro']}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '30%' }}>
-              <Typography variant="h6" gutterBottom>
-
-              </Typography>
-            </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '30%' }}>
-              <Typography variant="h6" gutterBottom>
-
+            <TableCell component="th" scope="row" s >
+              <Typography variant="body2" gutterBottom>
+                {itemTemporal['detalle']['descripcion_siniestro']}
               </Typography>
             </TableCell>
 
-            <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
+            <TableCell component="th" scope="row" style={{ display: 'flex', justifyContent: 'flex-start' }}>
               <Route style={{ marginRight: '6px' }} render={({ history }) => (
                 <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
                   FICHA
@@ -716,7 +711,7 @@ function Seguros() {
                 <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
                 <TableCell style={{ width: '40%' }}>EQUIPO</TableCell>
                 <TableCell style={{ width: '40%' }}>PLAN</TableCell>
-                <TableCell style={{ width: '15%' }}>OPCIONES</TableCell>
+                <TableCell style={{ width: '10%' }}>OPCIONES</TableCell>
               </TableRow>
             </TableHead>
 
@@ -746,11 +741,10 @@ function Siniestros() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: '20%' }}>SEGURO</TableCell>
-                <TableCell style={{ width: '20%' }}>ESTADO</TableCell>
+                <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
                 <TableCell style={{ width: '20%' }}>FECHA INGRESO</TableCell>
-                <TableCell style={{ width: '20%' }}>RESUMEN</TableCell>
-                <TableCell style={{ width: '20%' }}>DETALLE</TableCell>
+                <TableCell style={{ width: '60%' }}>RESUMEN</TableCell>
+                <TableCell style={{ width: '10%' }}>DETALLE</TableCell>
               </TableRow>
             </TableHead>
             {data}
