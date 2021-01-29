@@ -44,6 +44,7 @@
     "google-map-react": "2.1.9",
     "jss": "10.5.0",
     "material-ui-dropzone": "3.5.0",
+    "moment": "^2.29.1",
     "polished": "4.0.3",
     "react": "17.0.1",
     "react-app-polyfill": "2.0.0",

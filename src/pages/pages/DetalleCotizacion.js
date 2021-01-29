@@ -51,6 +51,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
   let { id } = useParams();
 
+  let temId = String(id)
   console.log(id)
 
 
@@ -60,7 +61,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
   useEffect(async () => {
     const queryListaActividadGraphql = `
  query MyQuery {
-   detalleCotizacion(numero_cotizacion:${id}) {
+   detalleCotizacion(numero_cotizacion:"${temId}") {
      id
     data_cotizacion
   }

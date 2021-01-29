@@ -12,6 +12,7 @@ import { Formik } from "formik";
 import { API } from "aws-amplify";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
+import moment from 'moment';
 
 
 import {
@@ -164,7 +165,8 @@ async function registrarCotizacion() {
   let objectoRegistro = JSON.stringify({
     asegurado: itemDatosAsegurado,
     plan: planSeleccionado,
-    subplan: subPlanSeleccionado
+    subplan: subPlanSeleccionado,
+    detalles:detallesExtras
   });
 
   console.log("objecto_cotizacion", objectoRegistro)
@@ -201,7 +203,9 @@ async function registrarProducto() {
           asegurado: itemDatosAsegurado,
           plan: planSeleccionado,
           user: userAccountData,
-          subplan: subPlanSeleccionado
+          subplan: subPlanSeleccionado,
+          detalles: detallesExtras
+
         }),
 
       }
@@ -344,6 +348,123 @@ function AlertDialogImei() {
   );
 }
 
+ 
+
+function AlertDialogCotizacion() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleRegistrar = () => {
+    registrarCotizacion();
+    setOpen(false);
+  };
+
+  const handleCancelar = () => {
+     setOpen(false);
+  };
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <Paper mt={4}>
+        
+
+          <Button variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }} onClick={handleClickOpen}>
+            GUARDAR COTIZACION
+                                   </Button>
+          <Dialog
+            open={open}
+            onClose={handleCancelar}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Guardar cotizacion"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                SE DEJARA UNA COTIZACION EN LOS DETALLES DE SU CUENTA
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+
+              <Button onClick={handleCancelar} color="primary" autoFocus>
+                CANCELAR
+              </Button>
+              <Button onClick={handleRegistrar} color="primary" autoFocus>
+                ACEPTAR
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </Paper>
+      </CardContent>
+    </Card >
+  );
+}
+
+
+
+function AlertCompletarFormulario(props) {
+
+
+  console.log("props",props)
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleRegistrar = () => {
+    registrarProducto();
+    setOpen(false);
+    props.onClick()
+
+   };
+
+  const handleCancelar = () => {
+    setOpen(false);
+ 
+  };
+  return (
+     <Grid>
+          <Button variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }} onClick={handleClickOpen}>
+            COMPLETAR FORMULARIO
+                                   </Button>
+          <Dialog
+            open={open}
+            onClose={handleCancelar}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Confirmar compra"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+            Esta seguro que desea comprar :
+            <br />
+            {}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+
+              <Button onClick={handleCancelar} color="primary" autoFocus>
+                CANCELAR
+              </Button>
+              <Button onClick={handleRegistrar} color="primary" autoFocus>
+                ACEPTAR
+              </Button>
+            </DialogActions>
+          </Dialog>
+    </Grid>
+
+  );
+}
+
+
+
 function AlertDialogNroSerie() {
   const [open, setOpen] = React.useState(false);
 
@@ -392,6 +513,7 @@ function AlertDialogNroSerie() {
 }
 let listPlanes = [];
 let listSubPlanes = [];
+let listCoberturas = [];
 
 let itemRender = 'cargando';
 let itemRenderSubPlan = 'cargando';
@@ -404,6 +526,7 @@ let subPlanSeleccionado = {};
 
 let itemDatosAsegurado = {};
 let userAccountData = {};
+let detallesExtras = {};
 
 
 function SaveValue(key, value) {
@@ -413,6 +536,46 @@ function SaveValue(key, value) {
 
 function SaveValueAccount(key, value) {
   userAccountData[key] = value
+}
+
+async function obtenerListaItems() {
+
+  listCoberturas = []
+  const queryListaActividadGraphql = `
+ query MyQuery {
+   listasCoberturas{
+     id
+     id_sub_plan
+    data_cobertura
+  }
+}
+
+`;
+
+  console.log(queryListaActividadGraphql)
+  const data = await API.graphql({
+    query: queryListaActividadGraphql
+  });
+  console.log("data from GraphQL:", data);
+ 
+  let listasProductos = data['data']['listasCoberturas'];
+  listasProductos && listasProductos.forEach(element => {
+
+    let itemPlan = JSON.parse(element['data_cobertura'])
+    let itemCobertura = {
+      ...itemPlan,
+      id: element['id'],
+      id_sub_plan: element['id_sub_plan']
+
+     }
+    console.log(itemCobertura);
+    listCoberturas.push(itemCobertura);
+  
+  });
+  console.log(listCoberturas)
+
+
+  return true;
 }
 
 
@@ -531,7 +694,7 @@ const ListaRenderSubPlan = (functionRenderDetalle) => {
         listaSubPlanes.map(item => {
           console.log(item);
           let itemSubPlan = JSON.parse(item['data_sub_plan'])
-          return <option style={{ textTransform: 'uppercase' }} value={item['id']}> {itemSubPlan['plan']}</option>
+          return <option style={{ textTransform: 'uppercase' }} value={item['id']}> {itemSubPlan['nombre']} + {itemSubPlan['capital']} UF</option>
 
         })
       }
@@ -559,82 +722,92 @@ function RenderDetallePlan(item) {
 
           </div>
         </Grid>
-        <Typography variant="h6" gutterBottom>
-          <h2 style={{
-            textTransform: 'uppercase'
-          }}> {detalle['nombre_plan']}</h2>
+        <Typography variant="h2" gutterBottom style={{marginTop:12}}>
+          {detalle['nombre_plan']} 
+
+      
+        </Typography>
+
+        <Typography variant="body2" gutterBottom>
           <p>{detalle['descripcion_comercial_plan']}</p>
 
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>BRIEF : {detalle['brief']}</p>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>REVISTA : {detalle['caracteristicas']}</p>
-
         </Typography>
-      </Grid>
-
-
-      <Grid item lg={12}>
-        <Divider />
-      </Grid>
-      <Grid item lg={12} style={{ display: 'flex' }}>
-        <Grid lg={6}>
-          <br />
-
-          <Typography variant="h4">CARACTERISTICAS</Typography>
-          <br />
-
-          <Typography variant="h6">
-                FECHA INICIO
-                 <br />
-                FECHA TERMINO
-                <br />
-                CAPITAL ASEGURADO
-                <br />
-                PRECIO MENSUAL
-                <br />
-
-          </Typography>
-        </Grid>
-        <Grid lg={6}>
-          <br />
-
-          <Typography variant="h4" align="right" display="block">
-            DETALLE
-                                </Typography>
-
-          <br />
-
-          <Typography variant="h6" align="right">
-            {''}
-            <br />
-            {''}
-            <br />
-            {detalle['capital_asegurado_basico']}
-            <br />
-            {detalle['precio_mensual']}
-            <br />
-
-          </Typography>
-        </Grid>
-
-
-      </Grid>
-
-
-
+      </Grid> 
     </Grid>)
   }
   return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
 }
+
+
+function cargarDetallesCobertura(item) {
+  let listaTemporalCoberturas = []
+
+  let cargarDetalleCob = async function () {
+    listCoberturas && listCoberturas.forEach((data) => {
+
+      console.log("cobertura", data)
+      console.log("subplan", item)
+
+      if (data['id_sub_plan'] === item['id']) {
+
+        listaTemporalCoberturas.push(data)
+      }
+    })
+  };
+  
+  cargarDetalleCob().then((data) => {
+    console.log("lista", listaTemporalCoberturas)
+
+
+    listaTemporalCoberturas.find((item) => { 
+
+      switch (item['codigo_cobertura']) { 
+
+        case "CL-Daño-Total":
+          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL DEDUCIBLE: <strong>' + item['deducible'] + ' UF </strong>'
+          detallesExtras = {
+            ...detallesExtras,
+            "CL-Daño-Total": item['deducible']
+          }
+          break;
+        
+        case "CL-Daño-Parcial":
+          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL DEDUCIBLE : <strong>' + item['deducible'] + ' UF </strong>'
+          detallesExtras = {
+            ...detallesExtras,
+            "CL-Daño-Parcial": item['deducible']
+          }
+          break;
+
+        case "CL-Robo":
+          document.getElementById('cobertura_perdida').innerHTML = 'ROBO DEDUCIBLE :  <strong>' + item['deducible'] + ' UF </strong>'
+          detallesExtras = {
+            ...detallesExtras,
+            "CL-Robo": item['deducible']
+          }
+          break;
+
+      }
+    })
+  })
+
+}
+
+
 
 function RenderDetalleSubPlan(item) {
   // const [detallePlan, setDetallePlan] = useState({});
 
 
   let detalle = JSON.parse(item['data_sub_plan'])
+ 
+  cargarDetallesCobertura(item)
 
+ 
   console.log("DETALLE_SUBPLAN", detalle)
 
   if (detalle) {
+ 
     //setDetallePlan(detalle)
     return (<Grid lg={12}>
 
@@ -643,68 +816,24 @@ function RenderDetalleSubPlan(item) {
 
           <h2 style={{
             textTransform: 'uppercase'
-          }}>COBERTURA : {detalle['plan']}</h2>
+          }}>SUBPLAN : {detalle['nombre']}</h2>
 
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CODIGO : {detalle['codigo_cobertura']}</p>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>BRIEF : {detalle['brief']}</p>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>REVISTA : {detalle['pdf_cobetura']}</p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>{detalle['capital']} UF</strong></p>
+          <h2 style={{
+            textTransform: 'uppercase'
+          }}>COBERTURAS </h2>
+          <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
+          <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
+          <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalle['precio_mensual']} UF  </strong></p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>COMPAÑIA ASEGURADORA :<strong> CHUBB DE CHILE COMPAÑIA DE SEGUROS GENERALES S.A</strong></p>
 
 
         </Typography>
       </Grid>
-
-
-
-      <Grid item lg={12}>
-        <Divider />
-      </Grid>
-      <Grid item lg={12} style={{ display: 'flex' }}>
-        <Grid lg={6}>
-          <br />
-
-          <Typography variant="h4">CARACTERISTICAS</Typography>
-          <br />
-
-          <Typography variant="h4">
-        
-                DAÑO PARCIAL
-               <br />
-                DAÑO TOTAL
-                <br />
-                PERDIDA
-                <br />
-          </Typography>
-        </Grid>
-        <Grid lg={6}>
-          <br />
-
-          <Typography variant="h4" align="right" display="block">
-            DETALLE
-                                </Typography>
-          <br />
-
-          <Typography variant="h4" align="right">
-
-            {detalle['fecha_inicio']}
-            <br />
-            {detalle['fecha_termino']}
-            <br />
-            {detalle['pol_cad_cobertura']}                                    <br />
-
-            {detalle['ramo_fecu']}                                    <br />
-            {detalle['deducible']}                                    <br />
-
-          </Typography>
-        </Grid>
-
-
-      </Grid>
-
-
-
-
-
-
+  
     </Grid>)
   }
   return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
@@ -792,17 +921,22 @@ function BasicForm() {
                       />
                     </Grid>
                     <Grid item md={6}>
-                      <TextField
-                        name="fecha_nacimiento"
-                        label="FECHA NACIMIENTO"
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['fecha_nacimiento']}
+                     
 
-                        onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
-                        my={2}
-                      />
+                      <form noValidate>
+                        <TextField
+                          style={{marginTop:8}}
+                          id="fecha_nacimiento"
+                          label="FECHA NACIMIENTO"
+                          type="date"
+                          fullWidth
+                          value={itemDatosAsegurado['fecha_nacimiento']}
+                          onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </form>
                     </Grid>
 
                     <Grid item md={6}>
@@ -880,28 +1014,27 @@ function BasicForm() {
 
                       <select onChange={event => SaveValue("modelo_equipo", event.target.value)} style={{ width: '100%', height: '40px' }}>
                         <option > SEELECCIONAR MODELO </option>
-                        <option value="samsung"> SAMSUNG </option>
+ 
 
-
-                        <option value="samsung"> Galaxy S5</option>
-                           <option value="samsung">Galaxy S6</option>
-                           <option value="samsung">Galaxy S7</option>
-                           <option value="samsung">Galaxy S8</option>
-                           <option value="samsung">Galaxy S9</option>
-                           <option value="samsung">Galaxy S10</option>
-                          <option value="samsung">Galaxy S10 +</option>
-                           <option value="samsung">Galaxy S20</option>
-                          <option value="samsung">Galaxy S20+</option>
-                          <option value="samsung">Galaxy S20+ Ultra</option>
-                           <option value="samsung">Galaxy A10</option>
-                           <option value="samsung">Galaxy A20</option>
-                           <option value="samsung">Galaxy A30</option>
-                           <option value="samsung">Galaxy A40</option>
-                           <option value="samsung">Galaxy A50</option>
-                           <option value="samsung">Galaxy A60</option>
-                           <option value="samsung">Galaxy A70</option>
-                           <option value="samsung">Galaxy A80</option>
-                           <option value="samsung">Galaxy A90</option>
+                        <option  > Galaxy S5</option>
+                           <option >Galaxy S6</option>
+                           <option >Galaxy S7</option>
+                           <option >Galaxy S8</option>
+                           <option >Galaxy S9</option>
+                           <option >Galaxy S10</option>
+                          <option >Galaxy S10 +</option>
+                           <option >Galaxy S20</option>
+                          <option >Galaxy S20+</option>
+                          <option >Galaxy S20+ Ultra</option>
+                           <option >Galaxy A10</option>
+                           <option >Galaxy A20</option>
+                           <option >Galaxy A30</option>
+                           <option >Galaxy A40</option>
+                           <option >Galaxy A50</option>
+                           <option >Galaxy A60</option>
+                           <option >Galaxy A70</option>
+                           <option >Galaxy A80</option>
+                           <option >Galaxy A90</option>
                       </select>
                     </Grid>
 
@@ -953,12 +1086,52 @@ function BasicForm() {
   );
 }
 
-function ResumenDetail() {
+function ResumenDetail() { 
 
+  const [open, setOpen] = React.useState(true);
 
-  let detallePlan = JSON.parse(planSeleccionado['data_plan'])
-  let detalleSubPlan = JSON.parse(subPlanSeleccionado['data_sub_plan'])
+  const handleClose = () => {
+    setOpen(false);
+  };
 
+  const handleRegistrarCotizacion = () => {
+
+    registrarCotizacion();
+  };
+
+  const showAlertCotizacion = () => {
+  console.log("ada")
+  
+    return (
+      <Paper mt={4}>
+      <Dialog
+        open={true}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {"Se ha registrado exitosamente su cotizacion"}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+
+          <Button onClick={handleRegistrarCotizacion} color="primary" autoFocus>
+            ACEPTAR
+              </Button>
+        </DialogActions>
+        </Dialog>
+        </Paper>
+
+  )
+     
+  };
+  
+  itemRenderDetallePlan =  RenderDetallePlan(planSeleccionado)
+  itemRenderDetalleSubPlan =   RenderDetalleSubPlan(subPlanSeleccionado)
 
 
   const handleSubmit = async (
@@ -976,9 +1149,7 @@ function ResumenDetail() {
       setSubmitting(false);
     }
   };
-  let registrarCotz = async () => {
-    registrarCotizacion();
-  }
+
   return (
 
 
@@ -1029,15 +1200,13 @@ function ResumenDetail() {
 
 
 
-                              <Grid item md={6}>
+                              <Grid item lg={6}>
                                 <h2>RESUMEN</h2>
                               </Grid>
-                              <Grid md={6} >
+                              <Grid lg={6} >
 
                                 <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                                  <Button onClick={registrarCotz} variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }}>
-                                    GUARDAR COTIZACION
-                </Button>
+                                <AlertDialogCotizacion/>
                                 </div>
 
 
@@ -1046,152 +1215,42 @@ function ResumenDetail() {
                                 <Typography variant="caption">CLIENTE</Typography>
                                 <Typography variant="h5">
                                   RUT:  {itemDatosAsegurado['rut_persona']}
-                                  <br />
-                                NOMBRE:  {itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_persona']}
-                                  <br />
+                                 
+                                </Typography>
+                                
+                                <Typography variant="h5">
+                                  NOMBRE:  {itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
+
+                                </Typography>
+                                <Typography variant="h5" style={{marginTop:6}}>
                                   {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
-                                  <br />
+
+                                </Typography>
+                                <Typography variant="h5">
                                   {'MODELO: ' + itemDatosAsegurado['modelo_equipo']}
-                                  <br />
 
+                                </Typography>
+                                <Typography variant="h5" style={{ marginTop: 6 }}>
                                   {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
-                                  <br />
+
+                                </Typography>
+                                <Typography variant="h5">
                                   {'IMEI: ' + itemDatosAsegurado['imei']}
-                                  <br />
-                                </Typography>
-                              </Grid>
-                              <Grid lg={12}>
-                                <Grid style={{ marginTop: '12px' }}>
-                                  <div style={{ width: '100%', height: '160px', background: 'red' }}>
-                                    <img src={detallePlan['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
-
-                                  </div>
-                                </Grid>
-                                <Typography variant="h6" gutterBottom>
-                                  <h2 style={{
-                                    textTransform: 'uppercase'
-                                  }}> {detallePlan['nombre_plan']}</h2>
-                                  <p>{detallePlan['descripcion_comercial_plan']}</p>
-
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>BRIEF : {detallePlan['brief']}</p>
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>REVISTA : {detallePlan['caracteristicas']}</p>
 
                                 </Typography>
-                              </Grid>
-
-
-
-                              <Grid lg={12}>
-
-                                <Grid style={{ marginTop: '12px' }}>
-                                  <div style={{ width: '100%', height: '160px', background: 'red' }}>
-                                    <img src={detalleSubPlan['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
-
-                                  </div>
-                                </Grid>
-                                <Typography variant="h6" gutterBottom>
-
-                                  <h2 style={{
-                                    textTransform: 'uppercase'
-                                  }}>COBERTURA : {detalleSubPlan['plan']}</h2>
-
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CODIGO : {detalleSubPlan['codigo_cobertura']}</p>
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>BRIEF : {detalleSubPlan['brief']}</p>
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>REVISTA : {detalleSubPlan['pdf_cobetura']}</p>
+                                
+                                <Typography variant="body2" gutterBottom>
+                                  {itemRenderDetalleSubPlan && itemRenderDetallePlan}
                                 </Typography>
 
-
+                                {itemRenderDetalleSubPlan}
 
                               </Grid>
-
 
                             </Grid>
                           </CardContent>
                         </Card>
-                        <Card item lg={12}>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>DETALLE</TableCell>
-                                <TableCell></TableCell>
-                                <TableCell align="right">VALOR</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  FECHA INICIO
-                    </TableCell>
-                                <TableCell></TableCell>
-                                <TableCell align="right">{detalleSubPlan['fecha_inicio']}</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  FECHA TERMINO
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">{detalleSubPlan['fecha_termino']}</TableCell>
-                              </TableRow>
-
-
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  PRIMA SEGURO
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">-</TableCell>
-                              </TableRow>
-
-
-
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  PRIMA NETA
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">-</TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  DEDUCIBLE
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">-</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell />
-                                <TableCell>COSTO MENSUAL</TableCell>
-                                <TableCell align="right">$275.00</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell />
-                                <TableCell>COSTO ANUAL</TableCell>
-                                <TableCell align="right">$275.00</TableCell>
-                              </TableRow>
-
-
-                              <TableRow>
-                                <TableCell />
-                                <TableCell>Total</TableCell>
-                                <TableCell align="right"></TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </Card>
-
+                     
                       </Shadow>
                     </Grid>
                   </Grid>
@@ -1207,6 +1266,10 @@ function ResumenDetail() {
 
 
 function FlujoTerminadoRender() {
+
+
+  itemRenderDetallePlan = RenderDetallePlan(planSeleccionado)
+  itemRenderDetalleSubPlan = RenderDetalleSubPlan(subPlanSeleccionado)
 
 
   const handleSubmit = async (
@@ -1305,61 +1368,7 @@ function FlujoTerminadoRender() {
                                   <h2>RESUMEN</h2>
                                 </Typography>
                               </div>
-                              <Grid xl={12} style={{ marginTop: '12px' }}>
-                                <div style={{ width: '100%', height: '210px', background: 'red' }}>
-                                  <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
-                                </div>
-                              </Grid>
-                              <Grid item xs={6}>
-
-                                <Grid style={{ marginTop: '12px' }}>
-                                  <div style={{ width: '100%', height: '160px', background: 'red' }}>
-                                    <img src={detallePlan['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
-
-                                  </div>
-                                </Grid>
-                                <Typography variant="h6" gutterBottom>
-
-                                  <h2 style={{
-                                    textTransform: 'uppercase'
-                                  }}> {detallePlan['nombre_plan']}</h2>
-                                  <p>{detallePlan['descripcion_comercial_plan']}</p>
-
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>BRIEF : {detallePlan['brief']}</p>
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>REVISTA : {detallePlan['caracteristicas']}</p>
-
-                                </Typography>
-
-
-
-                              </Grid>
-
-                              <Grid item xs={6}>
-
-                                <Grid style={{ marginTop: '12px' }}>
-                                  <div style={{ width: '100%', height: '160px', background: 'red' }}>
-                                    <img src={detalleSubPlan['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
-
-                                  </div>
-                                </Grid>
-                                <Typography variant="h6" gutterBottom>
-
-                                  <h2 style={{
-                                    textTransform: 'uppercase'
-                                  }}>COBERTURA : {detalleSubPlan['plan']}</h2>
-
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CODIGO : {detalleSubPlan['codigo_cobertura']}</p>
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>BRIEF : {detalleSubPlan['brief']}</p>
-                                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>REVISTA : {detalleSubPlan['pdf_cobetura']}</p>
-                                </Typography>
-
-
-
-                              </Grid>
-                              <Grid item xs={12}>
-                                <Divider />
-                              </Grid>
                               <Grid item xs={12} md={6}>
                                 <Typography variant="caption">CLIENTE</Typography>
                                 <Typography variant="h4">
@@ -1385,93 +1394,18 @@ function FlujoTerminadoRender() {
                                 </Typography>
                               </Grid>
 
+                              <Typography variant="body2" gutterBottom>
+                                {itemRenderDetalleSubPlan && itemRenderDetallePlan}
+                              </Typography>
+
+                              {itemRenderDetalleSubPlan}
+
+                          
+
                             </Grid>
                           </CardContent>
                         </Card>
-                        <Card lg={12}>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell>DETALLE</TableCell>
-                                <TableCell></TableCell>
-                                <TableCell align="right">VALOR</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  FECHA INICIO
-                    </TableCell>
-                                <TableCell></TableCell>
-                                <TableCell align="right">{detalleSubPlan['fecha_inicio']}</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  FECHA TERMINO
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">{detalleSubPlan['fecha_termino']}</TableCell>
-                              </TableRow>
-
-
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  PRIMA SEGURO
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">-</TableCell>
-                              </TableRow>
-
-
-
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  PRIMA NETA
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">-</TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  DEDUCIBLE
-
-                    </TableCell>
-
-
-                                <TableCell></TableCell>
-                                <TableCell align="right">-</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell />
-                                <TableCell>COSTO MENSUAL</TableCell>
-                                <TableCell align="right">$275.00</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell />
-                                <TableCell>COSTO ANUAL</TableCell>
-                                <TableCell align="right">$275.00</TableCell>
-                              </TableRow>
-
-
-                              <TableRow>
-                                <TableCell />
-                                <TableCell>Total</TableCell>
-                                <TableCell align="right"></TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </Card>
-
+          
                       </Shadow>
                     </Grid>
                   </Grid>
@@ -1485,8 +1419,11 @@ function FlujoTerminadoRender() {
     </Formik >
   );
 }
+
 function PlanesForm() {
 
+
+  
   const [dplan, setDplan] = useState('');
   const [splan, setSplan] = useState('');
 
@@ -1519,6 +1456,9 @@ function PlanesForm() {
     // RenderDetallePlan(user)
   };
 
+
+
+  
   itemRender = ListaRender(handleChangePlan)
   itemRenderSubPlan = ListaRenderSubPlan(handleChangeSubPlan)
   itemRenderDetallePlan = dplan && RenderDetallePlan(dplan)
@@ -1590,20 +1530,21 @@ function PlanesForm() {
 
 
                               </Grid>
-                              <Grid item xs={12}>
-                                <Typography variant="body2" gutterBottom>
-                                  {itemRenderDetalleSubPlan &&  itemRenderDetallePlan}
-                                </Typography>
-                              </Grid>
+                              
 
                               <Grid item md={12}>
                                 {itemRenderSubPlan}
 
                               </Grid>
                               <Grid item xs={12}>
+                                <Typography variant="body2" gutterBottom>
+                                  {itemRenderDetalleSubPlan && itemRenderDetallePlan}
+                                </Typography>
+
                                 {itemRenderDetalleSubPlan}
 
                               </Grid>
+                         
 
                             </Grid>
                           </CardContent>
@@ -1678,7 +1619,7 @@ function RegistrarPerfil() {
                     <Grid item md={6}>
                       <TextField
                         name="nombre_persona"
-                        label="NOMBRE PERSONA"
+                        label="NOMBRES"
 
                         value={itemDatosAsegurado['nombre_persona']}
                         error={Boolean(touched.firstName && errors.firstName)}
@@ -1692,60 +1633,108 @@ function RegistrarPerfil() {
                     </Grid>
                     <Grid item md={6}>
                       <TextField
-                        name="apellido_persona"
-                        label="APELLIDO PERSONA"
+                        name="apellidos"
+                        label="APELLIDOS"
                         error={Boolean(touched.lastName && errors.lastName)}
                         fullWidth
                         helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['apellido_persona']}
+                        value={itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
 
-                        onChange={event => SaveValueAccount("apellido_persona", event.target.value)} variant="outlined"
+                        onChange={event => SaveValueAccount("apellidos", event.target.value)} variant="outlined"
                         my={2}
                       />
                     </Grid>
 
                    
-                    <Grid item md={12}>
-                      <TextField
-                        name="direccion_persona"
-                        label="DIRECCION "
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['direccion_persona']}
-
-                        onChange={event => SaveValueAccount("direccion_persona", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                     
                     <Grid item md={6}>
                       <TextField
-                        name="region_persona"
-                        label="REGION"
+                        name="calle"
+                        label="CALLE "
                         error={Boolean(touched.lastName && errors.lastName)}
                         fullWidth
                         helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['region_persona']}
+                        value={itemDatosAsegurado['calle']}
 
-                        onChange={event => SaveValueAccount("region_persona", event.target.value)} variant="outlined"
+                        onChange={event => SaveValueAccount("calle", event.target.value)} variant="outlined"
                         my={2}
                       />
                     </Grid>
+ 
+
 
                     <Grid item md={6}>
                       <TextField
-                        name="comuna_persona"
-                        label="COMUNDA"
+                        name="numero_dpto"
+                        label="NUMERO DPTO/CASA "
                         error={Boolean(touched.lastName && errors.lastName)}
                         fullWidth
                         helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['comuna_persona']}
+                        value={itemDatosAsegurado['numero_dpto']}
 
-                        onChange={event => SaveValueAccount("comuna_persona", event.target.value)} variant="outlined"
+                        onChange={event => SaveValueAccount("numero_dpto", event.target.value)} variant="outlined"
                         my={2}
                       />
                     </Grid>
+
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="comuna"
+                        label="COMUNA "
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['comuna']}
+
+                        onChange={event => SaveValueAccount("comuna", event.target.value)} variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="ciudad"
+                        label="CIUDAD "
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['ciudad']}
+
+                        onChange={event => SaveValueAccount("ciudad", event.target.value)} variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="region"
+                        label="REGION "
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        fullWidth
+
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['region']}
+
+                        onChange={event => SaveValueAccount("region", event.target.value)} variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+                      <TextField
+                        name="pais"
+                        label="PAIS"
+                        error={Boolean(touched.lastName && errors.lastName)}
+                        helperText={touched.lastName && errors.lastName}
+                        value={itemDatosAsegurado['pais']}
+                        fullWidth
+
+                        onChange={event => SaveValueAccount("pais", event.target.value)} variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                 
                   </Grid>
 
                   <TextField
@@ -1995,17 +1984,7 @@ function HorizontalNonLinearStepper() {
 
       <div style={{ marginTop: '16px', marginBottom: '10px', display: 'flex', flexDirection: 'row', }}>
         <div style={{ flex: 1 }}>
-          <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-            ATRAS
-              </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-            className={classes.button}
-          >
-            SIGUIENTE
-              </Button>
+       
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           {activeStep !== steps.length &&
@@ -2014,9 +1993,10 @@ function HorizontalNonLinearStepper() {
                 Paso {activeStep + 1} completado
               </Typography>
             ) : (
-                <Button variant="contained" color="primary" onClick={handleComplete}>
-                  {completedSteps() === totalSteps() - 1 ? 'FINALIZAR' : 'COMPLETAR'}
-                </Button>
+              
+              <Grid>
+                { completedSteps() === totalSteps() - 1 ? <AlertCompletarFormulario onClick={handleComplete}/> : <Button variant="contained" color="primary" onClick={handleComplete}> COMPLETAR PASO </Button> }
+              </Grid>
               ))}
         </div>
       </div>
@@ -2043,18 +2023,39 @@ function HorizontalNonLinearStepper() {
           </div>
         ) : (
             <div  >
-
-
               <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+             
             </div>
+         
           )}
       </div>
+
+      {allStepsCompleted() ? (<Grid></Grid>): (
+        <div style = {{ display: 'flex' }}>
+      <Grid item lg={6} style={{ display: 'flex' }}>
+        <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+          ATRAS
+              </Button>
+      </Grid>
+      <Grid item lg={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid>
+          {completedSteps() === totalSteps() - 1 ? <AlertCompletarFormulario onClick={handleComplete} /> : <Button variant="contained" color="primary" onClick={handleComplete}> SIGUIENTE </Button>}
+        </Grid>
+      </Grid>
     </div>
+      )}
+
+    </div >
+
+      
   );
 }
 
 
 function FlujoCompra() {
+
+  obtenerListaItems();
+
 
 
   return (
