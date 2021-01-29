@@ -108,6 +108,27 @@ const validationSchema = Yup.object().shape({
 });
 
 
+
+
+let listPlanes = [];
+let listSubPlanes = [];
+let listCoberturas = [];
+
+let itemRender = 'cargando';
+let itemRenderSubPlan = 'cargando';
+let itemRenderDetallePlan = 'cargando'
+let itemRenderDetalleSubPlan = 'cargando'
+
+let planSeleccionado = {};
+let subPlanSeleccionado = {};
+
+
+let itemDatosAsegurado = {};
+let userAccountData = {};
+let detallesExtras = {};
+
+
+
 function Project({ id, image, title, description, chip }) {
   return (
     <Card mb={6}>
@@ -326,11 +347,19 @@ function AlertDialogImei() {
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"COMO CONSEGUIR IMEI DEL TELEFONO"}
+              {"Buscar el número de serie o el IMEI del iPhone"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-*#06#
+                {`   
+Obtén información sobre cómo encontrar el modelo, número de serie, el IMEI/MEID, el CDN y el ICCID del iPhone.
+Antes de empezar
+Puedes encontrar estos números en varios lugares, como Configuración, el dispositivo físico, el Finder o iTunes y el empaque original.
+Buscar el número de serie, el IMEI/MEID o el ICCID
+Ve a Configuración > General y toca Información.
+Busca el número de serie. Es posible que debas desplazarte hacia abajo para encontrar el modelo, IMEI/MEID y el ICCID.
+Para pegar esta información, mantén presionado el número para copiar.
+` }
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -490,12 +519,29 @@ function AlertDialogNroSerie() {
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"COMO CONSEGUIR NUMERO DE SERIE DEL TELEFONO"}
+              {"¿Cómo buscar el modelo y el número de serie de mi Smartphone con Android 4.2 o superior?"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-               *#06#
-              </DialogContentText>
+                {`   
+
+                Para buscar el modelo y el número de serie de mi dispositivo Samsung debemos tener en cuenta, que el menú varía dependiendo el modelo y la versión de Android del dispositivo, en este caso para la versión 4.2 o superior.    
+
+                A continuación, se incluyen las instrucciones generales, 
+
+                RUTA DE ACCESO PARA VER EL MODELO:
+                 
+                Ajuste → Mas → Acerca del dispositivo → Numero de modelo.
+                 
+                RUTA DE ACCESO PARA VER EL NUMERO DE SERIE:
+                 
+                Ajuste → Mas → Acerca del dispositivo → Estado → Numero de serie.
+
+                En la pantalla principal seleccione Ajustes o Configuración, luego pulse en el icono “Mas” y nos dirigimos a la última opción “Acerca del dispositivo” donde vamos a evidenciar el modelo, la versión de Android.
+
+                Una vez hayamos verificado el modelo del equipo, tocamos la opción “Estado” donde vamos encontrar: Estado de red móvil, Mi número de teléfono, El Imei, Imeisv, Direccion IP, Dirección Mac Wifi, Dirección Bluetooth y “EL NUMERO DE SERIE”.
+              
+               `}  </DialogContentText>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">
@@ -511,23 +557,6 @@ function AlertDialogNroSerie() {
     </Card >
   );
 }
-let listPlanes = [];
-let listSubPlanes = [];
-let listCoberturas = [];
-
-let itemRender = 'cargando';
-let itemRenderSubPlan = 'cargando';
-let itemRenderDetallePlan = 'cargando'
-let itemRenderDetalleSubPlan = 'cargando'
-
-let planSeleccionado = {};
-let subPlanSeleccionado = {};
-
-
-let itemDatosAsegurado = {};
-let userAccountData = {};
-let detallesExtras = {};
-
 
 function SaveValue(key, value) {
   itemDatosAsegurado[key] = value
@@ -1243,7 +1272,7 @@ function ResumenDetail() {
                                   {itemRenderDetalleSubPlan && itemRenderDetallePlan}
                                 </Typography>
 
-                                {itemRenderDetalleSubPlan}
+                                {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
 
                               </Grid>
 
@@ -1375,7 +1404,7 @@ function FlujoTerminadoRender() {
                                   {'RUT: ' + itemDatosAsegurado['rut_persona']}
                                   <br />
 
-                                  {'NOMBRE: ' + itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_persona']}
+                                  {'NOMBRE: ' + itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
                                   <br />
                                   {'EMAIL: ' + userAccountData['email']}
                                   <br />
@@ -1393,7 +1422,7 @@ function FlujoTerminadoRender() {
                                   <br />
                                   {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
                                   <br />
-                                  {'IMEI: ' + itemDatosAsegurado['imei']}
+                                  {'IMEI: ' + itemDatosAsegurado['imei']} 
                                   <br />
                                 </Typography>
                               </Grid>
@@ -1403,7 +1432,7 @@ function FlujoTerminadoRender() {
                                 {itemRenderDetalleSubPlan && itemRenderDetallePlan}
                               </Typography>
 
-                              {itemRenderDetalleSubPlan}
+                              {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
 
                           
 
@@ -1546,7 +1575,7 @@ function PlanesForm() {
                                   {itemRenderDetalleSubPlan && itemRenderDetallePlan}
                                 </Typography>
 
-                                {itemRenderDetalleSubPlan}
+                                {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
 
                               </Grid>
                          

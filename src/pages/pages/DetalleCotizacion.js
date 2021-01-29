@@ -3,8 +3,14 @@ import styled from "styled-components/macro";
 import { NavLink } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import { API } from "aws-amplify";
+import {
+
+  CheckCircle as CheckCircle,
+
+} from "@material-ui/icons";
 
 import Helmet from "react-helmet";
+import moment from 'moment';
 
 import {
   CardContent,
@@ -45,7 +51,197 @@ const Typography = styled(MuiTypography)(display);
 
 
 
+let listPlanes = [];
+let listSubPlanes = [];
+let listCoberturas = [];
 
+let itemRender = 'cargando';
+let itemRenderSubPlan = 'cargando';
+let itemRenderDetallePlan = 'cargando'
+let itemRenderDetalleSubPlan = 'cargando'
+
+let planSeleccionado = {};
+let subPlanSeleccionado = {};
+
+
+let itemDatosAsegurado = {};
+let userAccountData = {};
+let detallesExtras = {};
+
+
+
+function RenderDetallePlan(item) {
+  // const [detallePlan, setDetallePlan] = useState({});
+
+  let detalle = JSON.parse(item['data_plan'])
+  console.log("DETALLE_PLAN", detalle)
+
+  if (detalle) {
+    //setDetallePlan(detalle)
+    return (<Grid>
+      <Grid>
+        <Grid style={{ marginTop: '12px' }}>
+          <div style={{ width: '100%', height: '160px', background: 'red' }}>
+            <img src={detalle['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
+
+          </div>
+        </Grid>
+        <Typography variant="h2" gutterBottom style={{ marginTop: 12 }}>
+          {detalle['nombre_plan']}
+
+
+        </Typography>
+
+        <Typography variant="body2" gutterBottom>
+          <p>{detalle['descripcion_comercial_plan']}</p>
+
+        </Typography>
+      </Grid>
+    </Grid>)
+  }
+  return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
+}
+
+
+async function obtenerListaItems() {
+
+  listCoberturas = []
+  const queryListaActividadGraphql = `
+ query MyQuery {
+   listasCoberturas{
+     id
+     id_sub_plan
+    data_cobertura
+  }
+}
+
+`;
+
+  console.log(queryListaActividadGraphql)
+  const data = await API.graphql({
+    query: queryListaActividadGraphql
+  });
+  console.log("data from GraphQL:", data);
+
+  let listasProductos = data['data']['listasCoberturas'];
+  listasProductos && listasProductos.forEach(element => {
+
+    let itemPlan = JSON.parse(element['data_cobertura'])
+    let itemCobertura = {
+      ...itemPlan,
+      id: element['id'],
+      id_sub_plan: element['id_sub_plan']
+
+    }
+    console.log(itemCobertura);
+    listCoberturas.push(itemCobertura);
+
+  });
+  console.log(listCoberturas)
+
+
+  return true;
+}
+
+
+function cargarDetallesCobertura(item) {
+  let listaTemporalCoberturas = []
+
+  let cargarDetalleCob = async function () {
+    listCoberturas && listCoberturas.forEach((data) => {
+
+      console.log("cobertura", data)
+      console.log("subplan", item)
+
+      if (data['id_sub_plan'] === item['id']) {
+
+        listaTemporalCoberturas.push(data)
+      }
+    })
+  };
+
+  cargarDetalleCob().then((data) => {
+    console.log("lista", listaTemporalCoberturas)
+
+
+    listaTemporalCoberturas.find((item) => {
+
+      switch (item['codigo_cobertura']) {
+
+        case "CL-Daño-Total":
+          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL DEDUCIBLE: <strong>' + item['deducible'] + ' UF </strong>'
+          detallesExtras = {
+            ...detallesExtras,
+            "CL-Daño-Total": item['deducible']
+          }
+          break;
+
+        case "CL-Daño-Parcial":
+          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL DEDUCIBLE : <strong>' + item['deducible'] + ' UF </strong>'
+          detallesExtras = {
+            ...detallesExtras,
+            "CL-Daño-Parcial": item['deducible']
+          }
+          break;
+
+        case "CL-Robo":
+          document.getElementById('cobertura_perdida').innerHTML = 'ROBO DEDUCIBLE :  <strong>' + item['deducible'] + ' UF </strong>'
+          detallesExtras = {
+            ...detallesExtras,
+            "CL-Robo": item['deducible']
+          }
+          break;
+
+      }
+    })
+  })
+
+}
+
+
+function RenderDetalleSubPlan(item) {
+  // const [detallePlan, setDetallePlan] = useState({});
+
+
+  let detalle = JSON.parse(item['data_sub_plan'])
+
+  cargarDetallesCobertura(item)
+
+
+  console.log("DETALLE_SUBPLAN", detalle)
+
+  if (detalle) {
+
+    //setDetallePlan(detalle)
+    return (<Grid lg={12}>
+
+      <Grid lg={12}>
+        <Typography variant="h6" gutterBottom>
+
+          <h2 style={{
+            textTransform: 'uppercase'
+          }}>SUBPLAN : {detalle['nombre']}</h2>
+
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>{detalle['capital']} UF</strong></p>
+          <h2 style={{
+            textTransform: 'uppercase'
+          }}>COBERTURAS </h2>
+          <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
+          <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
+          <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalle['precio_mensual']} UF  </strong></p>
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>COMPAÑIA ASEGURADORA :<strong> CHUBB DE CHILE COMPAÑIA DE SEGUROS GENERALES S.A</strong></p>
+
+
+        </Typography>
+      </Grid>
+
+    </Grid>)
+  }
+  return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
+}
 
 const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
@@ -80,136 +276,96 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
   console.log("polizaaa", siniestros)
   if (siniestros && siniestros['data']) {
-    console.log("productos", siniestros['data']['listasSiniestros']);
-    let listProductos = siniestros['data']['listasSiniestros'];
+    console.log("productos", siniestros['data']['detalleCotizacion']['data_cotizacion']);
+    let listProductos = JSON.parse(siniestros['data']['detalleCotizacion']['data_cotizacion']);
+
+    console.log("listproduct", listProductos);
+    itemDatosAsegurado = listProductos['asegurado']
+
+    planSeleccionado = listProductos['plan'];
+    subPlanSeleccionado = listProductos['subplan'];
+
+    console.log("subPlanSeleccionado", subPlanSeleccionado)
+
+    itemRenderDetallePlan = RenderDetallePlan(planSeleccionado)
+    itemRenderDetalleSubPlan = RenderDetalleSubPlan(subPlanSeleccionado)
+
+    console.log("detalleAsegurado", listProductos)
     console.log("listaProductos", listProductos)
 
     return (
 
 
       <Grid container justify="center">
-        <Grid item xs={12} lg={10}>
-          <Shadow>
-            <Card px={6} pt={6}>
-              <CardContent>
-                <Grid xl={12} container spacing={6}>
-                  <Grid style={{ marginTop: '12px' }}>
-                    <div style={{ width: '100%', height: '160px', background: 'red' }}>
-                      <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
+
+        <Grid container justify="center">
+          <Grid item xs={12} lg={10}>
+            <Shadow>
+
+              <Card px={6} pt={6}>
+                <CardContent>
+                  <Grid container spacing={6}>
+
+
+
+
+
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+
+                      <Typography variant="h2" gutterBottom>
+                        <h2>RESUMEN COTIZACION</h2>
+                      </Typography>
                     </div>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Divider />
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="caption">Client</Typography>
-                    <Typography variant="body2">
-                      Anna Walley
-                      <br />
-                      4183 Forest Avenue
-                      <br />
-                      New York City
-                      <br />
-                      10011
-                      <br />
-                      USA
-                      <br />
-                      <Link href="mailto:anna@walley.com">anna@walley.com</Link>
+
+                    <Grid item lg={6}>
+                      <Typography variant="caption">CLIENTE</Typography>
+                      <Typography variant="h4">
+                        {'RUT: ' + itemDatosAsegurado['rut_persona']}
+                        <br />
+
+                        {'NOMBRE: ' + itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
+                        <br />
+                        {'EMAIL: ' + userAccountData['email']}
+                        <br />
+                        <br />
+                      </Typography>
+
+                    </Grid>
+
+                    <Grid item lg={6}>
+
+                      <Typography variant="caption">EQUIPO</Typography>
+                      <Typography variant="h4">
+
+                        {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
+                        <br />
+                        {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
+                        <br />
+                        {'IMEI: ' + itemDatosAsegurado['imei']}
+                        <br />
+                      </Typography>
+                    </Grid>
+
+
+                    <Typography variant="body2" gutterBottom>
+                      {itemRenderDetalleSubPlan && itemRenderDetallePlan}
                     </Typography>
+
+                    {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
+
+
+
                   </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Typography variant="caption" align="right" display="block">
-                      Payment To
-                    </Typography>
-                    <Typography variant="body2" align="right">
-                      Material App LLC
-                      <br />
-                      354 Roy Alley
-                      <br />
-                      Denver
-                      <br />
-                      80202
-                      <br />
-                      USA
-                      <br />
-                      <Link href="mailto:info@material-app.com">
-                        info@material-app.com
-                      </Link>
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-            <Card px={6}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Description</TableCell>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      Material App Theme Customization
-                    </TableCell>
-                    <TableCell>2</TableCell>
-                    <TableCell align="right">$150.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      Monthly Subscription
-                    </TableCell>
-                    <TableCell>3</TableCell>
-                    <TableCell align="right">$25.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell component="th" scope="row">
-                      Additional Service
-                    </TableCell>
-                    <TableCell>2</TableCell>
-                    <TableCell align="right">$100.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell />
-                    <TableCell>Subtotal</TableCell>
-                    <TableCell align="right">$275.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell />
-                    <TableCell>Shipping</TableCell>
-                    <TableCell align="right">$8.00</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell />
-                    <TableCell>Discount</TableCell>
-                    <TableCell align="right">5%</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell />
-                    <TableCell>Total</TableCell>
-                    <TableCell align="right">$268.85</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </Card>
-            <Card pb={6} px={6}>
-              <CardContent style={{ textAlign: "center" }}>
-                <div>
-                  <Typography variant="caption" gutterBottom align="center">
-                    Extra note: Please send all items at the same time to the
-                    shipping address. Thanks in advance.
-                  </Typography>
-                </div>
-                <Button variant="contained" color="primary" mt={2}>
-                  IMPRIMIR DETALLE
-                </Button>
-              </CardContent>
-            </Card>
-          </Shadow>
+                </CardContent>
+              </Card>
+
+            </Shadow>
+          </Grid>
         </Grid>
+
+
+
       </Grid>
 
     )
@@ -231,6 +387,8 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 function DetalleCotizacion() {
 
   let data = ObtenerDetalleCotizacion();
+  obtenerListaItems();
+
   let { id } = useParams();
 
   return (

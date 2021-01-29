@@ -12,6 +12,7 @@ import { Formik } from "formik";
 import { API } from "aws-amplify";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
+import moment from 'moment';
 
 
 import {
@@ -527,19 +528,23 @@ function BasicForm() {
                       {data}
                     </Grid>
                     <Grid item md={6}>
-                      <TextField
-                        name="fecha_siniestro"
-                        label="FECHA SINIESTRO "
-                        fullWidth
-                        onBlur={handleBlur}
-                        value={itemDatosAsegurado['fecha_siniestro']}
-                        onChange={event => SaveValue("fecha_siniestro", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
+                      <form noValidate>
+                        <TextField
+                          style={{ marginTop: 8 }}
+                          id="fecha_siniestro"
+                          label="FECHA SINIESTRO"
+                          type="date"
+                          fullWidth
+                          value={itemDatosAsegurado['fecha_siniestro']}
+                          onChange={event => SaveValue("fecha_siniestro", event.target.value)} variant="outlined"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </form>
                     </Grid>
                     <Grid item md={6}>
-                      <select style={{ height: 50, width:'100%', marginTop:10 }}
+                      <select style={{ height: 50, width:'100%', marginTop:10, padding:6 }}
                         onChange={event => SaveValue("tipo_siniestro", event.target.value)}
                       >
                         <option value="parcial">DAÑO PARCIAL</option>
@@ -577,6 +582,8 @@ function BasicForm() {
 }
 
 function ResumenDetail() {
+
+  console.log("itemAsegurado",itemDatosAsegurado)
   const handleSubmit = async (
     values,
     { resetForm, setErrors, setStatus, setSubmitting }
@@ -638,7 +645,7 @@ function ResumenDetail() {
                             <Grid container spacing={6}>
                               <Grid item md={12}>
                                 <Typography variant="h3" gutterBottom>
-                                  {'DECLARACION DE SINIESTRO:  ' + itemDatosAsegurado['fecha_siniestro']}
+                                  {'DECLARACION DE SINIESTRO:  ' + moment(itemDatosAsegurado['fecha_siniestro']).format('DD-MM-YYYY')}
                                 </Typography>
                               </Grid>
 
@@ -646,13 +653,35 @@ function ResumenDetail() {
 
                               <Grid item xs={12}>
                                 <Grid item xs={12}>
+                                  <Typography variant="body1" gutterBottom>
+                                    DETALLE SINIESTRO
+                                  </Typography>
                                   <Typography variant="body2" gutterBottom>
-                                    {itemDatosAsegurado['descripcion_caso']}
+                                    {itemDatosAsegurado['descripcion_siniestro']}
 
                                   </Typography>
                                 </Grid>
                               </Grid>
 
+
+                              <Grid item lg={12} style={{display:'flex'}}>
+                                <Grid item lg={3} style={{ paddingRight:2}}>
+                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
+                                    </div>
+                                </Grid>
+                                <Grid item lg={3} style={{ paddingRight:2}}>
+                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
+                                    </div>
+                                </Grid>
+                                <Grid item lg={3} style={{ paddingRight:2}}>
+                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
+                                    </div>
+                                </Grid>
+                                <Grid item lg={3} style={{ paddingRight:2}}>
+                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
+                                    </div>
+                                </Grid>
+                              </Grid>
 
                             </Grid>
 
@@ -660,40 +689,7 @@ function ResumenDetail() {
 
                           </CardContent>
                         </Card>
-                        <Card px={6}>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell style={{ fontWeight: 'bold ' }}>DETALLE POLIZA</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  Material App Theme Customization
-                    </TableCell>
-                                <TableCell>2</TableCell>
-                                <TableCell align="right">$150.00</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  Monthly Subscription
-                    </TableCell>
-                                <TableCell>3</TableCell>
-                                <TableCell align="right">$25.00</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  Additional Service
-                    </TableCell>
-                                <TableCell>2</TableCell>
-                                <TableCell align="right">$100.00</TableCell>
-                              </TableRow>
-
-                            </TableBody>
-                          </Table>
-                        </Card>
-
+                    
                       </Shadow>
                     </Grid>
                   </Grid>
@@ -1311,17 +1307,7 @@ function HorizontalNonLinearStepper() {
 
       <div style={{ marginTop: '16px', marginBottom: '10px', display: 'flex', flexDirection: 'row', }}>
         <div style={{ flex: 1 }}>
-          <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-            ATRAS
-              </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-            className={classes.button}
-          >
-            SIGUIENTE
-              </Button>
+        
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           {activeStep !== steps.length &&
@@ -1365,6 +1351,25 @@ function HorizontalNonLinearStepper() {
             </div>
           )}
       </div>
+      {allStepsCompleted() ? (<Grid></Grid>) : (
+        
+        <div style={{display: 'flex'}}>
+          <Grid item lg={6}>
+
+          <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+            ATRAS
+              </Button>
+          </Grid>
+
+          <Grid item lg={6} style={{ display: 'flex', justifyContent: 'flex-end'}}>
+            <Button variant="contained" color="primary" onClick={handleComplete}>
+              {completedSteps() === totalSteps() - 1 ? 'FINALIZAR' : 'COMPLETAR'}
+            </Button>
+          </Grid>
+
+        </div>
+      )}
+
     </div>
   );
 }
@@ -1374,19 +1379,19 @@ async function registrarProducto() {
   const mutation = `
   mutation MyMutation($bank:registrarNuevoSiniestroInput!) {
   registrarNuevoSiniestro (input:$bank){
-    data_poliza
+    data_siniestro
   }
 }
 `;
 
+  let dataSave = JSON.stringify({
+    detalle: itemDatosAsegurado,
+  });
   await API.graphql({
     query: mutation,
     variables: {
       bank: {
-        data_siniestro: JSON.stringify({
-          detalle: itemDatosAsegurado,
-
-        }),
+        data_siniestro: dataSave
 
       }
     }
@@ -1444,7 +1449,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
           console.log(itemTemporal)
 
           return (<option>
-            {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['numero_serie'] + ' - ' + itemTemporal['asegurado']['imei']}
+            {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo'] }
 
           </option>)
         })
