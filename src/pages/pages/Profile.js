@@ -468,30 +468,27 @@ const ListaRenderCotizaciones = (obtenerListaProductos) => {
                 rgbcolor={blue[500]}
               />
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '20%' }}>
-              <Typography variant="h6" gutterBottom>
-                {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['numero_serie'] + ' - ' + itemTemporal['asegurado']['imei']}
+            <TableCell component="th" scope="row" style={{ width: '40%' }}>
+              <Typography variant="body2" gutterBottom>
+                {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo']}
               </Typography>
             </TableCell>
 
-            <TableCell component="th" scope="row" style={{ width: '30%' }}>
+            <TableCell component="th" scope="row" style={{ width: '40%' }}>
               <Typography style={{
                 textTransform: 'uppercase'
-              }} variant="h6" gutterBottom>
-                {itemPlan['nombre_plan']}
+              }} variant="body2" gutterBottom>
+                {itemPlan['nombre_plan'] + " " + itemSubPlan['nombre']}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '30%' }}>
-              <Typography variant="h6" gutterBottom>
-                {itemSubPlan['plan']}
-              </Typography>
-            </TableCell>
+
 
             <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
               <Route style={{ marginRight: '6px' }} render={({ history }) => (
                 <Button onClick={() => { history.push(`/pages/cotizaciones/${item['id']}`) }} size="small" color="primary">
                   COMPRAR
                 </Button>
+
               )} />
 
             </TableCell>
@@ -567,18 +564,18 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
               />
             </TableCell>
 
-            <TableCell component="th" scope="row" style={{ width: '20%' }}>
-              <Typography variant="h6" gutterBottom>
-                {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['numero_serie'] + ' - ' + itemTemporal['asegurado']['imei']}
+            <TableCell component="th" scope="row" style={{ width: '5%' }}>
+              <Typography variant="body2" gutterBottom>
+                {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo']}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '30%' }}>
-              <Typography variant="h6" gutterBottom>
+            <TableCell component="th" scope="row" style={{ width: '40%' }}>
+              <Typography variant="body2" gutterBottom>
                 {itemPlan['nombre_plan']}
               </Typography>
             </TableCell>
-            <TableCell component="th" scope="row" style={{ width: '30%' }}>
-              <Typography variant="h6" gutterBottom>
+            <TableCell component="th" scope="row" style={{ width: '40%' }}>
+              <Typography variant="body2" gutterBottom>
                 {itemSubPlan['plan']}
               </Typography>
             </TableCell>
@@ -717,9 +714,8 @@ function Seguros() {
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
-                <TableCell style={{ width: '20%' }}>EQUIPO</TableCell>
-                <TableCell style={{ width: '30%' }}>PLAN</TableCell>
-                <TableCell style={{ width: '30%' }}>COBERTURA</TableCell>
+                <TableCell style={{ width: '40%' }}>EQUIPO</TableCell>
+                <TableCell style={{ width: '40%' }}>PLAN</TableCell>
                 <TableCell style={{ width: '15%' }}>OPCIONES</TableCell>
               </TableRow>
             </TableHead>
@@ -781,11 +777,10 @@ function Cotizaciones() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: '20%' }}>ESTADO</TableCell>
-                <TableCell style={{ width: '20%' }}>EQUIPO</TableCell>
-                <TableCell style={{ width: '20%' }}>PLAN</TableCell>
-                <TableCell style={{ width: '20%' }}>SUBPLAN</TableCell>
-                <TableCell style={{ width: '20%' }}>DETALLE</TableCell>
+                <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
+                <TableCell style={{ width: '40%' }}>EQUIPO</TableCell>
+                <TableCell style={{ width: '40%' }}>PLAN</TableCell>
+                <TableCell style={{ width: '15%' }}>DETALLE</TableCell>
               </TableRow>
             </TableHead>
             {data}

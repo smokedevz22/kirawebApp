@@ -1369,7 +1369,7 @@ function FlujoTerminadoRender() {
                                 </Typography>
                               </div>
 
-                              <Grid item xs={12} md={6}>
+                              <Grid item lg={6}>
                                 <Typography variant="caption">CLIENTE</Typography>
                                 <Typography variant="h4">
                                   {'RUT: ' + itemDatosAsegurado['rut_persona']}
@@ -1382,7 +1382,11 @@ function FlujoTerminadoRender() {
                                   <br />
                                 </Typography>
 
-                                <Typography variant="caption">EQUIPÖ</Typography>
+                              </Grid>
+
+                              <Grid item lg={6}>
+                        
+                                <Typography variant="caption">EQUIPO</Typography>
                                 <Typography variant="h4">
 
                                   {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
@@ -1393,6 +1397,7 @@ function FlujoTerminadoRender() {
                                   <br />
                                 </Typography>
                               </Grid>
+
 
                               <Typography variant="body2" gutterBottom>
                                 {itemRenderDetalleSubPlan && itemRenderDetallePlan}
