@@ -459,7 +459,7 @@ function AlertCompletarFormulario(props) {
   return (
      <Grid>
           <Button variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }} onClick={handleClickOpen}>
-            COMPLETAR FORMULARIO
+            CONTRATAR SEGURO
                                    </Button>
           <Dialog
             open={open}

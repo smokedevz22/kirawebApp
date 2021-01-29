@@ -12,6 +12,7 @@ import { Formik } from "formik";
 import { API } from "aws-amplify";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
+import moment from 'moment';
 
 
 import {
@@ -152,7 +153,7 @@ function Project({ id, image, title, description, chip }) {
 function DefaultDropzone() {
   return (
     <Card mb={6}>
-      <CardContent>
+        <CardContent>
         <Typography variant="h6" gutterBottom>
           ADJUNTAR ARCHIVOS
         </Typography>
@@ -162,9 +163,59 @@ function DefaultDropzone() {
         </Typography>
 
         <Spacer mb={4} />
-        <DropzoneArea showFileNamesInPreview={true} showFileNames={true} />
+
+        <Grid container lg={12}  >
+          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }} >
+              FOTO DEL EQUIPO
+            
+        </Typography>
+            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
+               Material-UI-Dropzone is a React component using Material-UI and is
+              based on the excellent react-dropzone library.
+        </Typography>
+            <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+
+
+          </Grid>
+
+          <Grid lg={6} style={{ marginTop: '22px' }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+              ADJUNTAR FOTO CARNET DE IDENTIDAD
+            
+        </Typography>
+            <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
+               Material-UI-Dropzone is a React component using Material-UI and is
+              based on the excellent react-dropzone library.
+        </Typography>
+            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
+          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6  }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+              ADJUNTAR FOTO COTIZACION SERVICIO TECNICO
+            
+        </Typography>
+            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
+               Material-UI-Dropzone is a React component using Material-UI and is
+              based on the excellent react-dropzone library.
+        </Typography>
+            <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
+     
+
+        </Grid>
+
+
       </CardContent>
-    </Card>
+   </Card>
   );
 }
 
@@ -471,16 +522,20 @@ function BasicForm() {
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={6}>
                     <Grid item md={6}>
-                      <TextField
-                        name="fecha_siniestro"
-                        label="FECHA SINIESTRO "
-                        fullWidth
-                        onBlur={handleBlur}
-                        value={itemDatosAsegurado['fecha_siniestro']}
-                        onChange={event => SaveValue("fecha_siniestro", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
+                      <form noValidate>
+                        <TextField
+                          style={{ marginTop: 8 }}
+                          id="fecha_siniestro"
+                          label="FECHA SINIESTRO"
+                          type="date"
+                          fullWidth
+                          value={itemDatosAsegurado['fecha_siniestro']}
+                          onChange={event => SaveValue("fecha_siniestro", event.target.value)} variant="outlined"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </form>
                     </Grid>
                     <Grid item md={6}>
                       <select style={{ height: 50, width: '100%', marginTop: 10 }}
@@ -582,7 +637,7 @@ function ResumenDetail() {
                             <Grid container spacing={6}>
                               <Grid item md={12}>
                                 <Typography variant="h3" gutterBottom>
-                                  {'DECLARACION DE SINIESTRO:  ' + itemDatosAsegurado['fecha_siniestro']}
+                                  {'DECLARACION DE SINIESTRO:  ' + moment(itemDatosAsegurado['fecha_siniestro']).format('DD-MM-YYYY')}
                                 </Typography>
                               </Grid>
 
@@ -590,52 +645,41 @@ function ResumenDetail() {
 
                               <Grid item xs={12}>
                                 <Grid item xs={12}>
+                                  <Typography variant="body1" gutterBottom>
+                                    DETALLE SINIESTRO
+                                  </Typography>
                                   <Typography variant="body2" gutterBottom>
-                                    {itemDatosAsegurado['descripcion_caso']}
+                                    {itemDatosAsegurado['descripcion_siniestro']}
 
                                   </Typography>
                                 </Grid>
                               </Grid>
 
 
+                              <Grid item lg={12} style={{ display: 'flex' }}>
+                                <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                  <div style={{ background: 'lightgray', height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+                                  </div>
+                                </Grid>
+                                <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                  <div style={{ background: 'lightgray', height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+                                  </div>
+                                </Grid>
+                                <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                  <div style={{ background: 'lightgray', height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+                                  </div>
+                                </Grid>
+                                <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                  <div style={{ background: 'lightgray', height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+                                  </div>
+                                </Grid>
+                              </Grid>
+
                             </Grid>
 
 
 
                           </CardContent>
-                        </Card>
-                        <Card px={6}>
-                          <Table>
-                            <TableHead>
-                              <TableRow>
-                                <TableCell style={{ fontWeight: 'bold ' }}>DETALLE POLIZA</TableCell>
-                              </TableRow>
-                            </TableHead>
-                            <TableBody>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  Material App Theme Customization
-                    </TableCell>
-                                <TableCell>2</TableCell>
-                                <TableCell align="right">$150.00</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  Monthly Subscription
-                    </TableCell>
-                                <TableCell>3</TableCell>
-                                <TableCell align="right">$25.00</TableCell>
-                              </TableRow>
-                              <TableRow>
-                                <TableCell component="th" scope="row">
-                                  Additional Service
-                    </TableCell>
-                                <TableCell>2</TableCell>
-                                <TableCell align="right">$100.00</TableCell>
-                              </TableRow>
-
-                            </TableBody>
-                          </Table>
                         </Card>
 
                       </Shadow>
@@ -1251,17 +1295,7 @@ function HorizontalNonLinearStepper() {
 
       <div style={{ marginTop: '16px', marginBottom: '10px', display: 'flex', flexDirection: 'row', }}>
         <div style={{ flex: 1 }}>
-          <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-            ATRAS
-              </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleNext}
-            className={classes.button}
-          >
-            SIGUIENTE
-              </Button>
+      
         </div>
         <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           {activeStep !== steps.length &&
@@ -1305,6 +1339,25 @@ function HorizontalNonLinearStepper() {
             </div>
           )}
       </div>
+
+      {allStepsCompleted() ? (<Grid></Grid>) : (
+
+        <div style={{ display: 'flex' }}>
+          <Grid item lg={6}>
+
+            <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
+              ATRAS
+              </Button>
+          </Grid>
+
+          <Grid item lg={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button variant="contained" color="primary" onClick={handleComplete}>
+              {completedSteps() === totalSteps() - 1 ? 'FINALIZAR' : 'COMPLETAR'}
+            </Button>
+          </Grid>
+
+        </div>
+      )}
     </div>
   );
 }
