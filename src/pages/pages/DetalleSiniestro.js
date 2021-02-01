@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import { NavLink } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import { API } from "aws-amplify";
+import moment from 'moment';
 
 import Helmet from "react-helmet";
 
@@ -42,7 +43,108 @@ const Button = styled(MuiButton)(spacing);
 
 const Typography = styled(MuiTypography)(display);
 
+
+const ObtenerDetalleSiniestro = () => {
+
+  let { id } = useParams();
+
+  let temId = String(id)
+  console.log(id)
+
+
+  const [siniestros, setSiniestros] = useState('undefined');
+
+
+  useEffect(async () => {
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   detalleSiniestro(numero_siniestro:"${temId}") {
+     id
+    data_siniestro
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    const data = await API.graphql({
+      query: queryListaActividadGraphql
+    });
+    console.log("data from GraphQL:", data);
+    setSiniestros(data)
+
+  }, [])
+
+  console.log("polizaaa", siniestros)
+  if (siniestros && siniestros['data']) {
+
+    let dataSiniestro = JSON.parse(siniestros['data']['detalleSiniestro']['data_siniestro'])
+    console.log("siniestro", dataSiniestro)
+
+    return (
+
+
+      <Grid container justify="center">
+        <Grid container justify="center">
+          <Grid item xs={12} lg={10}>
+            <Shadow>
+              <Grid container justify="center">
+                <Grid item xs={12} lg={10}>
+                  <Shadow>
+
+                    <Card pb={6} px={6}>
+                      <CardContent  >
+                        <div>
+                          <Typography variant="h2" gutterBottom  >
+                            DETALLE SINIESTRO
+                                     </Typography>
+
+
+                          <Grid style={{ display: 'flex', }}>
+
+                            <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
+                              FECHA DECLARACION
+                          </Typography>
+
+                            <Typography variant="h6" gutterBottom  >
+                              {moment(dataSiniestro['detalle']['fecha_siniestro']).format("DD-MM-YYYY")}
+                            </Typography>
+                          </Grid>
+
+
+                          <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
+                            {dataSiniestro['detalle']['descripcion_siniestro']}
+
+                          </Typography>
+                        </div>
+
+                      </CardContent>
+                    </Card>
+                  </Shadow>
+                </Grid>
+              </Grid>  </Shadow>
+          </Grid>
+        </Grid>
+      </Grid>
+
+    )
+  } else {
+
+    return siniestros && 'cargando...'
+
+  }
+
+
+
+}
+
+
+
 function DetalleSiniestro() {
+
+
+
+  let DetalleSiniestro = ObtenerDetalleSiniestro()
   return (
     <React.Fragment>
       <Helmet title="Invoice Details" />
@@ -66,36 +168,8 @@ function DetalleSiniestro() {
 
       <Divider my={6} />
 
-      <Grid container justify="center">
-        <Grid item xs={12} lg={10}>
-          <Shadow>
-            <Grid container justify="center">
-              <Grid item xs={12} lg={10}>
-                <Shadow>
+      {DetalleSiniestro}
 
-                  <Card pb={6} px={6}>
-                    <CardContent  >
-                      <div>
-                        <Typography variant="h2" gutterBottom  >
-                          DETALLE SINIESTRO
-                                     </Typography>
-
-
-                        <Typography variant="h6" gutterBottom  >
-                          FECHA DECLARACION
-                                     </Typography>
-                        <Typography variant="body2" gutterBottom  >
-                          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </Typography>
-                      </div>
-
-                    </CardContent>
-                  </Card>
-                </Shadow>
-              </Grid>
-            </Grid>  </Shadow>
-        </Grid>
-      </Grid>
     </React.Fragment>
   );
 }

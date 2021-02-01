@@ -42,6 +42,7 @@
     "deepmerge": "4.2.2",
     "formik": "2.2.5",
     "google-map-react": "2.1.9",
+    "ionic": "^5.4.16",
     "jss": "10.5.0",
     "material-ui-dropzone": "3.5.0",
     "moment": "^2.29.1",
