@@ -525,9 +525,15 @@ function BasicForm() {
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={6}>
                     <Grid item md={12}>
+
+                      <h4>¿En que poliza deseas registrar un siniestro?</h4>
+
                       {data}
                     </Grid>
                     <Grid item md={6}>
+
+                      <h4>¿Cuando ocurrió?</h4>
+
                       <form noValidate>
                         <TextField
                           style={{ marginTop: 8 }}
@@ -544,6 +550,9 @@ function BasicForm() {
                       </form>
                     </Grid>
                     <Grid item md={6}>
+
+                      <h4>¿Qué ocurrió?</h4>
+
                       <select style={{ height: 50, width:'100%', marginTop:10, padding:6 }}
                         onChange={event => SaveValue("tipo_siniestro", event.target.value)}
                       >
@@ -554,6 +563,9 @@ function BasicForm() {
                       </select>
                     </Grid>
                     <Grid item md={12}>
+
+                      <h4>Describa lo ocurrido</h4>
+
                       <textarea
                         rows="12"
                         placeholder="INGRESE DESCRIPCION DEL ACCIDENTE"
@@ -1489,7 +1501,7 @@ function DeclaracionSiniestroGlobal() {
           <Typography>DECLARACION</Typography>
         </Breadcrumbs>
         <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '210px', background: 'red' }}>
+          <div style={{ width: '100%', height: '210px',    }}>
             <img src="/static/img/imagen_prote.jpg" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
 
           </div>

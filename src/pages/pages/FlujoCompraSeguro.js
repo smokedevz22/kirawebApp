@@ -767,10 +767,10 @@ function RenderDetallePlan(item,subplan) {
 
   if (detalle) {
     //setDetallePlan(detalle)
-    return (<Grid style={{display:'flex'}}>
+    return (<Grid >
    
    
-      <Grid item lg={4} >
+      <Grid item lg={12} >
         
         <Grid style={{ marginTop: '12px' }}>
           <div style={{ width: '100%', height: '160px', }}>
@@ -781,7 +781,7 @@ function RenderDetallePlan(item,subplan) {
      </Grid>
 
       
-      <Grid item lg={8}>
+      <Grid item lg={12}>
 
 
 

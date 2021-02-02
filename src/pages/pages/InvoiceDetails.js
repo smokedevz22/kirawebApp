@@ -71,7 +71,7 @@ function InvoiceDetails() {
               <CardContent>
                 <Grid xl={12} container spacing={6}>
                   <Grid style={{ marginTop: '12px' }}>
-                    <div style={{ width: '100%', height: '160px', background: 'red' }}>
+                    <div style={{ width: '100%', height: '160px', }}>
                       <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
                     </div>

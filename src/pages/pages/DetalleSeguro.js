@@ -251,7 +251,7 @@ function RenderDetallePlan(item, subplan) {
     return (<Grid>
       <Grid>
         <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '160px', background: 'red' }}>
+          <div style={{ width: '100%', height: '160px',  }}>
             <img src={detalle['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
 
           </div>
@@ -690,14 +690,7 @@ const ObtenerDetalleSiniestro = () => {
 
                             </Grid>
                           </Grid>
-
-
-
-
-
-
-
-                          <Grid item lg={12} style={{display:'flex', marginTop:22}}>
+ <Grid item lg={12} style={{display:'flex', marginTop:22}}>
 
                             <Grid item lg={6}>
                               <Typography variant="h6" gutterBottom>

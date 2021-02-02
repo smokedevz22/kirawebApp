@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   Box,
   Container,
   Avatar,
   Grid,
+  Button as MuiButton,
+
   Tooltip,
   Typography as MuiTypography,
 } from "@material-ui/core";
@@ -14,6 +17,7 @@ import {
 import { spacing } from "@material-ui/system";
 
 const Typography = styled(MuiTypography)(spacing);
+const Button = styled(MuiButton)(spacing);
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -137,10 +141,37 @@ function Introduction() {
 
             </Grid>
 
-            <Grid style={{ display: 'flex', textAlign: 'start' }}>
-              <Subtitle color="textSecondary">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. <br /> when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                  </Subtitle>
+            <Grid style={{ display: 'flex', textAlign: 'start', flexDirection: 'column', paddingTop: 22, justifyContent: 'center', alignItems: 'center' }}>
+
+
+              <Grid style={{ paddingLeft: 12, paddingRight: 12, textAlign: 'center' }}>
+
+                <Typography gutterBottom>
+                  Reposición de tu equipo por:
+                 </Typography>
+                <Typography gutterBottom>
+                  Robo,
+                  </Typography>
+                <Typography gutterBottom>
+                  Perdida total o
+                 </Typography>
+                <Typography gutterBottom>
+                  Perdida parcial por accidente
+                  </Typography>
+              </Grid>
+              <Grid>
+
+                <Button
+                  style={{ marginTop: 12 }}
+                  ml={2}
+                  color="primary"
+                  variant="contained"
+                  component={Link}
+                  to="/pages/flujo_compras"
+                >
+                  COTIZAR
+              </Button>
+              </Grid>
             </Grid>
 
 
@@ -152,14 +183,13 @@ function Introduction() {
 
                   <Grid style={{ display: 'flex', }}>
                     <Typography variant="h4" style={{ textTransform: 'uppercase', color: '#0fb6e9' }}>
-                      En que consiste la reposición?
+                      ¿cómo recuperas el equipo?
                 </Typography>
                   </Grid>
 
                   <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
                     <Typography variant="p" style={{ color: 'white', }}>
-                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                      .
+                      Se repone el equipo el equipo asegurado con uno “nuevo o similar a nuevo” en condiciones y características similares.
                 </Typography>
                   </Grid>
 
@@ -169,14 +199,14 @@ function Introduction() {
 
                   <Grid style={{ display: 'flex', }}>
                     <Typography variant="h4" style={{ textTransform: 'uppercase', color: '#0fb6e9' }}>
-                      En que consiste la reposición?
-                </Typography>
+                      Deducible                </Typography>
                   </Grid>
 
                   <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
                     <Typography variant="p" style={{ color: 'white', }}>
-                      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-                      .
+                      La perdida total tiene un deducible igual al 25% del valor del equipo.
+                      La perdida parcial tiene un deducible del 15% valor del equipo
+
                 </Typography>
                   </Grid>
 

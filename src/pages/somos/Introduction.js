@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   Box,
@@ -8,12 +9,15 @@ import {
   Avatar,
   Grid,
   Tooltip,
+  Button as MuiButton,
+
   Typography as MuiTypography,
 } from "@material-ui/core";
 
 import { spacing } from "@material-ui/system";
 
 const Typography = styled(MuiTypography)(spacing);
+const Button = styled(MuiButton)(spacing);
 
 const Wrapper = styled.div`
   padding-top: 3.5rem;
@@ -139,7 +143,8 @@ function Introduction() {
 
             <Grid style={{ display: 'flex', textAlign: 'start' }}>
               <Subtitle color="textSecondary">
-                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s. <br /> when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                FR Group, una corredora líder con más de 34 años de experiencia en el mercado asegurador chileno, de probada solvencia, reconocida en brindar soluciones y programas de seguros.
+                Un grupo que diseña soluciones a medida
                   </Subtitle>
             </Grid>
 
