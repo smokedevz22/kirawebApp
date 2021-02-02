@@ -7,6 +7,7 @@ import { Helmet } from "react-helmet";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { signIn } from "../../redux/actions/authActions";
+import { Auth } from 'aws-amplify';
 
 import {
   Avatar,
@@ -37,10 +38,26 @@ const BigAvatar = styled(Avatar)`
   text-align: center;
   margin: 0 auto ${(props) => props.theme.spacing(5)}px;
 `;
+const AlwaysOn = (props) => {
+  return (
+    <div>
+      <div>I am always here to show current auth state: {props.authState}</div>
+      <button onClick={() => props.onStateChange('signUp')}>Show Sign Up</button>
+    </div>
+  )
+}
 
-function SignIn() {
+
+function handleAuthStateChange(state) {
+  if (state === 'signedIn') {
+    /* Do something when the user has signed-in */
+  }
+}
+
+function SignInx() {
   const dispatch = useDispatch();
   const history = useHistory();
+
 
   return (
     <Wrapper>
@@ -55,23 +72,22 @@ function SignIn() {
 
       <Formik
         initialValues={{
-          email: "demo@bootlab.io",
-          password: "unsafepassword",
+          email: "",
+          password: "",
           submit: false,
         }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email("Must be a valid email")
-            .max(255)
-            .required("Email is required"),
-          password: Yup.string().max(255).required("Password is required"),
-        })}
+
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+
+          console.log("SDasd")
           try {
-            await dispatch(
-              signIn({ email: values.email, password: values.password })
-            );
-            history.push("/private");
+
+            await Auth.signIn(values.email, values.password).then((data) => {
+              console.log("datalogin", data)
+              // history.push("/pages/mi_cuenta");
+              window.location.href = '/pages/mi_cuenta'
+            })
+
           } catch (error) {
             const message = error.message || "Something went wrong";
 
@@ -92,8 +108,7 @@ function SignIn() {
         }) => (
           <form noValidate onSubmit={handleSubmit}>
             <Alert mt={3} mb={1} severity="info">
-              Use <strong>demo@bootlab.io</strong> and{" "}
-              <strong>unsafepassword</strong> to sign in
+              ESTE PODRIA SER UN ESPACIO PUBLICITARIO
             </Alert>
             {errors.submit && (
               <Alert mt={2} mb={1} severity="warning">
@@ -148,8 +163,11 @@ function SignIn() {
           </form>
         )}
       </Formik>
+
+
+
     </Wrapper>
   );
 }
 
-export default SignIn;
+export default SignInx;

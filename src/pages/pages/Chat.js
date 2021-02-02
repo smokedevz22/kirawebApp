@@ -230,7 +230,6 @@ let itemRender = 'cargando'
 
 function ChatWindow() {
 
-  itemRender = ListaRenderSiniestros();
 
 
   return (

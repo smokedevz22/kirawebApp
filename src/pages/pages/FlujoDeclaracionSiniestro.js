@@ -522,6 +522,8 @@ function BasicForm() {
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={6}>
                     <Grid item md={6}>
+                      <h4>¿Cuando ocurrió?</h4>
+
                       <form noValidate>
                         <TextField
                           style={{ marginTop: 8 }}
@@ -538,6 +540,7 @@ function BasicForm() {
                       </form>
                     </Grid>
                     <Grid item md={6}>
+                      <h4>¿Qué ocurrió?</h4>
                       <select style={{ height: 50, width: '100%', marginTop: 10 }}
                         onChange={event => SaveValue("tipo_siniestro", event.target.value)}
                       >
@@ -548,6 +551,9 @@ function BasicForm() {
                       </select>
                     </Grid>
                     <Grid item md={12}>
+
+                      <h4>Describa lo ocurrido</h4>
+
                       <textarea
                         rows="12"
                         placeholder="INGRESE DESCRIPCION DEL ACCIDENTE"

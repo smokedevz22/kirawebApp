@@ -304,7 +304,7 @@ function Orders(props) {
       <Card mb={6} pt={2}>
         <CardContent>
           <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">30</Box>
+            <Box fontWeight="fontWeightRegular">0</Box>
           </Typography>
           <Typography variant="body2" gutterBottom mt={3} mb={0}>
             SEGUROS CONTRATADOS
@@ -334,7 +334,7 @@ function Revenue(props) {
       <Card mb={6} pt={2}>
         <CardContent>
           <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">1.224</Box>
+            <Box fontWeight="fontWeightRegular">0</Box>
           </Typography>
           <Typography variant="body2" gutterBottom mt={3} mb={0}>
             SINIESTROS DECLARADOS
@@ -366,7 +366,7 @@ function CotizacionesCard(props) {
       <Card mb={6} pt={2}>
         <CardContent>
           <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">1.224</Box>
+            <Box fontWeight="fontWeightRegular">0</Box>
           </Typography>
           <Typography variant="body2" gutterBottom mt={3} mb={0}>
             Cotizaciones Realizadas
@@ -565,33 +565,34 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
             </TableCell>
 
             <TableCell component="th" scope="row"  >
-              <Typography variant="body2" gutterBottom>
+              <Typography gutterBottom style={{ fontSize: 12, textTransform: 'uppercase' }}>
                 {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo']}
               </Typography>
             </TableCell>
             <TableCell component="th" scope="row" >
-              <Typography variant="body2" gutterBottom>
+              <Typography style={{ fontSize: 12, textTransform: 'uppercase' }} gutterBottom>
                 {itemPlan['nombre_plan']}
               </Typography>
             </TableCell>
+
+
             <TableCell component="th" scope="row" >
-              <Typography variant="body2" gutterBottom>
-                {itemSubPlan['plan']}
-              </Typography>
+
+              <Grid style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                  <Button onClick={() => { history.push(`/pages/polizas/${item['id']}`) }} size="small" color="primary">
+                    FICHA
+                  </Button>
+                )} />
+
+                <Route render={({ history }) => (
+                  <Button onClick={() => { history.push('/pages/flujo_siniestro') }} size="small" color="primary">
+                    SINIESTRO
+                  </Button>
+                )} />
+
+              </Grid>
             </TableCell>
-
-            <TableCell component="th" scope="row" style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <Route style={{ marginRight: '6px' }} render={({ history }) => (
-                <Button onClick={() => { history.push(`/pages/polizas/${item['id']}`) }} size="small" color="primary">
-                  FICHA
-                </Button>
-              )} />
-
-              <Route render={({ history }) => (
-                <Button onClick={() => { history.push('/pages/flujo_siniestro') }} size="small" color="primary">
-                  SINIESTRO
-                </Button>
-              )} /></TableCell>
           </TableRow>
           )
         })
@@ -709,8 +710,8 @@ function Seguros() {
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
-                <TableCell style={{ width: '40%' }}>EQUIPO</TableCell>
-                <TableCell style={{ width: '40%' }}>PLAN</TableCell>
+                <TableCell style={{ width: '70%' }}>EQUIPO</TableCell>
+                <TableCell style={{ width: '20%' }}>PLAN</TableCell>
                 <TableCell style={{ width: '10%' }}>OPCIONES</TableCell>
               </TableRow>
             </TableHead>

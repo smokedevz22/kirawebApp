@@ -11,6 +11,11 @@ import { ThemeProvider } from "styled-components/macro";
 
 import createTheme from "./theme";
 import Routes from "./routes/Routes";
+import Amplify, { Auth } from 'aws-amplify';
+import awsconfig from './aws-exports';
+import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+
+Amplify.configure(awsconfig);
 
 function App() {
   const theme = useSelector((state) => state.themeReducer);
@@ -25,6 +30,9 @@ function App() {
           <MuiThemeProvider theme={createTheme(theme.currentTheme)}>
             <ThemeProvider theme={createTheme(theme.currentTheme)}>
               <Routes />
+
+
+
             </ThemeProvider>
           </MuiThemeProvider>
         </MuiPickersUtilsProvider>
@@ -32,5 +40,5 @@ function App() {
     </React.Fragment>
   );
 }
-
 export default App;
+

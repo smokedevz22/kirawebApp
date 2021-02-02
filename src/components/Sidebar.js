@@ -5,8 +5,12 @@ import { NavLink, withRouter } from "react-router-dom";
 import { darken } from "polished";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import "../vendor/perfect-scrollbar.css";
-
+import { SignIn } from 'aws-amplify-react';
 import { spacing } from "@material-ui/system";
+import async from "../components/Async";
+import { AddShoppingCart, NoteAdd, Storefront, LocalHospital, NewReleases, QueuePlayNext, Contacts, PersonAdd, AssignmentInd, Notifications } from "@material-ui/icons";
+import { Auth } from 'aws-amplify';
+import { useHistory } from "react-router-dom";
 
 import {
   Badge,
@@ -30,6 +34,17 @@ import { sidebarRoutes as routes } from "../routes/index";
 
 import { ReactComponent as Logo } from "../vendor/logo.svg";
 
+
+
+
+const SignInx = async(() => import("../pages/auth/SignIn"));
+const Profile = async(() => import("../pages/pages/Profile"));
+const DeclaracionSiniestroGlobal = async(() => import("../pages/pages/FlujoSiniestroGlobal"));
+const SalirComponent = async(() => {
+  console.log("salir")
+
+
+});
 const Box = styled(MuiBox)(spacing);
 
 const Drawer = styled(MuiDrawer)`
@@ -289,6 +304,7 @@ const SidebarLink = ({ name, to, badge, icon }) => {
 };
 
 const Sidebar = ({ classes, staticContext, location, ...rest }) => {
+
   const initOpenRoutes = () => {
     /* Open collapse element that matches current url */
     const pathName = location.pathname;
@@ -309,6 +325,7 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
   };
 
   const [openRoutes, setOpenRoutes] = useState(() => initOpenRoutes());
+  const [nada, setNada] = useState('');
 
   const toggle = (index) => {
     // Collapse all elements
@@ -325,6 +342,59 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
       Object.assign({}, openRoutes, { [index]: !openRoutes[index] })
     );
   };
+  console.log("routes", routes)
+
+  console.log("signIn", SignIn)
+  let d = Auth.currentUserInfo().then((data) => {
+
+    if (!data) {
+      console.log("--------x--------")
+      setNada('x')
+      let itemA = {
+        path: "/pages/login",
+        name: "Login",
+        id: "INGRESAR",
+        icon: <List />,
+        component: SignInx,
+      }
+      routes[5] = '';
+      routes[6] = itemA;
+      routes[7] = '';
+
+    } else {
+      console.log("-------y---------")
+      setNada('Y')
+
+      let itemBA = {
+        path: "/pages/siniestro_global",
+        name: "Declarar siniestro",
+        id: "Declarar siniestro",
+        icon: <AddShoppingCart />,
+        component: DeclaracionSiniestroGlobal,
+      };
+
+      let itemB = {
+        path: "/pages/mi_cuenta",
+        name: "Mi Cuenta",
+        id: "Mi Cuenta",
+        icon: <Contacts />,
+        component: Profile,
+      }
+
+      let itemC = {
+        path: "/pages/logout",
+        id: "Salir",
+        icon: <Contacts />,
+        component: null
+      }
+      routes[5] = itemBA;
+      routes[6] = itemB;
+      routes[7] = itemC;
+
+    }
+  })
+
+  console.log("routesx2", routes)
 
   return (
     <Drawer variant="permanent" {...rest}>

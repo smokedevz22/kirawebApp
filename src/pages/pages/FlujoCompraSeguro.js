@@ -39,6 +39,8 @@ import {
   DialogContentText,
   DialogTitle,
   Grid,
+  Chip as MuiChip,
+
   Table,
   TableBody,
   TableCell,
@@ -56,6 +58,8 @@ import { color, spacing } from "@material-ui/system";
 import { Alert as MuiAlert } from "@material-ui/lab";
 import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
 
+
+const Chip = styled(MuiChip)(spacing);
 const Spacer = styled.div(spacing);
 const Divider = styled(MuiDivider)(spacing);
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
@@ -264,7 +268,7 @@ function DefaultDropzone() {
                Material-UI-Dropzone is a React component using Material-UI and is
               based on the excellent react-dropzone library.
         </Typography>
-            <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+            <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']}  
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
 
@@ -280,7 +284,7 @@ function DefaultDropzone() {
                Material-UI-Dropzone is a React component using Material-UI and is
               based on the excellent react-dropzone library.
         </Typography>
-            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
@@ -294,7 +298,7 @@ function DefaultDropzone() {
                Material-UI-Dropzone is a React component using Material-UI and is
               based on the excellent react-dropzone library.
         </Typography>
-            <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+            <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
@@ -309,7 +313,7 @@ function DefaultDropzone() {
               based on the excellent react-dropzone library.
         </Typography>
             <DropzoneArea   
- dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ dropzoneText={''}                       acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
@@ -468,13 +472,31 @@ function AlertCompletarFormulario(props) {
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"Confirmar compra"}
+              {"ACEPTACION DE LA POLIZA DE SEGURO"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-            Esta seguro que desea comprar :
-            <br />
-            {}
+            <Grid>
+              <Typography   gutterBottom>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>                 La poliza del seguro sera enviada a su correo electronico registrado
+</p>
+
+                <h4 style={{
+                  marginTop:22,
+                  textTransform: 'uppercase'
+                }}>CARACTERISTICAS DEL PRODUCTO </h4>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>  UF</strong></p>
+                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
+                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
+                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>  UF  </strong></p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px', marginTop: 22 }}><strong>El riesgo es asegurado por Chubb Compañía de Seguros Generales S.A</strong></p>
+
+
+              </Typography>
+           </Grid>
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -735,34 +757,72 @@ const ListaRenderSubPlan = (functionRenderDetalle) => {
   }
 }
 
-function RenderDetallePlan(item) {
+function RenderDetallePlan(item,subplan) {
   // const [detallePlan, setDetallePlan] = useState({});
 
   let detalle = JSON.parse(item['data_plan'])
+  let detalleSubPlan = JSON.parse(subplan['data_sub_plan'])
+
   console.log("DETALLE_PLAN", detalle)
 
   if (detalle) {
     //setDetallePlan(detalle)
-    return (<Grid>
-      <Grid>
+    return (<Grid style={{display:'flex'}}>
+   
+   
+      <Grid item lg={4} >
+        
         <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '160px', background: 'red' }}>
+          <div style={{ width: '100%', height: '160px', }}>
             <img src={detalle['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
 
           </div>
         </Grid>
-        <Typography variant="h2" gutterBottom style={{marginTop:12}}>
-          {detalle['nombre_plan']} 
+     </Grid>
 
       
-        </Typography>
+      <Grid item lg={8}>
 
-        <Typography variant="body2" gutterBottom>
-          <p>{detalle['descripcion_comercial_plan']}</p>
 
-        </Typography>
-      </Grid> 
-    </Grid>)
+
+        <Grid>
+
+          <Typography variant="h2" gutterBottom style={{ marginTop: 12 }}>
+            {detalle['nombre_plan']}   {detalleSubPlan['nombre']}
+
+
+          </Typography>
+
+          <Typography variant="body2" gutterBottom>
+            <p>{detalle['descripcion_comercial_plan']}</p>
+
+          </Typography>
+        </Grid> 
+
+        <Grid >
+          <Typography variant="h6" gutterBottom>
+
+            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>{detalleSubPlan['capital']} UF</strong></p>
+            <h2 style={{
+              textTransform: 'uppercase'
+            }}>COBERTURAS </h2>
+            <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
+            <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
+            <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
+            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
+            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
+            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalleSubPlan['precio_mensual']} UF  </strong></p>
+            <p style={{ textTransform: 'uppercase', fontSize: '12px', marginTop:12 }}><strong>El riesgo es asegurado por Chubb Compañía de Seguros Generales S.A</strong></p>
+
+
+          </Typography>
+        </Grid>
+
+      </Grid>
+
+
+
+     </Grid>)
   }
   return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
 }
@@ -793,7 +853,7 @@ function cargarDetallesCobertura(item) {
       switch (item['codigo_cobertura']) { 
 
         case "CL-Daño-Total":
-          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL DEDUCIBLE: <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_total').innerHTML = 'DEDUCIBLE DE DAÑO TOTAL : <strong>' + item['deducible'] + ' UF </strong>'
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Total": item['deducible']
@@ -801,7 +861,7 @@ function cargarDetallesCobertura(item) {
           break;
         
         case "CL-Daño-Parcial":
-          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL DEDUCIBLE : <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_parcial').innerHTML = 'DEDUCIBLE DE DAÑO PARCIAL  : <strong>' + item['deducible'] + ' UF </strong>'
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Parcial": item['deducible']
@@ -809,7 +869,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Robo":
-          document.getElementById('cobertura_perdida').innerHTML = 'ROBO DEDUCIBLE :  <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_perdida').innerHTML = 'DEDUCIBLE DE ROBO  :  <strong>' + item['deducible'] + ' UF </strong>'
           detallesExtras = {
             ...detallesExtras,
             "CL-Robo": item['deducible']
@@ -840,28 +900,7 @@ function RenderDetalleSubPlan(item) {
     //setDetallePlan(detalle)
     return (<Grid lg={12}>
 
-      <Grid lg={12}>
-        <Typography variant="h6" gutterBottom>
-
-          <h2 style={{
-            textTransform: 'uppercase'
-          }}>SUBPLAN : {detalle['nombre']}</h2>
-
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>{detalle['capital']} UF</strong></p>
-          <h2 style={{
-            textTransform: 'uppercase'
-          }}>COBERTURAS </h2>
-          <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
-          <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
-          <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalle['precio_mensual']} UF  </strong></p>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>COMPAÑIA ASEGURADORA :<strong> CHUBB DE CHILE COMPAÑIA DE SEGUROS GENERALES S.A</strong></p>
-
-
-        </Typography>
-      </Grid>
+      
   
     </Grid>)
   }
@@ -1159,7 +1198,7 @@ function ResumenDetail() {
      
   };
   
-  itemRenderDetallePlan =  RenderDetallePlan(planSeleccionado)
+  itemRenderDetallePlan =  RenderDetallePlan(planSeleccionado, subPlanSeleccionado)
   itemRenderDetalleSubPlan =   RenderDetalleSubPlan(subPlanSeleccionado)
 
 
@@ -1495,9 +1534,8 @@ function PlanesForm() {
   
   itemRender = ListaRender(handleChangePlan)
   itemRenderSubPlan = ListaRenderSubPlan(handleChangeSubPlan)
-  itemRenderDetallePlan = dplan && RenderDetallePlan(dplan)
-  itemRenderDetalleSubPlan = splan && RenderDetalleSubPlan(splan)
-
+  itemRenderDetallePlan = splan && dplan && RenderDetallePlan(dplan, splan)
+ 
 
 
   const handleSubmit = async (
@@ -1571,12 +1609,10 @@ function PlanesForm() {
 
                               </Grid>
                               <Grid item xs={12}>
-                                <Typography variant="body2" gutterBottom>
-                                  {itemRenderDetalleSubPlan && itemRenderDetallePlan}
-                                </Typography>
+                                   {itemRenderDetalleSubPlan && itemRenderDetallePlan}
+                            
 
-                                {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
-
+ 
                               </Grid>
                          
 
@@ -2112,7 +2148,7 @@ function FlujoCompra() {
           <Typography>FLUJO DE COMPRA</Typography>
         </Breadcrumbs>
         <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '210px', background: 'red' }}>
+          <div style={{ width: '100%', height: '210px',}}>
             <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
 
           </div>

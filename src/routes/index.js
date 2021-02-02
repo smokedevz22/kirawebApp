@@ -123,7 +123,7 @@ const Changelog = async(() => import("../pages/docs/Changelog"));
 const Landing = async(() => import("../pages/presentation/Landing"));
 const Somos = async(() => import("../pages/somos"));
 const Seguros = async(() => import("../pages/seguros"));
-
+const SalirComponent = async(() => import("../pages/auth/Logout"));
 // Protected routes
 const ProtectedPage = async(() => import("../pages/protected/ProtectedPage"));
 
@@ -245,6 +245,12 @@ const pagesRoutes = {
       id: "Private",
       icon: <List />,
       component: Chat,
+    },
+    {
+      path: "/pages/logout",
+      id: "Salir",
+      icon: <Contacts />,
+      component: SalirComponent
     }
   ],
   component: null,
@@ -692,48 +698,8 @@ export const sidebarRoutes = [
 
   },
 
-  {
-    path: "/pages/siniestro_global",
-    name: "Declarar siniestro",
-    id: "Declarar siniestro",
-    icon: <AddShoppingCart />,
-    component: DeclaracionSiniestroGlobal,
-  },
-  /*
-   {
-     path: "/pages/seguros",
-     name: "Mis Seguros",
-     id: "Mis Seguros",
-     icon: <LocalHospital />,
-     component: ListaSeguros,
-   },
-   {
-     path: "/pages/siniestros",
-     name: "Siniestros",
-     id: "Siniestros",
-     icon: <NewReleases />,
-     component: ListaSiniestros,
-   },
-  {
-     path: "/pages/flujo_siniestro",
-     name: "Flujo siniestro",
-     id: "Declaracion Siniestro",
-     icon: <QueuePlayNext />,
-     component: DeclaracionSiniestro,
-   },*/
-  {
-    path: "/pages/mi_cuenta",
-    name: "Mi Cuenta",
-    id: "Mi Cuenta",
-    icon: <Contacts />,
-    component: Profile,
-  },
 
-  {
-    path: "/pages/notificacion",
-    name: "Mensajes",
-    id: "Mensajes",
-    icon: <Notifications />,
-    component: Chat,
-  }
+
+
+
 ];
