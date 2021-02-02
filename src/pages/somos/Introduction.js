@@ -142,10 +142,11 @@ function Introduction() {
             </Grid>
 
             <Grid style={{ display: 'flex', textAlign: 'start' }}>
-              <Subtitle color="textSecondary">
+              <Typography style={{ marginTop: 20 }} >
+
                 FR Group, una corredora líder con más de 34 años de experiencia en el mercado asegurador chileno, de probada solvencia, reconocida en brindar soluciones y programas de seguros.
                 Un grupo que diseña soluciones a medida
-                  </Subtitle>
+                  </Typography>
             </Grid>
 
 
