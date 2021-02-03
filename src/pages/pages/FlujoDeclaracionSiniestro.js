@@ -1211,7 +1211,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['DATOS SINIESTRO', 'ADJUNTOS', ' RESUMEN'];
+  return ['DECLARACION DE SINIESTRO', 'SUBIR FOTOS', ' RESUMEN'];
 }
 
 function getStepContent(step) {

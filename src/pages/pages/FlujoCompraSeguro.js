@@ -249,24 +249,19 @@ function DefaultDropzone() {
     <Card mb={6}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          ADJUNTAR ARCHIVOS
+        SUBA LAS SIGUIENTES FOTOS
         </Typography>
-        <Typography variant="body2" gutterBottom>
-          Material-UI-Dropzone is a React component using Material-UI and is
-          based on the excellent react-dropzone library.
-        </Typography>
-
+       
         <Spacer mb={4} />
 
         <Grid container lg={12}  >
           <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }} >
-              ADJUNTAR FOTO BOLETA
+                FOTO BOLETA EQUIPO
             
         </Typography>
             <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
+               TOME UNA FOTO DONDE SE VEA CLARAMENTE LA BOLETA DEL EQUIPO
         </Typography>
             <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']}  
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
@@ -277,12 +272,11 @@ function DefaultDropzone() {
 
           <Grid lg={6} style={{ marginTop: '22px' }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              ADJUNTAR FOTO EQUIPO
+                FOTO NUMERO DE SERIE
             
         </Typography>
             <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
+               PUEDE ENCONTRAR EL NUMERO DE SERIE DEL MISMO DISPOSITIVO
         </Typography>
             <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
@@ -291,12 +285,11 @@ function DefaultDropzone() {
 
           <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6  }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              ADJUNTAR FOTO SERIE
+              FOTO DE IMEI
             
         </Typography>
             <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
+            PUEDE ENCONTRAR EL IMEI EN LA CAJA DEL EQUIPO <a href="#">EJEMPLO</a>
         </Typography>
             <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
@@ -305,12 +298,11 @@ function DefaultDropzone() {
 
           <Grid lg={6} style={{ marginTop: '22px' }}>
             <Typography variant="h6" style={{ color:'#0fb6e9'}} >
-              ADJUNTAR FOTO IMEI
+           FOTO DEL EQUIPO
             
         </Typography>
             <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }}>
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
+               TOME UNA FOTO DONDE SE VEA CLARAMENTE SU DISPOSITIVO
         </Typography>
             <DropzoneArea   
  dropzoneText={''}                       acceptedFiles={['image/*']} 
@@ -739,7 +731,7 @@ const ListaRenderSubPlan = (functionRenderDetalle) => {
 
 
     return < select style={{ width: '100%', height: '40px', textTransform: 'uppercase' }} onChange={functionRenderDetalle} >
-      < option value="_"  > SELECCIONAR PLAN</option >
+      < option value="_"  > SELECCIONAR BANDA</option >
 
       {
         listaSubPlanes.map(item => {
@@ -958,9 +950,7 @@ function BasicForm() {
             ) : (
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={6}>
-                    <Grid lg={12} style={{ paddingLeft: 12 }}>
-                      <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</span>
-                    </Grid>
+                    
 
                     <Grid item md={12}>
                       <span style={{ fontWeight: 'bold', fontSize: '22px' , marginTop:12}}> INFORMACION PERSONAL</span>
@@ -1052,7 +1042,7 @@ function BasicForm() {
                       </select>
                     </Grid>
                     <Grid item md={12}>
-                      <span style={{ fontWeight: 'bold', fontSize: '22px' }}> INFORMACION EQUIPO</span>
+                      <span style={{ fontWeight: 'bold', fontSize: '22px' }}> CELULAR</span>
                     </Grid>
                     <Grid item md={6}>
                       <TextField
@@ -1590,6 +1580,9 @@ function PlanesForm() {
 
 
                   <Grid container justify="center">
+                    <Grid item md={12}>
+                      <span style={{ fontWeight: 'bold', fontSize: '22px', marginTop: 12 }}> SELECCIONAR PLAN</span>
+                    </Grid>
                     <Grid item xs={12} lg={10}>
                       <Shadow>
 
@@ -1959,7 +1952,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['DATOS USUARIOS', 'SEGURO', 'ADJUNTOS', ' RESUMEN', 'PERFIL'];
+  return ['INFORMACION PERSONAL & CELULAR', 'SELECCIONAR PLAN', 'SUBIR FOTOS', 'VER COTIZACION', 'COMPRAR SEGURO'];
 }
 
 function getStepContent(step) {
@@ -2053,22 +2046,7 @@ function HorizontalNonLinearStepper() {
     <div className={classes.root}>
 
       <div style={{ marginTop: '16px', marginBottom: '10px', display: 'flex', flexDirection: 'row', }}>
-        <div style={{ flex: 1 }}>
        
-        </div>
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-          {activeStep !== steps.length &&
-            (completed[activeStep] ? (
-              <Typography variant="caption" className={classes.completed}>
-                Paso {activeStep + 1} completado
-              </Typography>
-            ) : (
-              
-              <Grid>
-                { completedSteps() === totalSteps() - 1 ? <AlertCompletarFormulario onClick={handleComplete}/> : <Button variant="contained" color="primary" onClick={handleComplete}> COMPLETAR PASO </Button> }
-              </Grid>
-              ))}
-        </div>
       </div>
 
       <Stepper nonLinear activeStep={activeStep}>
@@ -2135,18 +2113,10 @@ function FlujoCompra() {
 
       <Grid style={{ padding: '22px' }}>
         <Typography variant="h3" gutterBottom display="inline">
-          Flujo de compra
+         CONTRATA TU SEGURO
       </Typography>
 
-        <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-          <Link component={NavLink} exact to="/">
-            KIRAWEBAPP
-        </Link>
-          <Link component={NavLink} exact to="/">
-            SEGUROS
-        </Link>
-          <Typography>FLUJO DE COMPRA</Typography>
-        </Breadcrumbs>
+        
         <Grid style={{ marginTop: '12px' }}>
           <div style={{ width: '100%', height: '210px',}}>
             <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />

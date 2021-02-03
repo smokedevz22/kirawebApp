@@ -400,10 +400,11 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
     <Drawer variant="permanent" {...rest}>
       <Brand component={NavLink} to="/" button>
         <div style={{ display: 'flex', alignItems: 'center', }}>
-          <BrandIcon />{" "}
-          <Box ml={1}>
-            FRDIRECT
-          </Box>
+          <Grid style={{ width: 125, height: 57 }} >
+            <img src="/static/logo_cuatro.png" />
+
+          </Grid>
+
         </div>
       </Brand>
       <Scrollbar>

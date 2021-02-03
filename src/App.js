@@ -15,9 +15,12 @@ import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
 
-Amplify.configure(awsconfig);
+
+
 
 function App() {
+
+
   const theme = useSelector((state) => state.themeReducer);
 
   return (
@@ -40,5 +43,5 @@ function App() {
     </React.Fragment>
   );
 }
-export default App;
+export default App
 

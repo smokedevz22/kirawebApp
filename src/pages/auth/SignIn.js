@@ -4,10 +4,9 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import * as Yup from "yup";
 import { Formik } from "formik";
-import { signIn } from "../../redux/actions/authActions";
 import { Auth } from 'aws-amplify';
+import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings } from 'aws-amplify-react';
 
 import {
   Avatar,
@@ -162,9 +161,19 @@ function SignInx() {
             </Button>
           </form>
         )}
+
+
+
+
       </Formik>
 
-
+      <Authenticator hideDefault={true} onStateChange={handleAuthStateChange}>
+        <SignIn />
+        <SignUp />
+        <ConfirmSignUp />
+        <Greetings />
+        <AlwaysOn />
+      </Authenticator>
 
     </Wrapper>
   );
