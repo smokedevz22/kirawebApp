@@ -61,7 +61,7 @@ function SignInx() {
   return (
     <Wrapper>
       <Helmet title="Sign In" />
-      <BigAvatar alt="Lucy" src="/static/img/avatars/avatar-1.jpg" />
+      <BigAvatar alt="Lucy" src="/static/img/banner_06_on.png" />
 
       <Typography component="h1" variant="h4" align="center" gutterBottom>
         BIENVENIDO      </Typography>
@@ -167,13 +167,6 @@ function SignInx() {
 
       </Formik>
 
-      <Authenticator hideDefault={true} onStateChange={handleAuthStateChange}>
-        <SignIn />
-        <SignUp />
-        <ConfirmSignUp />
-        <Greetings />
-        <AlwaysOn />
-      </Authenticator>
 
     </Wrapper>
   );

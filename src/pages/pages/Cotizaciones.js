@@ -479,7 +479,7 @@ const ListaRenderCotizaciones = (obtenerListaProductos) => {
             </TableCell>
 
 
-            <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
+            <TableCell component="th" scope="row" style={{ width: '15%', }}>
               <Route style={{ marginRight: '6px' }} render={({ history }) => (
                 <Button onClick={() => { history.push(`/pages/cotizaciones/${item['id']}`) }} size="small" color="primary">
                   COMPRAR
@@ -761,9 +761,7 @@ function Cotizaciones() {
   return (
     <Card mb={6}>
       <CardContent>
-        <Typography variant="h2" gutterBottom>
-          COTIZACIONES REALIZADAS
-        </Typography>
+
         <TableWrapper>
           <Table>
             <TableHead>
@@ -874,8 +872,8 @@ const SalesRevenue = withTheme(({ theme }) => {
 
 let itemRender = 'cargando'
 
-function Profile() {
-  const [tipoLista, setTipoLista] = useState(1);
+function Cotizacionesx() {
+  const [tipoLista, setTipoLista] = useState(3);
 
   //itemRender = renderLista(1);
 
@@ -905,34 +903,16 @@ function Profile() {
       <AppBar />
 
       <Grid style={{ padding: '22px' }}>
-        <Typography variant="h3" gutterBottom display="inline">
-          MI CUENTA
-      </Typography>
-
+        <Typography variant="h2" gutterBottom>
+          COTIZACIONES REALIZADAS
+        </Typography>
 
 
         <Divider my={6} />
 
         <Grid container spacing={6}>
-          <Grid item xs={12} lg={4} xl={3}>
-            <Details />
 
-          </Grid>
-          <Grid item xs={12} lg={8} xl={9}>
-
-            <Grid container spacing={6}>
-
-              <Grid item xs={12} lg={4}>
-                <Orders onClick={{ functionClickListaSeguros }} />
-              </Grid>
-              <Grid item xs={12} lg={4}>
-                <Revenue onClick={{ functionClickListaSiniestros }} />
-              </Grid>
-
-              <Grid item xs={12} lg={4}>
-                <CotizacionesCard onClick={{ functionClickListaCotizaciones }} />
-              </Grid>
-            </Grid>
+          <Grid item lg={12}  >
             {itemRender}
           </Grid>
         </Grid>
@@ -943,4 +923,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default Cotizacionesx;

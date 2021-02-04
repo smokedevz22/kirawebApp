@@ -32,6 +32,8 @@ const ResetPassword = async(() => import("../pages/auth/ResetPassword"));
 const Page404 = async(() => import("../pages/auth/Page404"));
 const Page500 = async(() => import("../pages/auth/Page500"));
 
+const Cotizaciones = async(() => import("../pages/pages/Cotizaciones"));
+
 // Components components
 const Alerts = async(() => import("../pages/components/Alerts"));
 const Avatars = async(() => import("../pages/components/Avatars"));
@@ -224,6 +226,13 @@ const pagesRoutes = {
       id: "Private",
       icon: <List />,
       component: Profile,
+    },
+    {
+      path: "/pages/cotizaciones",
+      name: "Login",
+      id: "Private",
+      icon: <List />,
+      component: Cotizaciones,
     },
     {
       path: "/pages/login",

@@ -39,6 +39,8 @@ import { ReactComponent as Logo } from "../vendor/logo.svg";
 
 const SignInx = async(() => import("../pages/auth/SignIn"));
 const Profile = async(() => import("../pages/pages/Profile"));
+const Cotizaciones = async(() => import("../pages/pages/Cotizaciones"));
+
 const DeclaracionSiniestroGlobal = async(() => import("../pages/pages/FlujoSiniestroGlobal"));
 const SalirComponent = async(() => {
   console.log("salir")
@@ -350,6 +352,13 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
     if (!data) {
       console.log("--------x--------")
       setNada('x')
+      let itemC = {
+        path: "/pages/cotizaciones",
+        name: "Login",
+        id: "COTIZACIONES",
+        icon: <List />,
+        component: Cotizaciones,
+      }
       let itemA = {
         path: "/pages/login",
         name: "Login",
@@ -357,7 +366,7 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
         icon: <List />,
         component: SignInx,
       }
-      routes[5] = '';
+      routes[5] = itemC;
       routes[6] = itemA;
       routes[7] = '';
 

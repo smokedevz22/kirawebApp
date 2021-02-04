@@ -40,12 +40,7 @@ const AppBarComponent = () => (
       <Toolbar>
         <Container>
           <Grid container alignItems="center">
-            <Grid item>
-              <Brand>
-                <BrandIcon />
-                FRGROUP
-              </Brand>
-            </Grid>
+
             <Grid item xs />
             <Grid item>
               <Hidden smDown>

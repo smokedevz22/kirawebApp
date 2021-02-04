@@ -29,7 +29,7 @@ import {
   Card as MuiCard,
   CardContent,
   CircularProgress,
-  Divider as MuiDivider,
+   Divider as MuiDivider,
   CardActions,
   CardContent as MuiCardContent,
   CardMedia as MuiCardMedia,
@@ -40,13 +40,7 @@ import {
   DialogTitle,
   Grid,
   Chip as MuiChip,
-
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Link,
+ 
   Paper as MuiPaper,
 
   TextField as MuiTextField,
@@ -54,10 +48,18 @@ import {
   Select,
 } from "@material-ui/core";
 
-import { color, spacing } from "@material-ui/system";
-import { Alert as MuiAlert } from "@material-ui/lab";
+ import { Alert as MuiAlert } from "@material-ui/lab";
 import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
 
+import {
+  Done as DoneIcon,
+  Face as FaceIcon,
+  NewReleases,
+  BurstMode as BurstModeIcon,
+  Description as DescriptionIcon,
+  TagFaces as TagFacesIcon,
+} from "@material-ui/icons";
+import { spacing, display } from "@material-ui/system";
 
 const Chip = styled(MuiChip)(spacing);
 const Spacer = styled.div(spacing);
@@ -346,16 +348,19 @@ function AlertDialogImei() {
               {"Buscar el número de serie o el IMEI del iPhone"}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                {`   
-Obtén información sobre cómo encontrar el modelo, número de serie, el IMEI/MEID, el CDN y el ICCID del iPhone.
-Antes de empezar
-Puedes encontrar estos números en varios lugares, como Configuración, el dispositivo físico, el Finder o iTunes y el empaque original.
-Buscar el número de serie, el IMEI/MEID o el ICCID
-Ve a Configuración > General y toca Información.
-Busca el número de serie. Es posible que debas desplazarte hacia abajo para encontrar el modelo, IMEI/MEID y el ICCID.
-Para pegar esta información, mantén presionado el número para copiar.
-` }
+              <DialogContentText id="alert-dialog-description" style={{display:'flex', flexDirection:'column'}}>
+
+                <Grid item lg={12}> 
+                {`Para encontrar el IMEI puedes ver el instructivo para buscar el modelo y numero de serie del
+equipo.
+Puedes conseguirlo también marcando el *#06# en tu celular y te aparecerá la información en
+pantalla.` }
+                
+                </Grid>
+   
+                <Grid item lg={12}> <img style={{ width: 200 }} src="https://elandroidelibre.elespanol.com/wp-content/uploads/2016/10/saber-imei-002.jpg" />
+            </Grid>
+              
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -396,9 +401,13 @@ function AlertDialogCotizacion() {
         <Paper mt={4}>
         
 
-          <Button variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }} onClick={handleClickOpen}>
+          <Grid>        <Button variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }} onClick={handleClickOpen}>
             GUARDAR COTIZACION
                                    </Button>
+
+            <Button variant="contained" color="primary" style={{ marginLeft: '22px', marginTop: '22px'}} mt={2} onClick={fnxCompleteStep}>
+              CONTRATAR SEGURO
+                                   </Button></Grid>
           <Dialog
             open={open}
             onClose={handleCancelar}
@@ -455,7 +464,7 @@ function AlertCompletarFormulario(props) {
   return (
      <Grid>
           <Button variant="contained" color="primary" mt={2} style={{ marginTop: '22px' }} onClick={handleClickOpen}>
-            CONTRATAR SEGURO
+            FINALIZAR COMPRA
                                    </Button>
           <Dialog
             open={open}
@@ -749,7 +758,7 @@ const ListaRenderSubPlan = (functionRenderDetalle) => {
   }
 }
 
-function RenderDetallePlan(item,subplan) {
+function RenderDetallePlan(item, subplan, showButtons) {
   // const [detallePlan, setDetallePlan] = useState({});
 
   let detalle = JSON.parse(item['data_plan'])
@@ -763,13 +772,7 @@ function RenderDetallePlan(item,subplan) {
    
    
       <Grid item lg={12} >
-        
-        <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '160px', }}>
-            <img src={detalle['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
-
-          </div>
-        </Grid>
+    
      </Grid>
 
       
@@ -786,7 +789,7 @@ function RenderDetallePlan(item,subplan) {
           </Typography>
 
           <Typography variant="body2" gutterBottom>
-            <p>{detalle['descripcion_comercial_plan']}</p>
+            <p>El capital asegurado es el valor máximo a cubrir en caso de robo, pérdida parcial o total.</p>
 
           </Typography>
         </Grid> 
@@ -794,22 +797,65 @@ function RenderDetallePlan(item,subplan) {
         <Grid >
           <Typography variant="h6" gutterBottom>
 
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>{detalleSubPlan['capital']} UF</strong></p>
+            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}></p>
+            <Chip
+            
+              avatar={<CheckCircle style={{ color: 'green' }} />}
+              label={`CAPITAL ASEGURADO :  ${detalleSubPlan['capital']} UF `}
+               m={1}
+            />
+          
             <h2 style={{
               textTransform: 'uppercase'
-            }}>COBERTURAS </h2>
-            <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
-            <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
-            <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalleSubPlan['precio_mensual']} UF  </strong></p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px', marginTop:12 }}><strong>El riesgo es asegurado por Chubb Compañía de Seguros Generales S.A</strong></p>
+            }}>CARACTERISTICAS </h2>
+
+            <Grid style={{ display: 'flex' }} item lg={12}>
+              <Grid item lg={4}>
+                <h4>COBERTURA</h4>
 
 
+                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  </p>
+                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL    </p>
+                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO   </p>
+
+              </Grid>
+              <Grid item lg={4}>
+                <h4>VIGENCIA</h4>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
+
+              </Grid>
+              <Grid item lg={4}>
+
+                <h4>PRIMA</h4>
+
+              <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalleSubPlan['precio_mensual']} UF  </strong></p>
+             
+
+            </Grid>
+
+            
+        </Grid>
           </Typography>
         </Grid>
+        <Chip
+          style={{ textTransform: 'uppercase', fontSize: '12px', marginTop: 42 }}
+          avatar={<CheckCircle style={{ color: 'green' }} />}
+          label={`El riesgo es asegurado por Chubb Compañía de Seguros Generales S.A`}
+          m={1}
+        />
 
+        {showButtons ? <Grid lg={12} >
+
+          <div style={{ display: 'flex', width: '100%' }}>
+            <AlertDialogCotizacion />
+
+          </div>
+
+
+        </Grid> : ''}
+
+       
       </Grid>
 
 
@@ -955,47 +1001,7 @@ function BasicForm() {
                     <Grid item md={12}>
                       <span style={{ fontWeight: 'bold', fontSize: '22px' , marginTop:12}}> INFORMACION PERSONAL</span>
                     </Grid>
-                    <Grid item md={6}>
-                      <TextField
-                        name="rut_persona"
-                        value={itemDatosAsegurado['rut_persona']}
-                        label="RUT PERSONA"
-                        fullWidth
-                        onChange={event => SaveValue("rut_persona", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="nro_serie"
-                        value={itemDatosAsegurado['nro_serie']}
-                        label="NUMERO DE SERIE CARNET"
-                        fullWidth
-                        onChange={event => SaveValue("nro_serie", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    <Grid item md={6}>
-                     
-
-                      <form noValidate>
-                        <TextField
-                          style={{marginTop:8}}
-                          id="fecha_nacimiento"
-                          label="FECHA NACIMIENTO"
-                          type="date"
-                          fullWidth
-                          value={itemDatosAsegurado['fecha_nacimiento']}
-                          onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </form>
-                    </Grid>
+                 
 
                     <Grid item md={6}>
                       <TextField
@@ -1011,38 +1017,17 @@ function BasicForm() {
 
                     <Grid item md={6}>
                       <TextField
-                        name="apellido_paterno"
-                        label="APELLIDO PATERNO "
-                        value={itemDatosAsegurado['apellido_paterno']}
+                        name="email"
+                        label="CORREO ELECTRONICO "
+                        value={itemDatosAsegurado['email']}
                         fullWidth
-                        onChange={event => SaveValue("apellido_paterno", event.target.value)}
+                        onChange={event => SaveValue("email", event.target.value)}
                         variant="outlined"
                         my={2}
                       />
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="apellido_materno"
-                        label="APELLIDO MATERNO "
-                        value={itemDatosAsegurado['apellido_materno']}
-                        fullWidth
-                        onChange={event => SaveValue("apellido_materno", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    <Grid item md={6}>
-
-
-                      <select onChange={event => SaveValue("marca_equipo", event.target.value)} style={{ width: '100%', height: '40px' }}>
-                        <option > SELECCIONAR GENERO </option>
-                        <option value="femenino"> FEMENINO </option>
-                        <option value="masculino"> MASCULINO </option>
-                      </select>
                     </Grid>
                     <Grid item md={12}>
-                      <span style={{ fontWeight: 'bold', fontSize: '22px' }}> CELULAR</span>
+                      <span style={{ fontWeight: 'bold', fontSize: '22px' }}>MI CELULAR</span>
                     </Grid>
                     <Grid item md={6}>
                       <TextField
@@ -1188,7 +1173,7 @@ function ResumenDetail() {
      
   };
   
-  itemRenderDetallePlan =  RenderDetallePlan(planSeleccionado, subPlanSeleccionado)
+  itemRenderDetallePlan =  RenderDetallePlan(planSeleccionado, subPlanSeleccionado,false)
   itemRenderDetalleSubPlan =   RenderDetalleSubPlan(subPlanSeleccionado)
 
 
@@ -1261,30 +1246,22 @@ function ResumenDetail() {
                               <Grid item lg={6}>
                                 <h2>RESUMEN</h2>
                               </Grid>
-                              <Grid lg={6} >
-
-                                <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                                <AlertDialogCotizacion/>
-                                </div>
-
-
-                              </Grid>
+                          
                               <Grid lg={12}  >
-                                <Typography variant="caption">CLIENTE</Typography>
-                                <Typography variant="h5">
-                                  RUT:  {itemDatosAsegurado['rut_persona']}
-                                 
-                                </Typography>
                                 
                                 <Typography variant="h5">
-                                  NOMBRE:  {itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
+                                  NOMBRE:  {itemDatosAsegurado['nombre_persona']}
+
+                                </Typography>
+                                <Typography variant="h5" style={{ marginTop: 6 }}>
+                                  EMAIL:  {itemDatosAsegurado['email'] }
 
                                 </Typography>
                                 <Typography variant="h5" style={{marginTop:6}}>
-                                  {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
+                                  {'MARCA CELULAR: ' + itemDatosAsegurado['marca_equipo']}
 
                                 </Typography>
-                                <Typography variant="h5">
+                                <Typography variant="h5" style={{ marginTop: 6 }}>
                                   {'MODELO: ' + itemDatosAsegurado['modelo_equipo']}
 
                                 </Typography>
@@ -1292,7 +1269,7 @@ function ResumenDetail() {
                                   {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
 
                                 </Typography>
-                                <Typography variant="h5">
+                                <Typography variant="h5" style={{ marginTop: 6 }}>
                                   {'IMEI: ' + itemDatosAsegurado['imei']}
 
                                 </Typography>
@@ -1325,10 +1302,10 @@ function ResumenDetail() {
 
 function FlujoTerminadoRender() {
 
+  let showButtons = false; 
 
-  itemRenderDetallePlan = RenderDetallePlan(planSeleccionado)
-  itemRenderDetalleSubPlan = RenderDetalleSubPlan(subPlanSeleccionado)
-
+  itemRenderDetallePlan = RenderDetallePlan(planSeleccionado, subPlanSeleccionado, showButtons)
+ 
 
   const handleSubmit = async (
     values,
@@ -1345,9 +1322,7 @@ function FlujoTerminadoRender() {
       setSubmitting(false);
     }
   };
-
-  let detallePlan = JSON.parse(planSeleccionado['data_plan'])
-  let detalleSubPlan = JSON.parse(subPlanSeleccionado['data_sub_plan'])
+ 
   registrarProducto()
 
   return (
@@ -1430,9 +1405,7 @@ function FlujoTerminadoRender() {
                               <Grid item lg={6}>
                                 <Typography variant="caption">CLIENTE</Typography>
                                 <Typography variant="h4">
-                                  {'RUT: ' + itemDatosAsegurado['rut_persona']}
-                                  <br />
-
+                                 
                                   {'NOMBRE: ' + itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
                                   <br />
                                   {'EMAIL: ' + userAccountData['email']}
@@ -1458,11 +1431,9 @@ function FlujoTerminadoRender() {
 
 
                               <Typography variant="body2" gutterBottom>
-                                {itemRenderDetalleSubPlan && itemRenderDetallePlan}
+                                {itemRenderDetallePlan && itemRenderDetallePlan}
                               </Typography>
-
-                              {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
-
+ 
                           
 
                             </Grid>
@@ -1483,9 +1454,13 @@ function FlujoTerminadoRender() {
   );
 }
 
-function PlanesForm() {
+let fnxCompleteStep = '';
+
+function PlanesForm(props) {
 
 
+  console.log("prooops", props)
+  fnxCompleteStep = props.fn;
   
   const [dplan, setDplan] = useState('');
   const [splan, setSplan] = useState('');
@@ -1524,7 +1499,7 @@ function PlanesForm() {
   
   itemRender = ListaRender(handleChangePlan)
   itemRenderSubPlan = ListaRenderSubPlan(handleChangeSubPlan)
-  itemRenderDetallePlan = splan && dplan && RenderDetallePlan(dplan, splan)
+  itemRenderDetallePlan = splan && dplan && RenderDetallePlan(dplan, splan, true)
  
 
 
@@ -1797,7 +1772,80 @@ function RegistrarPerfil() {
                         my={2}
                       />
                     </Grid>
-                 
+                    <Grid item md={6}>
+                      <TextField
+                        name="rut_persona"
+                        value={itemDatosAsegurado['rut_persona']}
+                        label="RUT PERSONA"
+                        fullWidth
+                        onChange={event => SaveValue("rut_persona", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="nro_serie"
+                        value={itemDatosAsegurado['nro_serie']}
+                        label="NUMERO DE SERIE CARNET"
+                        fullWidth
+                        onChange={event => SaveValue("nro_serie", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+
+
+                      <form noValidate>
+                        <TextField
+                          style={{ marginTop: 8 }}
+                          id="fecha_nacimiento"
+                          label="FECHA NACIMIENTO"
+                          type="date"
+                          fullWidth
+                          value={itemDatosAsegurado['fecha_nacimiento']}
+                          onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </form>
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="apellido_paterno"
+                        label="APELLIDO PATERNO "
+                        value={itemDatosAsegurado['apellido_paterno']}
+                        fullWidth
+                        onChange={event => SaveValue("apellido_paterno", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="apellido_materno"
+                        label="APELLIDO MATERNO "
+                        value={itemDatosAsegurado['apellido_materno']}
+                        fullWidth
+                        onChange={event => SaveValue("apellido_materno", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                    <Grid item md={6}>
+
+
+                      <select onChange={event => SaveValue("marca_equipo", event.target.value)} style={{ width: '100%', height: '40px' }}>
+                        <option > SELECCIONAR GENERO </option>
+                        <option value="femenino"> FEMENINO </option>
+                        <option value="masculino"> MASCULINO </option>
+                      </select>
+                    </Grid>
                   </Grid>
 
                   <TextField
@@ -1848,7 +1896,7 @@ function RegistrarPerfil() {
                     color="primary"
                     mt={3}
                   >
-                    REGISTRAR USUARIO
+                    GUARDAR
                 </Button>
                 </form>
               )}
@@ -1874,7 +1922,7 @@ function FlujoTerminado() {
   return (
     <Card mb={6}>
       <CardContent>
-        <FlujoTerminadoRender />
+        <FlujoTerminadoRender  />
 
       </CardContent>
     </Card>
@@ -1913,11 +1961,11 @@ function FormularioAnexos() {
   );
 }
 
-function FormularioPlanes() {
+function FormularioPlanes(fnCompleteStep) {
   return (
     <Card mb={6}>
       <CardContent>
-        <PlanesForm />
+        <PlanesForm fn={fnCompleteStep}  />
 
       </CardContent>
     </Card>
@@ -1952,20 +2000,57 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['INFORMACION PERSONAL & CELULAR', 'SELECCIONAR PLAN', 'SUBIR FOTOS', 'VER COTIZACION', 'COMPRAR SEGURO'];
+  return ['INFORMACION PERSONAL & CELULAR', 'SELECCIONAR PLAN', 'SUBIR FOTOS' , 'COMPRAR SEGURO'];
 }
 
-function getStepContent(step) {
+let txBotonContinuar = 'SIGUIENTE'
+
+function getStepContent(step, fnCompleteStep) {
+
+  fnxCompleteStep = fnCompleteStep
   switch (step) {
     case 0:
+      txBotonContinuar = 'SELECIONAR PLAN'
+      setPImagen('banner_06_on.png')
+      setSImagen('banner_07_off.png')
+      setTImagen('banner_08_off.png')
+       setQImagen('banner_10_off.png')
+
       return FormulariosIngreso();
     case 1:
-      return FormularioPlanes();
+
+      setPImagen('banner_06_off.png')
+      setSImagen('banner_07_on.png')
+      setTImagen('banner_08_off.png')
+       setQImagen('banner_10_off.png')
+      
+      txBotonContinuar = 'SUBIR FOTO'
+
+      return FormularioPlanes(fnCompleteStep);
     case 2:
+
+
+      setPImagen('banner_06_off.png')
+      setSImagen('banner_07_off.png')
+      setTImagen('banner_08_on.png')
+       setQImagen('banner_10_off.png')
+
+
+      txBotonContinuar = 'CONTRATAR'
+
       return FormularioAnexos();
+
     case 3:
-      return ResumenSeguro();
-    case 4:
+
+      setPImagen('banner_06_off.png')
+      setSImagen('banner_07_off.png')
+      setTImagen('banner_08_off.png')
+
+      setQImagen('banner_10_on.png')
+
+
+      txBotonContinuar = 'FINALIZAR COMPRA'
+
       return FormularioPerfil();
 
     default:
@@ -2071,7 +2156,7 @@ function HorizontalNonLinearStepper() {
           </div>
         ) : (
             <div  >
-              <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
+              <Typography className={classes.instructions}>{getStepContent(activeStep,   handleComplete  )}</Typography>
              
             </div>
          
@@ -2087,7 +2172,7 @@ function HorizontalNonLinearStepper() {
       </Grid>
       <Grid item lg={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Grid>
-          {completedSteps() === totalSteps() - 1 ? <AlertCompletarFormulario onClick={handleComplete} /> : <Button variant="contained" color="primary" onClick={handleComplete}> SIGUIENTE </Button>}
+              {completedSteps() === totalSteps() - 1 ? <AlertCompletarFormulario onClick={handleComplete} /> : <Button variant="contained" color="primary" onClick={handleComplete}> {txBotonContinuar} </Button>}
         </Grid>
       </Grid>
     </div>
@@ -2100,10 +2185,65 @@ function HorizontalNonLinearStepper() {
 }
 
 
+
+let setPImagen = ''; 
+let setSImagen = ''; 
+let setTImagen = ''; 
+let setCImagen = ''; 
+let setQImagen = ''; 
+
+
+function RenderHeaderSteps() { 
+
+
+  const [primera, setPrimera] = React.useState('banner_06.png');
+  const [segunda, setSegunda] = React.useState('banner_06.png');
+  const [tercera, setTercera] = React.useState('banner_06.png');
+  const [cuarta, setCuarta] = React.useState('banner_06.png');
+  const [quinta, setQuinta] = React.useState('banner_06.png');
+
+  setPImagen = setPrimera;
+  setSImagen = setSegunda;
+  setTImagen = setTercera;
+  setCImagen = setCuarta;
+  setQImagen = setQuinta; 
+
+  return (<Grid style={{ marginTop: '12px', display: 'flex' }} item lg={12}>
+    <Grid item style={{ flex: 1, padding: 6, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ width: '120px', height: '110px', }}>
+        <img src={'/static/img/' + primera} style={{ width: '100%', height: '100%' }} />
+
+      </div>
+    </Grid>
+    <Grid item style={{ flex: 1, padding: 6, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ width: '120px', height: '110px', }}>
+        <img src={'/static/img/' + segunda} style={{ width: '100%', height: '100%' }} />
+
+      </div>
+    </Grid>
+
+    <Grid item style={{ flex: 1, padding: 6, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ width: '120px', height: '110px', }}>
+        <img src={'/static/img/' + tercera} style={{ width: '100%', height: '100%' }} />
+
+      </div>
+    </Grid>
+
+ 
+    <Grid item style={{ flex: 1, padding: 6, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ width: '120px', height: '110px', }}>
+        <img src={'/static/img/' + quinta} style={{ width: '100%', height: '100%' }} />
+
+      </div>
+    </Grid>
+  </Grid>)
+
+}
+
+
 function FlujoCompra() {
 
   obtenerListaItems();
-
 
 
   return (
@@ -2116,13 +2256,7 @@ function FlujoCompra() {
          CONTRATA TU SEGURO
       </Typography>
 
-        
-        <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '210px',}}>
-            <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />
-
-          </div>
-        </Grid>
+        <RenderHeaderSteps />
         <Divider my={6} />
         <HorizontalNonLinearStepper>
 

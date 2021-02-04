@@ -88,7 +88,7 @@ function FAQ() {
               </Grid>
 
               <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
-                <Typography variant="p" style={{ color: 'white', }}>
+                <Typography style={{ color: 'white', fontSize: 14 }}>
                   Se entiende como pérdida total por robo cuando el teléfono haya sido objeto de un robo con violencia en las personas o fuerza en las cosas, y en ambos casos no existieren antecedentes que hicieren factible su pronta recuperación.
                 </Typography>
               </Grid>
@@ -104,7 +104,7 @@ function FAQ() {
               </Grid>
 
               <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
-                <Typography variant="p" style={{ color: 'white', }}>
+                <Typography style={{ color: 'white', fontSize: 14 }}>
                   Se entiende como daño accidental el daño provocado fortuitamente (excluyendo todo daño por el uso regular o habitual del teléfono según su manual de funcionamiento), que afecte al normal funcionamiento del equipo. </Typography>
               </Grid>
 
@@ -119,7 +119,7 @@ function FAQ() {
               </Grid>
 
               <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
-                <Typography variant="p" style={{ color: 'white', }}>
+                <Typography style={{ color: 'white', fontSize: 14 }}>
                   Se entenderá que existe pérdida total por daño accidental, cuando los gastos de reparación del equipo celular igualan o excedan el 75% del valor de reposición del mismo..
                 </Typography>
               </Grid>
@@ -135,7 +135,7 @@ function FAQ() {
               </Grid>
 
               <Grid style={{ background: '#0fb6e9', minHeight: 80, padding: 12, display: 'flex', textAlign: 'start', marginTop: 8 }}>
-                <Typography variant="p" style={{ color: 'white', }}>
+                <Typography style={{ color: 'white', fontSize: 14 }}>
                   Se entiende por “equipo similar a nuevo” un equipo que ha sido inspeccionado, probado y restaurado en una fábrica o centro de servicio autorizado y que se encuentra certificado para su utilización.                </Typography>
               </Grid>
 

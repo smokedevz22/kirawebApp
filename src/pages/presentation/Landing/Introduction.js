@@ -143,19 +143,27 @@ function Introduction() {
             <Grid lg={12} style={{ display: 'flex', textAlign: 'start', display: 'flex', flexDirection: 'column', marginTop: 22 }}>
 
               <Grid style={{ display: 'flex', flexDirection: 'column' }} lg={12}>
-                <Grid lg={12} style={{ background: '#0fb6e9', display: 'flex', height: '250px' }}>
+                <Grid lg={12} style={{ display: 'flex', height: '250px' }}>
 
-                  <Grid lg={6} style={{ display: 'flex', paddingLeft: 12, justifyContent: 'center', flexDirection: 'column' }}>
+                  <div style={{ width: '100%', height: '220px', background: '#0fb6e9', position: 'absolute' }}></div>
+
+                  <Grid lg={6} style={{ display: 'flex', zIndex: '999', paddingLeft: 12, justifyContent: 'center', flexDirection: 'column' }}>
                     <Grid style={{ paddingLeft: 12 }}>
 
-                      <span gutterBottom style={{ background: '#0fb6e9', fontSize: 48, color: 'white', fontWeight: 'bold' }}>
+                      <span gutterBottom style={{ fontSize: 32, color: 'white', fontWeight: 'bold' }}>
                         PROTEGE TU
               </span></Grid>
 
                     <Grid style={{ paddingLeft: 12 }}>
 
-                      <span gutterBottom style={{ background: '#0fb6e9', fontSize: 48, color: 'white', fontWeight: 'bold' }}>
+                      <span gutterBottom style={{ fontSize: 48, color: 'white', fontWeight: 'bold' }}>
                         CELULAR
+              </span>
+                    </Grid>
+                    <Grid style={{ paddingLeft: 12 }}>
+
+                      <span gutterBottom style={{ fontSize: 22, color: 'white', fontWeight: 'lighter' }}>
+                        100% ONLINE
               </span>
                     </Grid>
                   </Grid>
@@ -164,11 +172,13 @@ function Introduction() {
                     <ImageWrapper style={{ padding: 16 }}>
 
 
-                      <Avatar style={{ height: 225, width: 225 }} alt="Remy Sharp" src={`/static/logo_cinco.png`} />
+                      <Avatar style={{ height: 250, width: 250, marginTop: 120 }} alt="Remy Sharp" src={`/static/logo_cinco.png`} />
 
                     </ImageWrapper>
 
                   </Grid>
+
+
                 </Grid>
 
 
@@ -179,15 +189,9 @@ function Introduction() {
           </Grid>
 
         </Grid>
-        <Grid item xs={12} xl={10} style={{ display: 'flex', marginTop: 42 }}>
-          <Typography variant="h2" component="h3" gutterBottom>
-            NUESTROS SEGUROS
-        </Typography>
+     
 
-        </Grid>
-
-
-        <Grid lg={12} style={{ display: 'flex', marginTop: 42 }}>
+        <Grid lg={12} style={{ display: 'flex', marginTop: 160 }}>
           <Grid lg={5}>
 
             <Grid style={{ display: 'flex', textAlign: 'start', display: 'flex', flexDirection: 'column' }}>
@@ -196,7 +200,8 @@ function Introduction() {
                 <Grid>
 
                   <span gutterBottom style={{ background: '#0fb6e9', fontSize: 32, fontWeight: 'bold', padding: 4, color: 'white' }}>
-                    SEGURO                     CELULAR
+                    ASEGURA TU CELULAR
+                    
 
               </span></Grid>
 
@@ -213,7 +218,7 @@ function Introduction() {
 
               <Grid style={{ paddingLeft: 12, paddingRight: 12, }}>
 
-                <Typography gutterBottom>
+                <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }}  gutterBottom>
                   Reposición de tu equipo por:
                  </Typography>
 
@@ -230,7 +235,7 @@ function Introduction() {
 
                   <CheckCircle style={{ color: 'black', fontSize: 22 }}></CheckCircle>
                   <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }} gutterBottom>
-                    Perdida total
+                    Pérdida total por accidente
                   </Typography>
                 </Grid>
 
@@ -239,7 +244,7 @@ function Introduction() {
 
                   <CheckCircle style={{ color: 'black', fontSize: 22 }}></CheckCircle>
                   <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }} gutterBottom>
-                    Perdida parcial por accidente
+                    Pérdida parcial por accidente
                   </Typography>
                 </Grid>
 
@@ -248,7 +253,7 @@ function Introduction() {
               <Grid>
 
                 <Button
-                  style={{ marginTop: 12, marginBottom: 12, zIndex: 999 }}
+                  style={{ marginTop: 12, marginBottom: 16, zIndex: 999 }}
                   ml={2}
                   color="primary"
                   variant="contained"

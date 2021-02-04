@@ -1407,15 +1407,7 @@ function DeclaracionSiniestro() {
           DECLARACION DE SINIESTRO
       </Typography>
 
-        <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-          <Link component={NavLink} exact to="/">
-            KIRAWEBAPP
-        </Link>
-          <Link component={NavLink} exact to="/">
-            SEGUROS
-        </Link>
-          <Typography>DECLARACION</Typography>
-        </Breadcrumbs>
+         
         <Grid style={{ marginTop: '12px' }}>
           <div style={{ width: '100%', height: '210px',   }}>
             <img src="https://sfestaticos.blob.core.windows.net/argentina/home/secciones/banner-accidentes-personales-desktop.jpg" style={{ width: '100%', height: '100%' }} />

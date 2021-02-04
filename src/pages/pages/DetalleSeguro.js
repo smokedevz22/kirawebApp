@@ -44,6 +44,13 @@ import {
 } from "@material-ui/icons";
 import { spacing, display } from "@material-ui/system";
 
+
+import {
+
+  CheckCircle as CheckCircle,
+
+} from "@material-ui/icons";
+
 import SendIcon from "@material-ui/icons/Send";
 
 const timeOut = (time) => new Promise((res) => setTimeout(res, time));
@@ -250,12 +257,7 @@ function RenderDetallePlan(item, subplan) {
     //setDetallePlan(detalle)
     return (<Grid>
       <Grid>
-        <Grid style={{ marginTop: '12px' }}>
-          <div style={{ width: '100%', height: '160px',  }}>
-            <img src={detalle['imagen_comercial_plan']} style={{ width: '100%', height: '100%' }} />
-
-          </div>
-        </Grid>
+       
         <Typography variant="h2" gutterBottom style={{ marginTop: 12 }}>
           {detalle['nombre_plan']} {detalleSub['nombre']}
 
@@ -263,33 +265,61 @@ function RenderDetallePlan(item, subplan) {
         </Typography>
 
         <Typography variant="body2" gutterBottom>
-          <p>{detalle['descripcion_comercial_plan']}</p>
-
+          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>                 La poliza del seguro sera enviada a su correo electronico registrado
+</p>
         </Typography>
       </Grid>
 
       <Grid lg={12}>
 
         <Grid lg={12}>
-          <Typography variant="h6" gutterBottom>
-            <h2 style={{
-              textTransform: 'uppercase'
-            }}>INFO COBERTURA </h2>
+  
+              <p style={{ textTransform: 'uppercase', fontSize: '12px' }}></p>
+              <Chip
 
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>{detalleSub['capital']} UF</strong></p>
+                avatar={<CheckCircle style={{ color: 'green' }} />}
+            label={`CAPITAL ASEGURADO :  ${detalleSub['capital']} UF `}
+                m={1}
+              />
 
-            <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
-            <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
-            <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalleSub['precio_mensual']} UF  </strong></p>
-            <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>COMPAÑIA ASEGURADORA :<strong> CHUBB DE CHILE COMPAÑIA DE SEGUROS GENERALES S.A</strong></p>
+              <h2 style={{
+                textTransform: 'uppercase'
+              }}>CARACTERISTICAS </h2>
+
+              <Grid style={{ display: 'flex' }} item lg={12}>
+                <Grid item lg={4}>
+                  <h4>COBERTURA</h4>
 
 
-          </Typography>
+                  <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  </p>
+                  <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL    </p>
+                  <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO   </p>
+
+                </Grid>
+                <Grid item lg={4}>
+                  <h4>VIGENCIA</h4>
+                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
+                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
+
+                </Grid>
+                <Grid item lg={4}>
+
+                  <h4>PRIMA</h4>
+
+              <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{detalleSub['precio_mensual']} UF  </strong></p>
+
+
+                </Grid>
+
+
+              </Grid>
         </Grid>
-
+        <Chip
+          style={{ textTransform: 'uppercase', fontSize: '12px', marginTop: 42 }}
+          avatar={<CheckCircle style={{ color: 'green' }} />}
+          label={`El riesgo es asegurado por Chubb Compañía de Seguros Generales S.A`}
+          m={1}
+        />
       </Grid>
     </Grid>)
   }
@@ -520,7 +550,7 @@ const ObtenerDetallePoliza = () => {
                       </Grid>
                     </Grid>
 
-                    <Grid lg={12}  >
+                    <Grid lg={12}  style={{marginTop:22}} >
 
                       <Grid>
 
@@ -1222,22 +1252,10 @@ function DetalleSeguro() {
       <Helmet title="Invoice Details" />
 
       <Typography variant="h3" gutterBottom display="inline">
-        DETALLE SEGURO
+        DETALLE SEGURO <Typography>NUMERO DE POLIZA {id}</Typography>
       </Typography>
 
-      <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
-          KIRAWEBAPP
-        </Link>
-        <Link component={NavLink} exact to="/">
-          SEGUROS
-        </Link>
-        <Link component={NavLink} exact to="/">
-          DETALLE
-        </Link>
-        <Typography>N° {id}</Typography>
-      </Breadcrumbs>
-
+   
       <Grid>
         <RenderPantall />
       </Grid>

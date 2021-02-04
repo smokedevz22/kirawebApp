@@ -20,11 +20,8 @@ import {
   Breadcrumbs as MuiBreadcrumbs,
   Card as MuiCard,
   Divider as MuiDivider,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
+  Chip as MuiChip,
+
   Typography as MuiTypography,
 } from "@material-ui/core";
 
@@ -47,6 +44,8 @@ const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Button = styled(MuiButton)(spacing);
 
 const Typography = styled(MuiTypography)(display);
+
+const Chip = styled(MuiChip)(spacing);
 
 
 
@@ -298,75 +297,86 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
       <Grid container justify="center">
 
-
-        <Grid container justify="center">
-          <Grid item xs={12} lg={10}>
-            <Shadow>
-
-              <Card px={6} pt={6}>
-                <CardContent>
-                  <Grid container spacing={6}>
+        <Grid item lg={12}>
 
 
 
+          <Grid>
+
+            <Typography variant="h2" gutterBottom style={{ marginTop: 12 }}>
+              {itemRenderDetallePlan['nombre_plan']}   {itemRenderDetalleSubPlan['nombre']}
 
 
-                    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            </Typography>
 
-                      <Typography variant="h2" gutterBottom>
-                        <h2>RESUMEN COTIZACION</h2>
-                      </Typography>
-                    </div>
+            <Typography variant="body2" gutterBottom>
+              <p>El capital asegurado es el valor máximo a cubrir en caso de robo, pérdida parcial o total.</p>
 
-                    <Grid item lg={6}>
-                      <Typography variant="caption">CLIENTE</Typography>
-                      <Typography variant="h4">
-                        {'RUT: ' + itemDatosAsegurado['rut_persona']}
-                        <br />
-
-                        {'NOMBRE: ' + itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
-                        <br />
-                        {'EMAIL: ' + userAccountData['email']}
-                        <br />
-                        <br />
-                      </Typography>
-
-                    </Grid>
-
-                    <Grid item lg={6}>
-
-                      <Typography variant="caption">EQUIPO</Typography>
-                      <Typography variant="h4">
-
-                        {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
-                        <br />
-                        {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
-                        <br />
-                        {'IMEI: ' + itemDatosAsegurado['imei']}
-                        <br />
-                      </Typography>
-                    </Grid>
-
-
-                    <Typography variant="body2" gutterBottom>
-                      {itemRenderDetalleSubPlan && itemRenderDetallePlan}
-                    </Typography>
-
-                    {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
-
-
-
-                  </Grid>
-                </CardContent>
-              </Card>
-
-            </Shadow>
+            </Typography>
           </Grid>
+
+          <Grid >
+            <Typography variant="h6" gutterBottom>
+
+              <p style={{ textTransform: 'uppercase', fontSize: '12px' }}></p>
+              <Chip
+
+                avatar={<CheckCircle style={{ color: 'green' }} />}
+                label={`CAPITAL ASEGURADO :  ${itemRenderDetalleSubPlan['capital']} UF `}
+                m={1}
+              />
+
+              <h2 style={{
+                textTransform: 'uppercase'
+              }}>CARACTERISTICAS </h2>
+
+              <Grid style={{ display: 'flex' }} item lg={12}>
+                <Grid item lg={4}>
+                  <h4>COBERTURA</h4>
+
+
+                  <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  </p>
+                  <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL    </p>
+                  <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO   </p>
+
+                </Grid>
+                <Grid item lg={4}>
+                  <h4>VIGENCIA</h4>
+                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
+                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
+
+                </Grid>
+                <Grid item lg={4}>
+
+                  <h4>PRIMA</h4>
+
+                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{itemRenderDetalleSubPlan['precio_mensual']} UF  </strong></p>
+
+
+                </Grid>
+
+
+              </Grid>
+            </Typography>
+          </Grid>
+          <Chip
+            style={{ textTransform: 'uppercase', fontSize: '12px', marginTop: 42 }}
+            avatar={<CheckCircle style={{ color: 'green' }} />}
+            label={`El riesgo es asegurado por Chubb Compañía de Seguros Generales S.A`}
+            m={1}
+          />
+
+          <Button variant="contained" color="primary" style={{ marginLeft: '22px', marginTop: '36px' }} mt={2} >
+            CONTRATAR SEGURO
+                                   </Button>
+
+
+
+
+
         </Grid>
 
-
-
-      </Grid>
+      </Grid >
 
     )
   } else {
@@ -400,15 +410,7 @@ function DetalleCotizacion() {
       </Typography>
 
       <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
-          KIRAWEBAPP
-        </Link>
-        <Link component={NavLink} exact to="/">
-          SEGUROS
-        </Link>
-        <Link component={NavLink} exact to="/">
-          COTIZACION
-        </Link>
+
         <Typography>N° {id}</Typography>
       </Breadcrumbs>
 

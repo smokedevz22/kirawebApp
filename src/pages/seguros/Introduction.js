@@ -14,6 +14,14 @@ import {
   Typography as MuiTypography,
 } from "@material-ui/core";
 
+
+import {
+
+  CheckCircle as CheckCircle,
+
+} from "@material-ui/icons";
+
+
 import { spacing } from "@material-ui/system";
 
 const Typography = styled(MuiTypography)(spacing);
@@ -128,41 +136,56 @@ function Introduction() {
                 <Grid>
 
                   <span gutterBottom style={{ background: '#0fb6e9', fontSize: 32, fontWeight: 'bold', padding: 4, color: 'white' }}>
-                    PROTEGE TU
+                    PROTEGE TU  CELULAR
+
               </span></Grid>
 
-                <Grid style={{ marginTop: 6 }}>
 
-                  <span gutterBottom style={{ background: '#0fb6e9', fontSize: 32, fontWeight: 'bold', padding: 4, color: 'white' }}>
-                    CELULAR
-              </span>
-                </Grid>
               </Grid>
 
             </Grid>
 
-            <Grid style={{ display: 'flex', textAlign: 'start', flexDirection: 'column', paddingTop: 22, justifyContent: 'center', alignItems: 'center' }}>
+            <Grid style={{ display: 'flex', textAlign: 'start', flexDirection: 'column', paddingTop: 22, alignItems: 'center' }}>
 
 
-              <Grid style={{ paddingLeft: 12, paddingRight: 12, textAlign: 'center' }}>
+              <Grid style={{ paddingLeft: 12, paddingRight: 12, }}>
 
-                <Typography gutterBottom>
+                <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }} gutterBottom>
                   Reposición de tu equipo por:
                  </Typography>
-                <Typography gutterBottom>
-                  Robo,
+
+                <Grid style={{ display: 'flex', alignItems: 'center' }}>
+
+                  <CheckCircle style={{ color: 'black', fontSize: 22 }}></CheckCircle>
+                  <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }} gutterBottom>
+                    Robo
                   </Typography>
-                <Typography gutterBottom>
-                  Perdida total o
-                 </Typography>
-                <Typography gutterBottom>
-                  Perdida parcial por accidente
+                </Grid>
+
+
+                <Grid style={{ display: 'flex', alignItems: 'center' }}>
+
+                  <CheckCircle style={{ color: 'black', fontSize: 22 }}></CheckCircle>
+                  <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }} gutterBottom>
+                    Pérdida total
                   </Typography>
+                </Grid>
+
+
+                <Grid style={{ display: 'flex', alignItems: 'center' }}>
+
+                  <CheckCircle style={{ color: 'black', fontSize: 22 }}></CheckCircle>
+                  <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }} gutterBottom>
+                    Pérdida parcial por accidente
+                  </Typography>
+                </Grid>
+
+
               </Grid>
               <Grid>
 
                 <Button
-                  style={{ marginTop: 12 }}
+                  style={{ marginTop: 12, marginBottom: 16, zIndex: 999 }}
                   ml={2}
                   color="primary"
                   variant="contained"
@@ -173,7 +196,6 @@ function Introduction() {
               </Button>
               </Grid>
             </Grid>
-
 
 
 
