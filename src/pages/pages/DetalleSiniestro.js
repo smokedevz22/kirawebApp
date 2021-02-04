@@ -16,6 +16,9 @@ import {
   Card as MuiCard,
   Divider as MuiDivider,
   Table,
+  Chip as MuiChip,
+  Badge as MuiBadge,
+
   TableBody,
   TableCell,
   TableHead,
@@ -24,6 +27,16 @@ import {
 } from "@material-ui/core";
 
 import { spacing, display } from "@material-ui/system";
+
+import {
+  Done as DoneIcon,
+  Face as FaceIcon,
+  NewReleases,
+  Notifications,
+  BurstMode as BurstModeIcon,
+  Description as DescriptionIcon,
+  TagFaces as TagFacesIcon,
+} from "@material-ui/icons";
 
 const Card = styled(MuiCard)`
   ${spacing};
@@ -42,6 +55,8 @@ const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 const Button = styled(MuiButton)(spacing);
 
 const Typography = styled(MuiTypography)(display);
+const Chip = styled(MuiChip)(spacing);
+const Badge = styled(MuiBadge)(spacing);
 
 
 const ObtenerDetalleSiniestro = () => {
@@ -139,12 +154,118 @@ const ObtenerDetalleSiniestro = () => {
 }
 
 
+function RenderPantall() {
+
+  const [itemRender, setItemRender] = useState('siniestros');
+
+
+  let handleClickSiniestro = () => {
+
+    setItemRender('siniestros')
+
+  }
+
+
+  let handleClickArchivos = () => {
+
+    setItemRender('archivos')
+
+  }
+
+  let handleClickNotificaciones = () => {
+
+    setItemRender('notificaciones')
+
+  }
+
+
+
+  switch (itemRender) {
+
+
+    case 'siniestros':
+      itemRenderDetalle = itemRender && dataAllSiniestros
+
+      break;
+
+    case 'archivos':
+      itemRenderDetalle = itemRender && dataInfoArchivos
+      break;
+
+    case 'notificaciones':
+      itemRenderDetalle = itemRender && dataNotificaciones
+      break;
+  }
+
+  if (itemRender) {
+    return (
+      <Grid>
+        <Grid style={{ marginTop: 22 }} lg={12} >
+
+
+
+          <Chip
+            avatar={<NewReleases />}
+            label="SINIESTRO"
+            onClick={handleClickSiniestro}
+            m={1}
+          />
+
+
+          <Chip
+            avatar={<BurstModeIcon />}
+            label="ARCHIVOS"
+            onClick={handleClickArchivos}
+            m={1}
+          />
+
+
+          <Chip
+            avatar={<Notifications />}
+            label="NOTIFICACIONES"
+            onClick={handleClickNotificaciones}
+            m={1}
+          />
+          <Badge badgeContent={''} color="secondary" mr={4}>
+
+
+          </Badge>
+        </Grid>
+
+
+
+        <Divider my={6} />
+
+        <Grid>
+          <Shadow>
+            <Card>
+              {itemRenderDetalle}
+            </Card>
+          </Shadow>
+        </Grid>
+      </Grid>
+    )
+  } else {
+    return itemRender && "Cargando detalle poliza"
+  }
+
+
+
+}
+
+
+let itemRenderDetalle = 'Cargando';
+
+let dataAllSiniestros = 'cargando'
+let dataInfoPoliza = 'cargando'
+let dataInfoArchivos = 'cargando'
+let dataNotificaciones = 'cargando'
 
 function DetalleSiniestro() {
 
 
 
-  let DetalleSiniestro = ObtenerDetalleSiniestro()
+  dataAllSiniestros = ObtenerDetalleSiniestro();
   return (
     <React.Fragment>
       <Helmet title="Invoice Details" />
@@ -154,22 +275,16 @@ function DetalleSiniestro() {
       </Typography>
 
       <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-        <Link component={NavLink} exact to="/">
-          KIRAWEBAPP
-        </Link>
-        <Link component={NavLink} exact to="/">
-          SEGUROS
-        </Link>
-        <Link component={NavLink} exact to="/">
-          DETALLES SINIESTRO
-        </Link>
-        <Typography>N° #0001</Typography>
+        <Typography>NUMERO SINIESTRO #0001</Typography>
       </Breadcrumbs>
 
       <Divider my={6} />
 
       {DetalleSiniestro}
 
+      <Grid>
+        <RenderPantall />
+      </Grid>
     </React.Fragment>
   );
 }

@@ -460,7 +460,7 @@ const ListaRenderCotizaciones = (obtenerListaProductos) => {
             <TableCell style={{ width: '5%' }}>
               <ProductsChip
                 size="small"
-                label="ACTIVO"
+                label={item['id']}
                 rgbcolor={blue[500]}
               />
             </TableCell>
@@ -766,7 +766,7 @@ function Cotizaciones() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
+                <TableCell style={{ width: '5%' }}>NUMERO</TableCell>
                 <TableCell style={{ width: '40%' }}>EQUIPO</TableCell>
                 <TableCell style={{ width: '40%' }}>PLAN</TableCell>
                 <TableCell style={{ width: '15%' }}>DETALLE</TableCell>

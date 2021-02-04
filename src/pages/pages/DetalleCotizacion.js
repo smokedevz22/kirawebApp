@@ -168,7 +168,7 @@ function cargarDetallesCobertura(item) {
       switch (item['codigo_cobertura']) {
 
         case "CL-Daño-Total":
-          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL DEDUCIBLE: <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL (DEDUCIBLE DE <strong>' + item['deducible'] + ' UF</strong>)'
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Total": item['deducible']
@@ -176,7 +176,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Daño-Parcial":
-          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL DEDUCIBLE : <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL (DEDUCIBLE DE <strong>' + item['deducible'] + ' UF</strong>)'
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Parcial": item['deducible']
@@ -184,7 +184,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Robo":
-          document.getElementById('cobertura_perdida').innerHTML = 'ROBO DEDUCIBLE :  <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_perdida').innerHTML = 'ROBO  (DEDUCIBLE DE  <strong>' + item['deducible'] + ' UF</strong>)'
           detallesExtras = {
             ...detallesExtras,
             "CL-Robo": item['deducible']
@@ -224,7 +224,7 @@ function RenderDetalleSubPlan(item) {
           <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>{detalle['capital']} UF</strong></p>
           <h2 style={{
             textTransform: 'uppercase'
-          }}>COBERTURAS </h2>
+          }}>COBERTURAS (DEDUCIBLE) </h2>
           <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
           <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
           <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
@@ -322,7 +322,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
               <Chip
 
                 avatar={<CheckCircle style={{ color: 'green' }} />}
-                label={`CAPITAL ASEGURADO :  ${itemRenderDetalleSubPlan['capital']} UF `}
+                label={`CAPITAL ASEGURADO :  10 UF `}
                 m={1}
               />
 
@@ -332,7 +332,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
               <Grid style={{ display: 'flex' }} item lg={12}>
                 <Grid item lg={4}>
-                  <h4>COBERTURA</h4>
+                  <h4>COBERTURAS (DEDUCIBLE)</h4>
 
 
                   <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  </p>
@@ -350,7 +350,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
                   <h4>PRIMA</h4>
 
-                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>{itemRenderDetalleSubPlan['precio_mensual']} UF  </strong></p>
+                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong> 1{itemRenderDetalleSubPlan['precio_mensual']} UF  </strong></p>
 
 
                 </Grid>
@@ -366,7 +366,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
             m={1}
           />
 
-          <Button variant="contained" color="primary" style={{ marginLeft: '22px', marginTop: '36px' }} mt={2} >
+          <Button variant="contained" color="primary" style={{ marginLeft: '22px', marginTop: '37px' }} mt={2} >
             CONTRATAR SEGURO
                                    </Button>
 
@@ -411,7 +411,7 @@ function DetalleCotizacion() {
 
       <Breadcrumbs aria-label="Breadcrumb" mt={2}>
 
-        <Typography>N° {id}</Typography>
+        <Typography>NUMERO COTIZACION {id}</Typography>
       </Breadcrumbs>
 
       <Divider my={6} />

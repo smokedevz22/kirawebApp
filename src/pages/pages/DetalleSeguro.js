@@ -38,11 +38,13 @@ import {
   Done as DoneIcon,
   Face as FaceIcon,
   NewReleases,
+  Notifications,
   BurstMode as BurstModeIcon,
   Description as DescriptionIcon,
   TagFaces as TagFacesIcon,
 } from "@material-ui/icons";
 import { spacing, display } from "@material-ui/system";
+import { red, green, blue } from "@material-ui/core/colors";
 
 
 import {
@@ -57,6 +59,11 @@ const timeOut = (time) => new Promise((res) => setTimeout(res, time));
 const Chip = styled(MuiChip)(spacing);
 const Spacer = styled.div(spacing);
 const TextField = styled(MuiTextField)(spacing);
+
+const TableWrapper = styled.div`
+  overflow-y: auto;
+  max-width: calc(100vw - ${(props) => props.theme.spacing(12)}px);
+`;
 
 const Card = styled(MuiCard)`
   ${spacing};
@@ -77,6 +84,13 @@ const Button = styled(MuiButton)(spacing);
 
 const Typography = styled(MuiTypography)(display);
 
+const ProductsChip = styled(Chip)`
+  height: 20px;
+  padding: 4px 0;
+  font-size: 90%;
+  background-color: ${(props) => props.rgbcolor};
+  color: ${(props) => props.theme.palette.common.white};
+`;
 const ChatContainer = styled(Grid)`
   width: 100%;
   height: 65vh;
@@ -352,7 +366,7 @@ function cargarDetallesCobertura(item) {
       switch (item['codigo_cobertura']) {
 
         case "CL-Daño-Total":
-          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL DEDUCIBLE: <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL  : <strong>' + item['deducible'] + ' UF </strong>'
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Total": item['deducible']
@@ -360,7 +374,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Daño-Parcial":
-          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL DEDUCIBLE : <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL   : <strong>' + item['deducible'] + ' UF </strong>'
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Parcial": item['deducible']
@@ -368,7 +382,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Robo":
-          document.getElementById('cobertura_perdida').innerHTML = 'ROBO DEDUCIBLE :  <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_perdida').innerHTML = 'ROBO   :  <strong>' + item['deducible'] + ' UF </strong>'
           detallesExtras = {
             ...detallesExtras,
             "CL-Robo": item['deducible']
@@ -579,247 +593,111 @@ const ObtenerDetallePoliza = () => {
 
 }
 
-
-const ObtenerDetalleSiniestro = () => {
-
-  let { id } = useParams();
-
-  let temId = String(id)
-  console.log(id)
-
-
-  const [siniestros, setSiniestros] = useState('undefined');
+const ObtenerListaSiniestros = () => {
+  const [siniestroxs, setSiniestroxs] = React.useState();
 
 
   useEffect(async () => {
-    const queryListaActividadGraphql = `
+    const myqueryDemo = `
  query MyQuery {
-   detallePoliza(numero_poliza:"${temId}") {
+   listasSiniestros {
      id
-    data_poliza
+    data_siniestro
   }
 }
 
 `;
 
-    console.log(queryListaActividadGraphql)
-    const data = await API.graphql({
-      query: queryListaActividadGraphql
+    console.log(myqueryDemo)
+    const datax= await API.graphql({
+      query: myqueryDemo
     });
-    console.log("data from GraphQL:", data);
-    setSiniestros(data)
+    console.log("data from GraqweqweqwehQL:", datax);
+    setSiniestroxs(datax)
 
   }, [])
 
-  console.log("polizaaa", siniestros)
-  if (siniestros && siniestros['data']) {
-
-    let dataSiniestro = JSON.parse(siniestros['data']['detallePoliza']['data_poliza'])
-    console.log("siniestro", dataSiniestro)
-
-    itemDatosAsegurado = dataSiniestro['asegurado']
-    itemRenderDetallePlan = RenderDetallePlan(dataSiniestro['plan'], dataSiniestro['subplan'])
-
-
-    const handleSubmit = async (
-      values,
-      { resetForm, setErrors, setStatus, setSubmitting }
-    ) => {
-      try {
-        await timeOut(1500);
-        resetForm();
-        setStatus({ sent: true });
-        setSubmitting(false);
-      } catch (error) {
-        setStatus({ sent: false });
-        setErrors({ submit: error.message });
-        setSubmitting(false);
-      }
-    };
-
-
-    obtenerListaItems();
+  console.log("poliiiizaaa", siniestroxs)
+  if (siniestroxs && siniestroxs['data']) {
+    console.log("productos", siniestroxs['data']['listasSiniestros']);
+    let listProductos = siniestroxs['data']['listasSiniestros'];
+    console.log("listaProductos", listProductos)
 
     return (
-
-
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values,
-          status,
-        }) => (
-          <Card mb={6}>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-
-              </Typography>
-              <Typography variant="body2" gutterBottom>
-
-
-              </Typography>
-
-
-              {isSubmitting ? (
-                <Box display="flex" justifyContent="center" my={6}>
-                  <CircularProgress />
-                </Box>
-              ) : (
-                  <Grid container   >
-              <Grid>
-                     <Card mb={6}>
-                        <CardContent>
-                          
-
-                          <Grid lg={12} style={{ marginTop: 8 }} >
-
-                            <Grid lg={12} style={{ display: 'flex', }}>
-                              <Typography variant="caption">EQUIPO</Typography>
-
-                            </Grid>
-
-                            <Grid style={{ display: 'flex', marginTop: 8 }} lg={12} >
-
-
-                              <Grid lg={3}>
-                                <Typography style={{ textTransform: 'uppercase', fontSize: 14 }} >
-                                  {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
-
-                                </Typography>
-                              </Grid>
-                              <Grid lg={4}>
-                                <Typography style={{ textTransform: 'uppercase', fontSize: 14 }} >
-                                  {'MODELO: ' + itemDatosAsegurado['modelo_equipo']}
-
-                                </Typography>
-                              </Grid>
-                              <Grid lg={3}>
-                                <Typography style={{ textTransform: 'uppercase', fontSize: 14 }} >
-                                  {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
-
-                                </Typography>
-                              </Grid>
-                              <Grid lg={2}>
-                                <Typography style={{ textTransform: 'uppercase', fontSize: 14 }}>
-                                  {'IMEI: ' + itemDatosAsegurado['imei']}
-
-                                </Typography>
-                              </Grid>
-
-
-
-
-                            </Grid>
-                          </Grid>
- <Grid item lg={12} style={{display:'flex', marginTop:22}}>
-
-                            <Grid item lg={6}>
-                              <Typography variant="h6" gutterBottom>
-                                FECHA SINIESTRO
-                            </Typography>
-                            </Grid>
-
-
-                            <Grid item lg={6}>
-                              <Typography variant="h6" gutterBottom>
-                                TIPO SINIESTRO
-                            </Typography>
-                            </Grid>
- 
-                          </Grid>
-                          <Grid item lg={12} style={{ marginTop:12 }}>
-                            <Typography variant="h6" gutterBottom>
-                              DETALLE SINIESTRO
-                             </Typography>
-                            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-                              Material-UI-Dropzone is a React component using Material-UI and is
-                              based on the excellent react-dropzone library.
-                 </Typography>
-                          </Grid>
-        <Spacer mb={4} />
-
-        <Grid container lg={12}  >
-          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
-            <Typography variant="h6" style={{ color: '#0fb6e9' }} >
-              FOTO DEL EQUIPO
-            
+      <Card mb={6} >
+        <CardContent>
+          <Typography variant="h2" gutterBottom>
+            SINIESTROS DECLARADOS
         </Typography>
-            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
-            <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
- filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+          <TableWrapper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
+                  <TableCell style={{ width: '20%' }}>FECHA INGRESO</TableCell>
+                  <TableCell style={{ width: '60%' }}>RESUMEN</TableCell>
+                  <TableCell style={{ width: '10%' }}>DETALLE</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody style={{ width: '100%' }}>
+
+                {listProductos &&
+                  listProductos.map((item, index) => {
+                    console.log(item);
+
+                    let itemTemporal = JSON.parse(item['data_siniestro']);
+                    console.log(itemTemporal)
+
+                    return (
 
 
+                      <TableRow style={{ width: '100%' }} key={index}>
+                        <TableCell  >
+                          <ProductsChip
+                            size="small"
+                            label="ACTIVO"
+                            rgbcolor={blue[500]}
+                          />
+                        </TableCell>
 
-          </Grid>
+                        <TableCell component="th" scope="row"  >
+                          <Typography variant="body2" gutterBottom>
+                            {itemTemporal['detalle']['fecha_siniestro']}
+                          </Typography>
+                        </TableCell>
+                        <TableCell component="th" scope="row" s >
+                          <Typography variant="body2" gutterBottom>
+                            {itemTemporal['detalle']['descripcion_siniestro']}
+                          </Typography>
+                        </TableCell>
 
-          <Grid lg={6} style={{ marginTop: '22px' }}>
-            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              ADJUNTAR FOTO CARNET DE IDENTIDAD
-            
-        </Typography>
-            <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
-            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
- filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+                        <TableCell component="th" scope="row" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                          <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                            <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
+                              FICHA
+                            </Button>
+                          )} />
 
-          </Grid>
-
-          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6  }}>
-            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              ADJUNTAR FOTO COTIZACION SERVICIO TECNICO
-            
-        </Typography>
-            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
-            <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
- filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
-
-          </Grid>
-
-     
-
-        </Grid>
-
-
-      </CardContent>
-   </Card>
-  
-                    </Grid> 
-                  </Grid>
-                )}
-            </CardContent>
-          </Card>
-        )
-        }
-      </Formik >)
-
-
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })
+                }
+              </TableBody>
+            </Table>
+          </TableWrapper>
+        </CardContent >
+      </Card >
+    )
   } else {
 
-    return siniestros && 'cargando...'
-
+    return siniestroxs && 'cargando...'
   }
-
 
 
 }
 
+ 
 
 const ObtenerListaArchivos = () => {
 
@@ -1131,6 +1009,122 @@ let itemRenderDetalle = 'Cargando';
 
 
 
+const ListaRenderSiniestros = (obtenerListaProductos) => {
+  const [siniestros, setSiniestros] = useState('undefined');
+
+
+  useEffect(async () => {
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   listasSiniestros {
+     id
+    data_siniestro
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    const data = await API.graphql({
+      query: queryListaActividadGraphql
+    });
+    console.log("data from GraphQL:", data);
+    setSiniestros(data)
+
+  }, [])
+
+  console.log("polizaaa", siniestros)
+  if (siniestros && siniestros['data']) {
+    console.log("productos", siniestros['data']['listasSiniestros']);
+    let listProductos = siniestros['data']['listasSiniestros'];
+    console.log("listaProductos", listProductos)
+
+    return <TableBody style={{ width: '100%' }}>
+
+      {listProductos &&
+        listProductos.map((item, index) => {
+          console.log(item);
+
+          let itemTemporal = JSON.parse(item['data_siniestro']);
+
+
+          console.log(itemTemporal)
+
+          return (<TableRow style={{ width: '100%' }} key={index}>
+            <TableCell  >
+              <ProductsChip
+                size="small"
+                label="ACTIVO"
+                rgbcolor={blue[500]}
+              />
+            </TableCell>
+
+            <TableCell component="th" scope="row"  >
+              <Typography variant="body2" gutterBottom>
+                {itemTemporal['detalle']['fecha_siniestro']}
+              </Typography>
+            </TableCell>
+            <TableCell component="th" scope="row" s >
+              <Typography variant="body2" gutterBottom>
+                {itemTemporal['detalle']['descripcion_siniestro']}
+              </Typography>
+            </TableCell>
+
+            <TableCell component="th" scope="row"  >
+              <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
+                  FICHA
+                </Button>
+              )} />
+
+            </TableCell>
+          </TableRow>
+          )
+        })
+      }
+    </TableBody>
+  } else {
+
+    return siniestros && 'cargando...'
+
+  }
+
+
+
+}
+
+function Siniestros() {
+
+  let data = ListaRenderSiniestros();
+
+
+  return (
+    <Card mb={6}>
+      <CardContent>
+        <Typography variant="h2" gutterBottom>
+          SINIESTROS DECLARADOS
+        </Typography>
+        <TableWrapper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
+                <TableCell style={{ width: '20%' }}>FECHA INGRESO</TableCell>
+                <TableCell style={{ width: '60%' }}>RESUMEN</TableCell>
+                <TableCell style={{ width: '10%' }}>DETALLE</TableCell>
+              </TableRow>
+            </TableHead>
+            {dataAllSiniestros}
+            </Table>
+        </TableWrapper>
+      </CardContent>
+    </Card>
+  );
+}
+
+
+
+
 function RenderPantall() {
 
   const [itemRender, setItemRender] = useState('ficha');
@@ -1166,20 +1160,20 @@ function RenderPantall() {
   switch (itemRender) {
 
     case 'ficha':
-      itemRenderDetalle = itemRender && ObtenerDetallePoliza()
+      itemRenderDetalle = itemRender && dataInfoPoliza
       break;
 
     case 'siniestros':
-      itemRenderDetalle = itemRender && ObtenerDetalleSiniestro()
+      itemRenderDetalle = itemRender && dataAllSiniestros
 
       break;
 
     case 'archivos':
-      itemRenderDetalle = itemRender && ObtenerListaArchivos()
+      itemRenderDetalle = itemRender && dataInfoArchivos
       break;
 
     case 'notificaciones':
-      itemRenderDetalle = itemRender && ObtenerListaNotificaciones()
+      itemRenderDetalle = itemRender && dataNotificaciones
       break;
   }
 
@@ -1201,25 +1195,25 @@ function RenderPantall() {
             onClick={handleClickSiniestro}
             m={1}
           />
-          <Badge badgeContent={'222R'} color="primary" mr={4}>
 
 
-            <Chip
-              avatar={<BurstModeIcon />}
-              label="ARCHIVOS"
-              onClick={handleClickArchivos}
-              m={1}
-            />
-          </Badge>
-          <Badge badgeContent={'22'} color="secondary" mr={4}>
+          <Chip
+            avatar={<BurstModeIcon />}
+            label="ARCHIVOS"
+            onClick={handleClickArchivos}
+            m={1}
+          />
 
 
-            <Chip
-              avatar={<BurstModeIcon />}
-              label="NOTIFICACIONES"
-              onClick={handleClickNotificaciones}
-              m={1}
-            />
+          <Chip
+            avatar={<Notifications />}
+            label="NOTIFICACIONES"
+            onClick={handleClickNotificaciones}
+            m={1}
+          />
+          <Badge badgeContent={''} color="secondary" mr={4}>
+
+
           </Badge>
         </Grid>
 
@@ -1236,17 +1230,29 @@ function RenderPantall() {
         </Grid>
       </Grid>
     )
-  } else {
-
-    return itemRender && 'cargando...'
+  } else { 
+    return itemRender && "Cargando detalle poliza"
   }
+
+
+  
 }
+
+let dataAllSiniestros = 'cargando'
+let dataInfoPoliza = 'cargando'
+let dataInfoArchivos = 'cargando'
+let dataNotificaciones = 'cargando'
 
 function DetalleSeguro() {
 
   let { id } = useParams();
   obtenerListaItems();
 
+  dataInfoPoliza = ObtenerDetallePoliza();
+  dataAllSiniestros =  ListaRenderSiniestros();
+  dataInfoArchivos = ObtenerListaArchivos();
+  dataNotificaciones = ObtenerListaNotificaciones();
+  
   return (
     <React.Fragment>
       <Helmet title="Invoice Details" />

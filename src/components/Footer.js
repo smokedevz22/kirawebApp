@@ -45,7 +45,7 @@ function Footer() {
                 <ListItemText
                   primary="- "
                 />
-                <ListItemText primary="info@email.cl" />
+                <ListItemText primary="Powered by KIRA" />
               </ListItem>
 
             </List>
@@ -58,7 +58,7 @@ function Footer() {
                 primary="CONTACTANOS "
               />
               <ListItemText
-                primary="email@email.com"
+                primary="info@frdirect.com"
               />
             </ListItem>
           </List>

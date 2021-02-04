@@ -1382,11 +1382,7 @@ function FlujoTerminadoRender() {
                                   <Typography variant="h2" gutterBottom>
                                     <h2>POLIZA REGISTRADA</h2>
                                   </Typography>
-                                  <Typography variant="body2" gutterBottom>
-                                    This is the receipt for a payment of $268.85 (USD) you
-                                    made to Material App.
-
-                                   </Typography>
+                            
                                   <Typography variant="body2" gutterBottom>
 
                                     <a href="#">DESCARGAR CONTRATO</a>
