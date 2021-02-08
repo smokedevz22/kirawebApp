@@ -281,21 +281,21 @@ const ObtenerDetalleSiniestro = () => {
                         <Grid item lg={12} style={{ display: 'flex', marginTop: 22,  }}>
                         
                             <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                              <Grid style={{ background: 'red', height: '100%', width: '100%' }}>
+                              <Grid style={{ border:'1px solid black', height: '100%', width: '100%' }}>
                               </Grid>
                             </Grid>
 
                             <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                              <Grid style={{ background: 'red', height: '100%', width: '100%' }}>
+                              <Grid style={{ border:'1px solid black', height: '100%', width: '100%' }}>
                               </Grid>
                             </Grid>
 
                             <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                              <Grid style={{ background: 'red', height: '100%', width: '100%' }}>
+                              <Grid style={{ border:'1px solid black', height: '100%', width: '100%' }}>
                               </Grid>
                             </Grid>
                             <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                              <Grid style={{ background: 'red', height: '100%', width: '100%' }}>
+                              <Grid style={{ border:'1px solid black', height: '100%', width: '100%' }}>
                               </Grid>
                             </Grid>
                           </Grid>
@@ -329,7 +329,7 @@ let itemRender = 'cargando'
 let ultimoElementoSeleccionado = null
 let listaRequerimientosGlobales = null;
 
-const ListaRenderSiniestros = (setListaMensajes) => {
+const ListaRenderSiniestros = (setListaMensajes, setTitulo) => {
   const [siniestros, setSiniestros] = useState('');
 
   useEffect(async () => {
@@ -369,6 +369,8 @@ const ListaRenderSiniestros = (setListaMensajes) => {
          console.log("actualizando lista mensajes")
          let itemf = ultimoElementoSeleccionado;
          let itemTemp = JSON.parse(ultimoElementoSeleccionado['data_requerimiento']);
+         console.log("iteeemTemporal", itemTemp)
+         setTitulo('SOLICITUD ' + objectoFind['id'])
          let listaMensajes = itemTemp['mensajes'];
          console.log("listaMensajesGuardar", listaMensajes)
          itemTemp["mensajes"] = listaMensajesGlobales;
@@ -412,52 +414,55 @@ const ListaRenderSiniestros = (setListaMensajes) => {
     console.log("listaProductos", listProductos)
     listaRequerimientosGlobales = listProductos
 
-    return <List  >
-      {listProductos &&
-        listProductos.map((item, index) => {
-          console.log(item);
-
-          let itemTemporal = JSON.parse(item['data_requerimiento']);
-          console.log(itemTemporal)
-
-       
-          let tempItem = ''
+    return (<Grid>
 
 
-          if (itemTemporal.estado === 1) {
+      <List  >
+        {listProductos &&
+          listProductos.map((item, index) => {
+            console.log(item);
+
+            let itemTemporal = JSON.parse(item['data_requerimiento']);
+            console.log(itemTemporal)
+
+
+            let tempItem = ''
+
+
+            if (itemTemporal.estado === 1) {
               tempItem = <Chip label="PENDIENTE" color="primary" />
-          } else { 
-            tempItem = <Chip label="RECHAZADO" style={{ background: 'darkred', color:'white' }}/>
-          }
-          
-          return (
-            <ListItem button >
+            } else {
+              tempItem = <Chip label="RECHAZADO" style={{ background: 'darkred', color: 'white' }} />
+            }
 
-              <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'start' }}
-                lg={12} onClick={event => { 
+            return (
+              <ListItem button >
 
-                  console.log("cargar lista mensajes")
-                  mostrarListaMensajes(item);
-                }}>
-                <Grid>
+                <Grid style={{ display: 'flex', flexDirection: 'column', justifyContent: 'start' }}
+                  lg={12} onClick={event => {
 
-                  <Typography style={{ fontWeight: 'bold' }} >
-                    {"SOLICITUD N° #" + item['id']}
-                  </Typography>
+                    console.log("cargar lista mensajes")
+                    mostrarListaMensajes(item);
+                  }}>
+                  <Grid>
+
+                    <Typography style={{ fontWeight: 'bold' }} >
+                      {"SOLICITUD N° " + (index + 1)}
+                    </Typography>
+                  </Grid>
+
+                  <Grid>
+                    {tempItem}
+                  </Grid>
                 </Grid>
-                <Grid>
-                  <ListItemText primary={'FECHA: ' } />
-                </Grid>
-                <Grid>
-                  {tempItem}
-                </Grid>
-              </Grid>
-            </ListItem>
-          )
-        })
-      }
+              </ListItem>
+            )
+          })
+        }
 
-    </List>
+      </List>
+    </Grid>
+  )
   } else {
 
     return siniestros && 'cargando...'
@@ -482,16 +487,19 @@ const ChatWindow = () =>{
    
   const [listaMensaje, setListaMensaje] = useState([]);
   const [mensaje, setMensaje] = useState('sasdasdd');
-  
+  const [titulo, setTitulo] = useState('');
+
 
   listaMensajesGlobales = listaMensaje;
 
-  itemRender = ListaRenderSiniestros(setListaMensaje);
+  itemRender = ListaRenderSiniestros(setListaMensaje, setTitulo);
 
 
 
   let listaElementos = listaMensaje;
-  
+  let tituloVentan
+
+
   let fnEnviarMensaje = () => {
 
  
@@ -524,6 +532,11 @@ const ChatWindow = () =>{
         </ChatSidebar>
         <ChatMain item xs={12} md={8} lg={9}>
           <ChatMessages id="listaMensajesContainer">
+
+
+            <Grid style={{ padding: 12, fontSize:18, fontWeight:'bold'}}>
+              {titulo}
+            </Grid>
             {listaMensaje && listaMensaje.map((item, index) => {
               console.log("iteeeem",item)
 

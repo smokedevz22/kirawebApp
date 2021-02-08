@@ -13,6 +13,7 @@ import { API } from "aws-amplify";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
 import moment from 'moment';
+import Amplify, { Storage } from 'aws-amplify';
 
 
 import {
@@ -162,63 +163,169 @@ function DefaultDropzone() {
         <Spacer mb={4} />
 
         <Grid container lg={12}  >
-          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
+         
+
+          {itemDatosAsegurado['tipo_siniestro'] === 'parcial' ? (<Grid item lg={12} style={{display:'flex'}}>
+        
+        
+         <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }} >
+              FOTO DETALENTERA CI
+            
+                </Typography>
+            
+                <DropzoneArea dropzoneText={''} onChange={event =>
+                          guardarImagen(event, "CARNET_DELANTERA")
+
+                        }                 acceptedFiles={['image/*']}  
+            filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+<Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }} >
+              FOTO TRASERA CI
+            
+                </Typography>
+            
+                <DropzoneArea dropzoneText={''} onChange={event =>
+                          guardarImagen(event, "CARNET_TRASERA")
+
+                        }                 acceptedFiles={['image/*']} 
+            filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
+            <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }} >
               FOTO DEL EQUIPO
             
-        </Typography>
+                </Typography>
             
-            <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
- filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+                <DropzoneArea dropzoneText={''} onChange={event =>
+                          guardarImagen(event, "EQUIPO")
+
+                        }                 acceptedFiles={['image/*']}  
+            filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
 
           
           <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6  }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-                FOTO COTIZACION SERVICIO TECNICO
+                 C SERVICIO TECNICO
             
         </Typography>
              
-            <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+            <DropzoneArea dropzoneText={''} onChange={event =>
+              guardarImagen(event, "SERVICIO_TECNICO")
+
+            }     acceptedFiles={['image/*']}   
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+              </Grid>
+          ):''}
+
+       
+
+          {itemDatosAsegurado['tipo_siniestro'] === 'total' ? (<Grid item lg={12} style={{ display: 'flex' }}>
+          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }} >
+              FOTO DETALENTERA CI
+            
+                </Typography>
+            
+                <DropzoneArea dropzoneText={''} onChange={event =>
+                          guardarImagen(event, "CARNET_DELANTERA")
+
+                        }                 acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+            filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+<Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }} >
+              FOTO TRASERA CI
+            
+                </Typography>
+            
+                <DropzoneArea dropzoneText={''} onChange={event =>
+                          guardarImagen(event, "CARNET_TRASERA")
+
+                        }                 acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+            filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
 
           
-          <Grid lg={6} style={{ marginTop: '22px' }}>
+          <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6  }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-                FOTO CARNET DE IDENTIDAD (DELANTERA)
+                COTIZACIONES SERVICIO TECNICO
             
         </Typography>
-            
-            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+             
+            <DropzoneArea dropzoneText={''} onChange={event =>
+              guardarImagen(event, "SERVICIO_TECNICO")
+
+            }     acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
+              </Grid>
+          ):''}
+          
+    
+          {itemDatosAsegurado['tipo_siniestro'] === 'robo' ? (<Grid  lg={12} style={{display:'flex', flexDirection:'row'}}>
+ 
+            <Grid item lg={6} style={{ marginTop: '22px', paddingRight: 6,  }}>
+              <Typography variant="h6" style={{ color: '#0fb6e9', textTransform: 'uppercase' }}  >
+                Foto Delantera CI 
+                 
+             </Typography>
+            <DropzoneArea dropzoneText={''} onChange={event =>
+              guardarImagen(event, "CARNET_IDENTIDAD_DELANTERA")
 
-          <Grid lg={6} style={{ marginTop: '22px' }}>
-            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              FOTO CARNET DE IDENTIDAD  (TRASERA)
-               
-        </Typography>
-            
-            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
- filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
-
-          </Grid>
-
-          <Grid lg={6} style={{ marginTop: '22px' }}>
-            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              PARTE POLICIAL
-
-        </Typography>
-
-            <DropzoneArea dropzoneText={''} acceptedFiles={['image/*']} dropzoneClass={{ background: 'red' }}
+            }                    acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
               filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
-          </Grid>
+            </Grid>
+            
 
+                     
+
+            <Grid  item lg={6} style={{ marginTop: '22px' }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' , textTransform:'uppercase'}}  >
+                Foto Trasera CI
+                 
+        </Typography>
+            
+            <DropzoneArea dropzoneText={''} onChange={event =>
+              guardarImagen(event, "CARNET_IDENTIDAD_TRASERA")
+
+            }              acceptedFiles={['image/*']}  
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+            </Grid>
+            
+
+
+
+            <Grid lg={6} style={{ marginTop: '22px' }}>
+              <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+                PARTE POLICIAL
+
+        </Typography>
+
+              <DropzoneArea dropzoneText={''} onChange={event =>
+                guardarImagen(event, "PARTE_POLICIAL")
+
+              } acceptedFiles={['image/*']} 
+                filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+            </Grid>
+
+              </Grid>
+          ):''}
+            
 
         </Grid>
 
@@ -228,6 +335,31 @@ function DefaultDropzone() {
   
   );
 }
+
+
+let listaImagenesSeguro = {}
+async function guardarImagen(item, titulo) {
+
+  console.log("asdads", item)
+  if (item[0]) {
+    console.log("asdad", item[0])
+    await Storage.put(item[0].name, item)
+      .then(result => {
+
+        console.log("RESULTTT", result)
+
+        listaImagenesSeguro[titulo] = 'https://kirastoragebucket112236-dev.s3.us-east-2.amazonaws.com/public/' + result['key']
+
+
+        console.log("lista", listaImagenesSeguro)
+
+
+      }) // {key: "test.txt"}
+      .catch(err => console.log(err));
+
+  }
+}
+
 
 function AlertDialog() {
   const [open, setOpen] = React.useState(false);
@@ -565,6 +697,8 @@ function BasicForm() {
                       <select style={{ height: 50, width:'100%', marginTop:10, padding:6 }}
                         onChange={event => SaveValue("tipo_siniestro", event.target.value)}
                       >
+                        <option  >SELECCIONAR OCURRIDO</option>
+
                         <option value="parcial">DAÑO PARCIAL</option>
                         <option value="total">DAÑO TOTAL</option>
                         <option value="robo">ROBO</option>
