@@ -1707,7 +1707,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
     let listProductos = polizas['data']['listasPolizas'];
     console.log("listaProductos", listProductos)
 
-    return <select style={{ width: '100%', height: 40 }}>
+    return <select style={{ width: '100%', height: 40, textTransform: 'uppercase'}}>
 
       {listProductos &&
         listProductos.map((item, index) => {
@@ -1720,8 +1720,8 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
 
           console.log(itemTemporal)
 
-          return (<option>
-            {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo'] + " - " + itemSubPlan['nombre']}
+          return (<option style={{textTransform:'uppercase'}}>
+            {item['id']+ ' - '+itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo'] + " - " + itemSubPlan['nombre']}
 
           </option>)
         })

@@ -578,7 +578,6 @@ const ChatWindow = () => {
   let fnEnviarMensaje = () => {
 
 
-
     listaElementos = [...listaElementos, { mensaje: inputMensaje }];
     console.log("lista", listaElementos)
 
@@ -833,9 +832,6 @@ function RenderPantall() {
           <Shadow>
             <Card>
               {itemRenderDetalle}
-
-
-
             </Card>
           </Shadow>
         </Grid>

@@ -35,17 +35,6 @@ import {
 import { spacing } from "@material-ui/system";
 import { AddShoppingCart, NoteAdd, Storefront, LocalHospital, NewReleases, QueuePlayNext, Contacts, PersonAdd, AssignmentInd, Notifications } from "@material-ui/icons";
 
-import {
-  Briefcase,
-  DollarSign,
-  ExternalLink,
-  Facebook,
-  Home,
-  Instagram,
-  MapPin,
-  ShoppingBag,
-  Twitter,
-} from "react-feather";
 
 const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 
@@ -113,202 +102,31 @@ const TableWrapper = styled.div`
   max-width: calc(100vw - ${(props) => props.theme.spacing(12)}px);
 `;
 
-function Details() {
-  return (
-    <Card mb={6} style={{ background: '#0fb6e9' }}>
-      <CardContent >
-
-
-        <Spacer mb={4} />
-
-        <Centered>
-          <Avatar alt="Lucy Lavender" src="/static/img/profile.jpg" />
-          <Typography variant="body2" component="div" gutterBottom>
-          </Typography>
-
-        </Centered>
-      </CardContent>
-    </Card>
-  );
-}
-
-
-
-function Skills() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          ACTIVIDADES
-        </Typography>
-
-        <Spacer mb={4} />
-
-        <Centered>
-          <Chip size="small" mr={1} mb={1} label="HTML" color="secondary" />
-          <Chip size="small" mr={1} mb={1} label="JavaScript" />
-          <Chip size="small" mr={1} mb={1} label="Sass" />
-          <Chip size="small" mr={1} mb={1} label="React" />
-          <Chip size="small" mr={1} mb={1} label="Redux" />
-          <Chip size="small" mr={1} mb={1} label="Next.js" />
-          <Chip size="small" mr={1} mb={1} label="Material UI" />
-          <Chip size="small" mr={1} mb={1} label="UI" />
-          <Chip size="small" mr={1} mb={1} label="UX" />
-        </Centered>
-      </CardContent>
-    </Card>
-  );
-}
-
-function About() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          CONTACTO
-        </Typography>
-
-        <Spacer mb={4} />
-
-        <Grid container direction="row" alignItems="center" mb={2}>
-          <Grid item>
-            <AboutIcon>
-              <Home />
-            </AboutIcon>
-          </Grid>
-          <Grid item>
-            Lives in{" "}
-            <Link href="https://material-app.bootlab.io/">
-              San Fransisco, SA
-            </Link>
-          </Grid>
-        </Grid>
-        <Grid container direction="row" alignItems="center" mb={2}>
-          <Grid item>
-            <AboutIcon>
-              <Briefcase />
-            </AboutIcon>
-          </Grid>
-          <Grid item>
-            Works at{" "}
-            <Link href="https://material-app.bootlab.io/">Material UI</Link>
-          </Grid>
-        </Grid>
-        <Grid container direction="row" alignItems="center">
-          <Grid item>
-            <AboutIcon>
-              <MapPin />
-            </AboutIcon>
-          </Grid>
-          <Grid item>
-            Lives in <Link href="https://material-app.bootlab.io/">Boston</Link>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  );
-}
-
-function Elsewhere() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          REDES SOCIALES
-        </Typography>
-
-        <Spacer mb={4} />
-
-        <Grid container direction="row" alignItems="center" mb={2}>
-          <Grid item>
-            <AboutIcon>
-              <ExternalLink />
-            </AboutIcon>
-          </Grid>
-          <Grid item>
-            <Link href="https://material-app.bootlab.io/">lucylavender.io</Link>
-          </Grid>
-        </Grid>
-        <Grid container direction="row" alignItems="center" mb={2}>
-          <Grid item>
-            <AboutIcon>
-              <Twitter />
-            </AboutIcon>
-          </Grid>
-          <Grid item>
-            <Link href="https://material-app.bootlab.io/">Twitter</Link>
-          </Grid>
-        </Grid>
-        <Grid container direction="row" alignItems="center" mb={2}>
-          <Grid item>
-            <AboutIcon>
-              <Facebook />
-            </AboutIcon>
-          </Grid>
-          <Grid item>
-            <Link href="https://material-app.bootlab.io/">Facebook</Link>
-          </Grid>
-        </Grid>
-        <Grid container direction="row" alignItems="center">
-          <Grid item>
-            <AboutIcon>
-              <Instagram />
-            </AboutIcon>
-          </Grid>
-          <Grid item>
-            <Link href="https://material-app.bootlab.io/">Instagram</Link>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  );
-}
-
-function Earnings() {
-  return (
-    <Box position="relative">
-      <Card mb={6} pt={2}>
-        <CardContent>
-          <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">$ 2.405</Box>
-          </Typography>
-          <Typography variant="body2" gutterBottom mt={3} mb={0}>
-            Total Earnings
-          </Typography>
-
-          <StatsIcon>
-            <DollarSign />
-          </StatsIcon>
-          <LinearProgress
-            variant="determinate"
-            value={75}
-            color="secondary"
-            mt={4}
-          />
-        </CardContent>
-      </Card>
-    </Box>
-  );
-}
 
 function Orders(props) {
 
 
   console.log(props)
   return (
-    <Box position="relative">
+    <Box position="relative" style={{ padding: 12 }}>
       <Card mb={6} pt={2}>
         <CardContent>
-          <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">0</Box>
-          </Typography>
-          <Typography variant="body2" gutterBottom mt={3} mb={0}>
-            SEGUROS CONTRATADOS
-          </Typography>
 
-          <StatsIcon>
-            <LocalHospital />
-          </StatsIcon>
+          <Grid item lg={12}>
+
+            <Grid item lg={8}>
+              <Typography variant="body2" gutterBottom mt={3} mb={0}>
+                SEGUROS CONTRATADOS
+              </Typography>
+            </Grid>
+
+            <Grid item lg={4} style={{ paddingBottom: 12 }}>
+              <StatsIcon>
+                <LocalHospital />
+              </StatsIcon>
+            </Grid>
+          </Grid>
+
           <LinearProgress
             variant="determinate"
             value={30}
@@ -326,20 +144,27 @@ function Orders(props) {
 
 function Revenue(props) {
   return (
-    <Box position="relative">
+    <Box position="relative" style={{ padding: 12 }}>
       <Card mb={6} pt={2}>
         <CardContent>
-          <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">0</Box>
-          </Typography>
-          <Typography variant="body2" gutterBottom mt={3} mb={0}>
-            SINIESTROS DECLARADOS
-          </Typography>
 
-          <StatsIcon>
-            <NewReleases />
-          </StatsIcon>
-          <LinearProgress
+
+
+          <Grid item lg={12}>
+
+            <Grid item lg={8}>
+              <Typography variant="body2" gutterBottom mt={3} mb={0}>
+                SINIESTROS DECLARADOS
+              </Typography>
+            </Grid>
+
+            <Grid item lg={4} style={{ paddingBottom: 12 }}>
+              <StatsIcon >
+                <NewReleases />
+              </StatsIcon>
+            </Grid>
+          </Grid>
+          < LinearProgress
             variant="determinate"
             value={50}
             color="secondary"
@@ -358,19 +183,24 @@ function Revenue(props) {
 
 function CotizacionesCard(props) {
   return (
-    <Box position="relative">
-      <Card mb={6} pt={2}>
+    <Box position="relative" style={{ padding: 12 }}>
+      <Card mb={6} pt={2} >
         <CardContent>
-          <Typography variant="h2" gutterBottom>
-            <Box fontWeight="fontWeightRegular">0</Box>
-          </Typography>
-          <Typography variant="body2" style={{ textTransform: 'uppercase' }} gutterBottom mt={3} mb={0}>
-            Cotizaciones Realizadas
-          </Typography>
+          <Grid item lg={12}>
 
-          <StatsIcon>
-            <NewReleases />
-          </StatsIcon>
+            <Grid item lg={8}>
+              <Typography variant="body2" gutterBottom mt={3} mb={0}>
+                COTIZACION REALIZADA
+              </Typography>
+            </Grid>
+
+            <Grid item lg={4} style={{ paddingBottom: 12 }}>
+              <StatsIcon >
+                <NoteAdd />
+              </StatsIcon>
+            </Grid>
+          </Grid>
+
           <LinearProgress
             variant="determinate"
             value={50}
@@ -560,6 +390,13 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
               />
             </TableCell>
 
+            <TableCell >
+              <Typography gutterBottom style={{ fontSize: 12, textTransform: 'uppercase' }}>
+                {item['id']}
+              </Typography>
+
+            </TableCell>
+
             <TableCell component="th" scope="row"  >
               <Typography gutterBottom style={{ fontSize: 12, textTransform: 'uppercase' }}>
                 {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo']}
@@ -577,15 +414,11 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
               <Grid style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <Route style={{ marginRight: '6px' }} render={({ history }) => (
                   <Button onClick={() => { history.push(`/pages/polizas/${item['id']}`) }} size="small" color="primary">
-                    FICHA
+                    VER POLIZA
                   </Button>
                 )} />
 
-                <Route render={({ history }) => (
-                  <Button onClick={() => { history.push('/pages/flujo_siniestro') }} size="small" color="primary">
-                    SINIESTRO
-                  </Button>
-                )} />
+
 
               </Grid>
             </TableCell>
@@ -706,9 +539,10 @@ function Seguros() {
             <TableHead>
               <TableRow>
                 <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
-                <TableCell style={{ width: '70%' }}>EQUIPO</TableCell>
+                <TableCell style={{ width: '20%' }}>POLIZA</TableCell>
+                <TableCell style={{ width: '30%' }}>EQUIPO</TableCell>
                 <TableCell style={{ width: '20%' }}>PLAN</TableCell>
-                <TableCell style={{ width: '10%' }}>OPCIONES</TableCell>
+                <TableCell style={{ width: '30%' }}>OPCIONES</TableCell>
               </TableRow>
             </TableHead>
 

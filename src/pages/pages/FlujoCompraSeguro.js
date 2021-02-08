@@ -306,7 +306,7 @@ function DefaultDropzone() {
             
         </Typography>
             <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
-               PUEDE ENCONTRAR EL NUMERO DE SERIE DEL MISMO DISPOSITIVO
+               PUEDE ENCONTRAR EL NUMERO DE SERIE EN LA CAJA DEL MISMO DISPOSITIVO
         </Typography>
             <DropzoneArea
               onChange={event =>  
@@ -486,6 +486,8 @@ function AlertCompletarFormulario(props) {
   console.log("props",props)
   const [open, setOpen] = React.useState(false);
 
+  let itemSubPlan = JSON.parse(subPlanSeleccionado['data_sub_plan'])
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -525,16 +527,18 @@ function AlertCompletarFormulario(props) {
                 <h4 style={{
                   marginTop:22,
                   textTransform: 'uppercase'
-                }}>CARACTERISTICAS DEL PRODUCTO </h4>
+                }}>COBERTURAS (DEDUCIBLE)
+ </h4>
 
-                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>  UF</strong></p>
-                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
-                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
-                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong> {itemSubPlan['capital']} UF</strong></p>
+                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL  ( DEDUCIBLE DE  {detallesExtras['CL-Daño-Total']} UF )</p>
+ 
+                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  ( DEDUCIBLE DE {detallesExtras['CL-Daño-Parcial']} UF) </p>
+                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO ( DEDUCIBLE DE  {detallesExtras['CL-Robo']} UF)</p>
                
                 <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
                 <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
-                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>  UF  </strong></p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong> {itemSubPlan['precio_mensual']} UF  </strong></p>
                 <p style={{ textTransform: 'uppercase', fontSize: '12px', marginTop: 22 }}><strong>El riesgo es asegurado por Chubb Compañía de Seguros Generales S.A</strong></p>
 
 
@@ -584,23 +588,16 @@ function AlertDialogNroSerie() {
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"¿Cómo buscar el modelo y el número de serie de mi Smartphone con Android 4.2 o superior?"}
+              {"¿Cómo buscar el modelo y el número de serie de mi Smartphone?"}
             </DialogTitle>
             <DialogContent>
             
               <DialogContentText id="alert-dialog-description" style={{ display: 'flex', flexDirection: 'column' }}>
 
                 <Grid item lg={12}>
-                  {`Para encontrar el IMEI puedes ver el instructivo para buscar el modelo y numero de serie del
-equipo.
-Puedes conseguirlo también marcando el *#06# en tu celular y te aparecerá la información en
-pantalla.` }
-
+                  {`Para obtener el numero de serie de su telefon debe ir a:   Configuraciones > Informacion del telefono > estado` }
                 </Grid>
-
-                <Grid item lg={12} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}> <img style={{ width: 200 }} src="https://elandroidelibre.elespanol.com/wp-content/uploads/2016/10/saber-imei-002.jpg" />
-                </Grid>
-
+ 
               </DialogContentText>
             
             </DialogContent>
