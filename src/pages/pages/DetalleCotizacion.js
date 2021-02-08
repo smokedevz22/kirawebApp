@@ -204,12 +204,12 @@ function RenderDetalleSubPlan(item) {
 
   let detalle = JSON.parse(item['data_sub_plan'])
 
-  cargarDetallesCobertura(item)
 
 
   console.log("DETALLE_SUBPLAN", detalle)
 
   if (detalle) {
+    cargarDetallesCobertura(item)
 
     //setDetallePlan(detalle)
     return (<Grid lg={12}>
@@ -286,6 +286,8 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
     console.log("subPlanSeleccionado", subPlanSeleccionado)
 
+    let itemSubPlanData = JSON.parse(subPlanSeleccionado['data_sub_plan'])
+
     itemRenderDetallePlan = RenderDetallePlan(planSeleccionado)
     itemRenderDetalleSubPlan = RenderDetalleSubPlan(subPlanSeleccionado)
 
@@ -322,7 +324,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
               <Chip
 
                 avatar={<CheckCircle style={{ color: 'green' }} />}
-                label={`CAPITAL ASEGURADO :  10 UF `}
+                label={`CAPITAL ASEGURADO : ${itemSubPlanData['capital']} UF `}
                 m={1}
               />
 
@@ -350,7 +352,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
                   <h4>PRIMA</h4>
 
-                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong> 1{itemRenderDetalleSubPlan['precio_mensual']} UF  </strong></p>
+                  <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong> {itemSubPlanData['precio_mensual']} UF  </strong></p>
 
 
                 </Grid>

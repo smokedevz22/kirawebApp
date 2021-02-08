@@ -241,7 +241,8 @@ function DefaultDropzone() {
                         }                 acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
             filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
-          </Grid>
+            </Grid>
+            
 <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6 }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }} >
               FOTO TRASERA CI
@@ -282,7 +283,7 @@ function DefaultDropzone() {
                  
              </Typography>
             <DropzoneArea dropzoneText={''} onChange={event =>
-              guardarImagen(event, "CARNET_IDENTIDAD_DELANTERA")
+              guardarImagen(event, "CARNET_DELANTERA")
 
             }                    acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
               filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
@@ -299,7 +300,7 @@ function DefaultDropzone() {
         </Typography>
             
             <DropzoneArea dropzoneText={''} onChange={event =>
-              guardarImagen(event, "CARNET_IDENTIDAD_TRASERA")
+              guardarImagen(event, "CARNET_TRASERA")
 
             }              acceptedFiles={['image/*']}  
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
@@ -343,7 +344,7 @@ async function guardarImagen(item, titulo) {
   console.log("asdads", item)
   if (item[0]) {
     console.log("asdad", item[0])
-    await Storage.put(item[0].name, item)
+    await Storage.put(item[0].name, item[0])
       .then(result => {
 
         console.log("RESULTTT", result)
@@ -755,6 +756,9 @@ function ResumenDetail() {
     }
   };
 
+
+  console.log("listaIMAGENES", listaImagenesSeguro)
+  console.log("itemDatosAsegurado", itemDatosAsegurado)
   return (
     <Formik
       initialValues={initialValues}
@@ -807,35 +811,153 @@ function ResumenDetail() {
 
 
                               <Grid item xs={12}>
-                                <Grid item xs={12}>
-                                  <Typography variant="body1" gutterBottom>
-                                    DETALLE SINIESTRO
-                                  </Typography>
-                                  <Typography variant="body2" gutterBottom>
-                                    {itemDatosAsegurado['descripcion_siniestro']}
 
-                                  </Typography>
+                                <Grid item lg={12}>
+                                  <div>
+                                    <span style={{ fontWeight: 'bold', fontSize: '22px', marginTop: 12 }}>    RESUMEN SINIESTRO</span>
+
+                                    <Grid style={{ marginTop: 22 }}>
+
+                                      <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
+                                        MI CELULAR
+                          </Typography>
+
+                                      <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
+                                        SAMSUNG - GALAXY S20  
+                                      </Typography>
+                                    </Grid>
+
+                                    <Grid style={{ marginTop: 22 }}>
+
+                                      <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
+                                        FECHA DECLARACION
+                          </Typography>
+
+                                      <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
+                                        {moment(itemDatosAsegurado['fecha_siniestro']).format("DD-MM-YYYY")}
+                                      </Typography>
+                                    </Grid>
+
+
+
+                                  </div>
                                 </Grid>
+
+
+                              </Grid>
+
+                              <Grid style={{ marginTop: 22, paddingLeft: 12}}>
+
+                                <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
+                                  RESUMEN
+                          </Typography>
+                                <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
+                                  {itemDatosAsegurado['descripcion_siniestro']}
+
+                                </Typography>
+
+
                               </Grid>
 
 
-                              <Grid item lg={12} style={{display:'flex'}}>
-                                <Grid item lg={3} style={{ paddingRight:2}}>
-                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
-                                    </div>
+                              <Grid lg={12} style={{   paddingLeft: 12, marginTop: 32 }}>
+
+                                <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
+                                  FOTOS ADJUNTAS
+                          </Typography></Grid> 
+                              <Grid   lg={12} style={{display:'flex',paddingLeft:12, marginTop:22}} >
+                               
+                                 
+                                {itemDatosAsegurado['tipo_siniestro'] === 'parcial' ? (<Grid lg={12} style={{ display: 'flex' }}><Grid lg={3} style={{ paddingRight: 2 }}>
+                                  <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                    <img style={{ width: '100%', height: '100%' }}  style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['EQUIPO']} />
+                                  </div>
                                 </Grid>
-                                <Grid item lg={3} style={{ paddingRight:2}}>
-                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
+                                <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                  <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['SERVICIO_TECNICO']} />
+                                  </div>
+                                  </Grid>
+
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_DELANTERA']} />
                                     </div>
-                                </Grid>
-                                <Grid item lg={3} style={{ paddingRight:2}}>
-                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
+                                  </Grid>
+
+
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_TRASERA']} />
                                     </div>
+                                  </Grid>
                                 </Grid>
-                                <Grid item lg={3} style={{ paddingRight:2}}>
-                                  <div style={{background:'lightgray', height:'120px', paddingRight:2, border:'1px dashed black'}}>
+                                ) : ''}
+
+                                
+
+
+                                {itemDatosAsegurado['tipo_siniestro'] === 'total' ? (<Grid lg={12} style={{ display: 'flex' }}>
+                                   
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['SERVICIO_TECNICO']} />
                                     </div>
+                                  </Grid>
+
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                    </div>
+                                  </Grid>
+
+
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                    </div>
+                                  </Grid>
                                 </Grid>
+                                ) : ''}
+
+                             
+                                
+
+                                {itemDatosAsegurado['tipo_siniestro'] === 'robo' ? (<Grid lg={12} style={{ display: 'flex' }}>
+      
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['PARTE_POLICIAL']} />
+                                    </div>
+                                  </Grid>
+
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                    </div>
+                                  </Grid>
+
+
+                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                    </div>
+                                  </Grid>
+                                </Grid>
+                                ) : ''}
+
+
+                               
                               </Grid>
 
                             </Grid>
@@ -1527,7 +1649,10 @@ async function registrarProducto() {
 
   let dataSave = JSON.stringify({
     detalle: itemDatosAsegurado,
+    imagenes: listaImagenesSeguro
   });
+
+  console.log("save", dataSave)
   await API.graphql({
     query: mutation,
     variables: {

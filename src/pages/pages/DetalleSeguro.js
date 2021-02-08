@@ -214,45 +214,7 @@ let imagenes = {};
 
 
 
-async function obtenerListaItems() {
-
-  listCoberturas = []
-  const queryListaActividadGraphql = `
- query MyQuery {
-   listasCoberturas{
-     id
-     id_sub_plan
-    data_cobertura
-  }
-}
-
-`;
-
-  console.log(queryListaActividadGraphql)
-  const data = await API.graphql({
-    query: queryListaActividadGraphql
-  });
-  console.log("data from GraphQL:", data);
-
-  let listasProductos = data['data']['listasCoberturas'];
-  listasProductos && listasProductos.forEach(element => {
-
-    let itemPlan = JSON.parse(element['data_cobertura'])
-    let itemCobertura = {
-      ...itemPlan,
-      id: element['id'],
-      id_sub_plan: element['id_sub_plan']
-
-    }
-    console.log(itemCobertura);
-    listCoberturas.push(itemCobertura);
-
-  });
-  console.log(listCoberturas)
-
-
-  return true;
-}
+ 
 
 function RenderDetallePlan(item, subplan) {
   // const [detallePlan, setDetallePlan] = useState({});
@@ -262,7 +224,6 @@ function RenderDetallePlan(item, subplan) {
 
   let detalleSub = JSON.parse(subplan['data_sub_plan'])
 
-  cargarDetallesCobertura(detalleSub)
 
 
   console.log("DETALLE_SUBPLAN", detalleSub)
@@ -270,6 +231,9 @@ function RenderDetallePlan(item, subplan) {
 
   if (detalle) {
     //setDetallePlan(detalle)
+
+    cargarDetallesCobertura(subplan)
+
     return (<Grid>
       <Grid style={{marginTop:22}}>
        
@@ -337,10 +301,12 @@ function RenderDetallePlan(item, subplan) {
 
 
 function cargarDetallesCobertura(item) {
+
+  console.log("subPlanItem",item)
   let listaTemporalCoberturas = []
 
   let cargarDetalleCob = async function () {
-    listCoberturas && listCoberturas.forEach((data) => {
+      listCoberturas.forEach((data) => {
 
       console.log("cobertura", data)
       console.log("subplan", item)
@@ -361,7 +327,7 @@ function cargarDetallesCobertura(item) {
       switch (item['codigo_cobertura']) {
 
         case "CL-Daño-Total":
-          document.getElementById('cobertura_total').innerHTML = 'DAÑO PARCIAL (DEDUCIBLE DE 2' + item['deducible'] + '  UF) ' 
+          document.getElementById('cobertura_total').innerHTML = 'DAÑO PARCIAL (DEDUCIBLE DE ' + item['deducible'] + '  UF) ' 
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Total": item['deducible']
@@ -369,7 +335,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Daño-Parcial":
-          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO TOTAL (DEDUCIBLE DE 1.2' + item['deducible'] + '  UF) ' 
+          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO TOTAL (DEDUCIBLE DE ' + item['deducible'] + '  UF) ' 
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Parcial": item['deducible']
@@ -377,7 +343,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Robo":
-          document.getElementById('cobertura_perdida').innerHTML = 'ROBO (DEDUCIBLE DE 0.6' + item['deducible'] + '  UF) ' 
+          document.getElementById('cobertura_perdida').innerHTML = 'ROBO (DEDUCIBLE DE ' + item['deducible'] + '  UF) ' 
           detallesExtras = {
             ...detallesExtras,
             "CL-Robo": item['deducible']
@@ -404,7 +370,7 @@ const ObtenerDetallePoliza = () => {
   const [siniestros, setSiniestros] = useState('undefined');
   const [imagenes, setImagenes] = useState([]);
 
-
+  
   useEffect(async () => {
     const queryListaActividadGraphql = `
  query MyQuery {
@@ -415,6 +381,8 @@ const ObtenerDetallePoliza = () => {
 }
 
 `;
+   
+    obtenerListaItems();
 
     console.log(queryListaActividadGraphql)
     const data = await API.graphql({
@@ -579,35 +547,35 @@ const ObtenerDetallePoliza = () => {
                   
                   
  
-                        <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                          <Grid style={{ border:'1px solid black', height: '100%', width: '100%' }}>
+                        <Grid item lg={3} style={{ padding: 12, height: 160 }}>
+                          <Grid style={{  height: '100%', width: '100%' }}>
 
-                          <img src={listaImagenes["BOLETA_EQUIPO"]} />
+                          <img style={{ border: '1px solid black',width:'180px'}} src={listaImagenes["BOLETA_EQUIPO"]} />
                           
                           </Grid>
                         </Grid>
                       
  
-                      <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                        <Grid style={{ border: '1px solid black', height: '100%', width: '100%' }}>
+                      <Grid item lg={3} style={{ padding: 12, height: 160 }}>
+                        <Grid style={{  height: '100%', width: '100%' }}>
 
-                          <img src={listaImagenes["EQUIPO"]} />
-
-                        </Grid>
-                      </Grid>
-
-                      <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                        <Grid style={{ border: '1px solid black', height: '100%', width: '100%' }}>
-
-                          <img src={listaImagenes["NUMERO_SERIE"]} />
+                          <img style={{ border: '1px solid black', width: '180px' }} src={listaImagenes["EQUIPO"]} />
 
                         </Grid>
                       </Grid>
 
-                      <Grid item lg={4} style={{ padding: 12, height: 160 }}>
-                        <Grid style={{ border: '1px solid black', height: '100%', width: '100%' }}>
+                      <Grid item lg={3} style={{ padding: 12, height: 160 }}>
+                        <Grid style={{  height: '100%', width: '100%' }}>
 
-                          <img src={listaImagenes["IMEI"]} />
+                          <img style={{ border: '1px solid black', width: '180px' }} src={listaImagenes["NUMERO_SERIE"]} />
+
+                        </Grid>
+                      </Grid>
+
+                      <Grid item lg={3} style={{ padding: 12, height: 160 }}>
+                        <Grid style={{  height: '100%', width: '100%' }}>
+
+                          <img style={{ border: '1px solid black',width:'180px'}} src={listaImagenes["IMEI"]} />
 
                         </Grid>
                       </Grid>
@@ -1042,6 +1010,45 @@ const ObtenerListaNotificaciones = () => {
 let itemRenderDetalle = 'Cargando';
 
 
+async function obtenerListaItems() {
+
+  listCoberturas = []
+  const queryListaActividadGraphql = `
+ query MyQuery {
+   listasCoberturas{
+     id
+     id_sub_plan
+    data_cobertura
+  }
+}
+
+`;
+
+  console.log(queryListaActividadGraphql)
+  const data = await API.graphql({
+    query: queryListaActividadGraphql
+  });
+  console.log("data from GraphQL:", data);
+
+  let listasProductos = data['data']['listasCoberturas'];
+  listasProductos && listasProductos.forEach(element => {
+
+    let itemPlan = JSON.parse(element['data_cobertura'])
+    let itemCobertura = {
+      ...itemPlan,
+      id: element['id'],
+      id_sub_plan: element['id_sub_plan']
+
+    }
+    console.log(itemCobertura);
+    listCoberturas.push(itemCobertura);
+
+  });
+  console.log(listCoberturas)
+
+
+  return true;
+}
 
 const ListaRenderSiniestros = (obtenerListaProductos) => {
   const [siniestros, setSiniestros] = useState('undefined');
@@ -1083,8 +1090,7 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
               <TableCell style={{ width: '15%' }}>ESTADO</TableCell>
 
               <TableCell style={{ width: '15%' }}>FECHA INGRESO</TableCell>
-              <TableCell style={{ width: '15%' }}>SOLICITUDES</TableCell>
-
+ 
               <TableCell style={{ width: '20%' }}>RESUMEN</TableCell>
               <TableCell style={{ width: '25%' }}>DETALLE</TableCell>
             </TableRow>
@@ -1128,15 +1134,7 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
                     </TableCell>
 
 
-                    <TableCell component="th" scope="row"  >
-                      <Grid style={{ display: 'flex',justifyContent:'center', alignItems:'center'}}>
-
-                        <Badge badgeContent={'1'} color="secondary" mr={4}>
-
-
-                        </Badge>
-                      </Grid>
-                    </TableCell>
+                    
                     <TableCell component="th" scope="row" s >
                       <Typography variant="body2" gutterBottom>
                         {itemTemporal['detalle']['descripcion_siniestro']}
@@ -1277,12 +1275,15 @@ let dataNotificaciones = 'cargando'
 function DetalleSeguro() {
 
   let { id } = useParams();
-  obtenerListaItems();
+
 
   dataInfoPoliza = ObtenerDetallePoliza();
   dataAllSiniestros =  ListaRenderSiniestros();
   dataInfoArchivos = ObtenerListaArchivos();
   dataNotificaciones = ObtenerListaNotificaciones();
+
+
+
   
   return (
     <React.Fragment>

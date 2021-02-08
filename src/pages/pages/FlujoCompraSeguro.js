@@ -251,7 +251,7 @@ async function guardarImagen(item,titulo)
   console.log("asdads", item)
   if (item[0]) { 
     console.log("asdad", item[0])
-    await Storage.put(item[0].name, item)
+    await Storage.put(item[0].name, item[0])
       .then(result => {
 
         console.log("RESULTTT", result)
@@ -586,26 +586,22 @@ function AlertDialogNroSerie() {
               {"¿Cómo buscar el modelo y el número de serie de mi Smartphone con Android 4.2 o superior?"}
             </DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                {`   
+            
+              <DialogContentText id="alert-dialog-description" style={{ display: 'flex', flexDirection: 'column' }}>
 
-                Para buscar el modelo y el número de serie de mi dispositivo Samsung debemos tener en cuenta, que el menú varía dependiendo el modelo y la versión de Android del dispositivo, en este caso para la versión 4.2 o superior.    
+                <Grid item lg={12}>
+                  {`Para encontrar el IMEI puedes ver el instructivo para buscar el modelo y numero de serie del
+equipo.
+Puedes conseguirlo también marcando el *#06# en tu celular y te aparecerá la información en
+pantalla.` }
 
-                A continuación, se incluyen las instrucciones generales, 
+                </Grid>
 
-                RUTA DE ACCESO PARA VER EL MODELO:
-                 
-                Ajuste → Mas → Acerca del dispositivo → Numero de modelo.
-                 
-                RUTA DE ACCESO PARA VER EL NUMERO DE SERIE:
-                 
-                Ajuste → Mas → Acerca del dispositivo → Estado → Numero de serie.
+                <Grid item lg={12} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 20 }}> <img style={{ width: 200 }} src="https://elandroidelibre.elespanol.com/wp-content/uploads/2016/10/saber-imei-002.jpg" />
+                </Grid>
 
-                En la pantalla principal seleccione Ajustes o Configuración, luego pulse en el icono “Mas” y nos dirigimos a la última opción “Acerca del dispositivo” donde vamos a evidenciar el modelo, la versión de Android.
-
-                Una vez hayamos verificado el modelo del equipo, tocamos la opción “Estado” donde vamos encontrar: Estado de red móvil, Mi número de teléfono, El Imei, Imeisv, Direccion IP, Dirección Mac Wifi, Dirección Bluetooth y “EL NUMERO DE SERIE”.
-              
-               `}  </DialogContentText>
+              </DialogContentText>
+            
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose} color="primary">
@@ -808,6 +804,8 @@ function RenderDetallePlan(item, subplan, showButtons) {
   console.log("DETALLE_PLAN", detalle)
 
   if (detalle) {
+
+    cargarDetallesCobertura(subplan)
     //setDetallePlan(detalle)
     return (<Grid  lg={12}>
      <Grid   lg={12}>
@@ -895,6 +893,10 @@ function RenderDetallePlan(item, subplan, showButtons) {
 
 
 function cargarDetallesCobertura(item) {
+
+
+  console.log("listaItems", item)
+  
   let listaTemporalCoberturas = []
 
   let cargarDetalleCob = async function () {
@@ -905,6 +907,7 @@ function cargarDetallesCobertura(item) {
 
       if (data['id_sub_plan'] === item['id']) {
 
+        console.log("....---COBERTURAS---...")
         listaTemporalCoberturas.push(data)
       }
     })
@@ -956,8 +959,7 @@ function RenderDetalleSubPlan(item) {
 
   let detalle = JSON.parse(item['data_sub_plan'])
  
-  cargarDetallesCobertura(item)
-
+  
  
   console.log("DETALLE_SUBPLAN", detalle)
 
@@ -1438,9 +1440,9 @@ function FlujoTerminadoRender() {
                               <Grid item lg={6}>
                                 <Typography variant="caption">CLIENTE</Typography>
                                 <Grid style={{ display: 'flex', flexDirection: 'column', marginTop: 6}}>
-                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}> {'NOMBRE: ' + itemDatosAsegurado['nombre_persona']}
+                                  <span style={{ textTransform: 'uppercase', fontSize: '14px' }}> {'NOMBRE: ' + itemDatosAsegurado['nombre_persona']}
                                   </span>
-                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}>  {'EMAIL: ' + userAccountData['email']}</span>
+                                  <span style={{ textTransform: 'uppercase', fontSize: '14px' }}>  {'EMAIL: ' + userAccountData['email']}</span>
                                  
                                 </Grid>
 
@@ -1452,10 +1454,10 @@ function FlujoTerminadoRender() {
                                
 
                                 <Grid style={{ display: 'flex', flexDirection: 'column' , marginTop:6}}>
-                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}>   {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
+                                  <span  style={{ textTransform: 'uppercase', fontSize: '14px' }}>   {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
                                   </span>
-                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}> {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}</span>
-                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}>  {'IMEI: ' + itemDatosAsegurado['imei']}</span>
+                                  <span  style={{ textTransform: 'uppercase', fontSize: '14px' }}> {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}</span>
+                                  <span  style={{ textTransform: 'uppercase', fontSize: '14px' }}>  {'IMEI: ' + itemDatosAsegurado['imei']}</span>
 
                                 </Grid>
                               </Grid>
