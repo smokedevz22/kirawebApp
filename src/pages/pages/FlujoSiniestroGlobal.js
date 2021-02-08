@@ -1514,6 +1514,8 @@ function getStepContent(step) {
   }
 }
 
+let registroRealizado = false;
+
 function HorizontalNonLinearStepper() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
@@ -1532,10 +1534,14 @@ function HorizontalNonLinearStepper() {
     return activeStep === totalSteps() - 1;
   };
 
+  let reg
   const allStepsCompleted = () => {
     if (completedSteps() === totalSteps()) {
 
-      registrarProducto()
+      if (!registroRealizado) { 
+        registrarProducto()
+   registroRealizado = true
+      }
       return true
     }
 

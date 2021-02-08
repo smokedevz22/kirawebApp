@@ -13,7 +13,8 @@ import Amplify ,{ API, Storage } from "aws-amplify";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
 import moment from 'moment';
- 
+import { Auth } from 'aws-amplify';
+
 
 import {
 
@@ -490,9 +491,9 @@ function AlertCompletarFormulario(props) {
   };
 
   const handleRegistrar = () => {
-    registrarProducto();
-    setOpen(false);
+     //ssetOpen(false);
     props.onClick()
+    registrarProducto();
 
    };
 
@@ -1356,8 +1357,7 @@ function FlujoTerminadoRender() {
     }
   };
  
-  registrarProducto()
-
+ 
   return (
     <Formik
       initialValues={initialValues}
@@ -1921,6 +1921,13 @@ function RegistrarPerfil() {
                     variant="contained"
                     color="primary"
                     mt={3}
+                    onClick={async (event) => {
+                      await Auth.signUp(userAccountData.email, userAccountData.password).then((data) => {
+                        console.log("usuarioRegistrado", data)
+                        // history.push("/pages/mi_cuenta");
+                        // 
+                      })
+                     }}
                   >
                     GUARDAR
                 </Button>

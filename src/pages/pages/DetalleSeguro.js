@@ -231,9 +231,11 @@ function RenderDetallePlan(item, subplan) {
 
   if (detalle) {
     //setDetallePlan(detalle)
+    setTimeout(() => { 
 
-    cargarDetallesCobertura(subplan)
+      cargarDetallesCobertura(subplan)
 
+    },1000)
     return (<Grid>
       <Grid style={{marginTop:22}}>
        
