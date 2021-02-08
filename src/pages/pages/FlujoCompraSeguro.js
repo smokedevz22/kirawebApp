@@ -9,11 +9,11 @@ import * as Yup from "yup";
 import styled, { createGlobalStyle } from "styled-components/macro";
 import { NavLink } from "react-router-dom";
 import { Formik } from "formik";
-import { API } from "aws-amplify";
+import Amplify ,{ API, Storage } from "aws-amplify";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
 import moment from 'moment';
-
+ 
 
 import {
 
@@ -231,8 +231,8 @@ async function registrarProducto() {
           plan: planSeleccionado,
           user: userAccountData,
           subplan: subPlanSeleccionado,
-          detalles: detallesExtras
-
+          detalles: detallesExtras,
+          imagenes: listaImagenesSeguro
         }),
 
       }
@@ -243,8 +243,30 @@ async function registrarProducto() {
 
 }
 
+let listaImagenesSeguro = {}
+
+async function guardarImagen(item,titulo)
+{ 
+
+  console.log("asdads", item)
+  if (item[0]) { 
+    console.log("asdad", item[0])
+    await Storage.put(item[0].name, item)
+      .then(result => {
+
+        console.log("RESULTTT", result)
+
+        listaImagenesSeguro[titulo] = 'https://kirastoragebucket112236-dev.s3.us-east-2.amazonaws.com/public/' + result['key']
 
 
+        console.log("lista", listaImagenesSeguro)
+
+
+      }) // {key: "test.txt"}
+      .catch(err => console.log(err));
+
+  }
+}
 
 function DefaultDropzone() {
   return (
@@ -265,8 +287,13 @@ function DefaultDropzone() {
             <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
                TOME UNA FOTO DONDE SE VEA CLARAMENTE LA BOLETA DEL EQUIPO
         </Typography>
-            <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']}  
- filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+            <DropzoneArea dropzoneText={''}
+              onChange={event =>  
+                guardarImagen(event,"BOLETA_EQUIPO")
+                
+            }
+              acceptedFiles={['image/*']}  
+              filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
 
 
@@ -280,7 +307,11 @@ function DefaultDropzone() {
             <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
                PUEDE ENCONTRAR EL NUMERO DE SERIE DEL MISMO DISPOSITIVO
         </Typography>
-            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} 
+            <DropzoneArea
+              onChange={event =>  
+                guardarImagen(event, "NUMERO_SERIE")
+
+              }   dropzoneText={''} acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
@@ -293,7 +324,12 @@ function DefaultDropzone() {
             <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
             PUEDE ENCONTRAR EL IMEI EN LA CAJA DEL EQUIPO <a href="#">EJEMPLO</a>
         </Typography>
-            <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} 
+            <DropzoneArea dropzoneText={''}
+              onChange={event =>
+                guardarImagen(event, "IMEI")
+
+              }
+              acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
@@ -307,7 +343,10 @@ function DefaultDropzone() {
                TOME UNA FOTO DONDE SE VEA CLARAMENTE SU DISPOSITIVO
         </Typography>
             <DropzoneArea   
- dropzoneText={''}                       acceptedFiles={['image/*']} 
+              dropzoneText={''} onChange={event => 
+                guardarImagen(event, "EQUIPO")
+
+              }                 acceptedFiles={['image/*']} 
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
@@ -358,7 +397,7 @@ pantalla.` }
                 
                 </Grid>
    
-                <Grid item lg={12}> <img style={{ width: 200 }} src="https://elandroidelibre.elespanol.com/wp-content/uploads/2016/10/saber-imei-002.jpg" />
+                <Grid item lg={12} style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:20}}> <img style={{ width: 200 }} src="https://elandroidelibre.elespanol.com/wp-content/uploads/2016/10/saber-imei-002.jpg" />
             </Grid>
               
               </DialogContentText>
@@ -479,17 +518,19 @@ function AlertCompletarFormulario(props) {
               <DialogContentText id="alert-dialog-description">
             <Grid>
               <Typography   gutterBottom>
-                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>                 La poliza del seguro sera enviada a su correo electronico registrado
-</p>
+                <p style={{ textTransform: 'uppercase', fontSize: '12px' }}> 
+                  La poliza del seguro sera enviada a su correo electronico registrado</p>
 
                 <h4 style={{
                   marginTop:22,
                   textTransform: 'uppercase'
                 }}>CARACTERISTICAS DEL PRODUCTO </h4>
+
                 <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>CAPITAL ASEGURADO : <strong>  UF</strong></p>
                 <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL : </p>
                 <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL :  </p>
                 <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>PERDIDA : </p>
+               
                 <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA INICIO :  <strong>{moment().format("DD/MM/YYYY")}</strong></p>
                 <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>FECHA TERMINO : <strong>  {moment().add(1, 'years').format("DD/MM/YYYY")}</strong></p>
                 <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>PRIMA MENSUAL :  <strong>  UF  </strong></p>
@@ -768,19 +809,9 @@ function RenderDetallePlan(item, subplan, showButtons) {
 
   if (detalle) {
     //setDetallePlan(detalle)
-    return (<Grid >
-   
-   
-      <Grid item lg={12} >
-    
-     </Grid>
-
-      
-      <Grid item lg={12}>
-
-
-
-        <Grid>
+    return (<Grid  lg={12}>
+     <Grid   lg={12}>
+    <Grid item lg={12}>
 
           <Typography variant="h2" gutterBottom style={{ marginTop: 12 }}>
             {detalle['nombre_plan']}   {detalleSubPlan['nombre']}
@@ -794,7 +825,7 @@ function RenderDetallePlan(item, subplan, showButtons) {
           </Typography>
         </Grid> 
 
-        <Grid >
+        <Grid item lg={12}>
           <Typography variant="h6" gutterBottom>
 
             <p style={{ textTransform: 'uppercase', fontSize: '12px' }}></p>
@@ -811,13 +842,10 @@ function RenderDetallePlan(item, subplan, showButtons) {
 
             <Grid style={{ display: 'flex' }} item lg={12}>
               <Grid item lg={4}>
-                <h4>COBERTURA</h4>
-
-
-                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  </p>
-                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL    </p>
-                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO   </p>
-
+                <h4> COBERTURAS (DEDUCIBLE) </h4>
+                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL (DEDUCIBLE DE UF) </p>
+                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL (DEDUCIBLE DE UF)   </p>
+                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO (DEDUCIBLE DE UF) : </p>
               </Grid>
               <Grid item lg={4}>
                 <h4>VIGENCIA</h4>
@@ -1278,10 +1306,13 @@ function ResumenDetail() {
                                   {itemRenderDetalleSubPlan && itemRenderDetallePlan}
                                 </Typography>
 
-                                {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
-
                               </Grid>
 
+                              <Grid>
+
+                                {itemRenderDetalleSubPlan && itemRenderDetalleSubPlan}
+
+                                </Grid>
                             </Grid>
                           </CardContent>
                         </Card>
@@ -1380,12 +1411,18 @@ function FlujoTerminadoRender() {
                                   </Typography>
 
                                   <Typography variant="h2" gutterBottom>
-                                    <h2>POLIZA REGISTRADA</h2>
+                                    <h2>POLIZA EMITIDA</h2>
                                   </Typography>
                             
+                                  
+                                  <Typography variant="p" gutterBottom>
+
+                                    <span>La poliza ha sido enviada a su correo electronico</span>
+                                  </Typography>
+
                                   <Typography variant="body2" gutterBottom>
 
-                                    <a href="#">DESCARGAR CONTRATO</a>
+                                    <a href="#">DESCARGAR POLIZA</a>
                                   </Typography>
 
                                 </div>
@@ -1400,36 +1437,33 @@ function FlujoTerminadoRender() {
 
                               <Grid item lg={6}>
                                 <Typography variant="caption">CLIENTE</Typography>
-                                <Typography variant="h4">
+                                <Grid style={{ display: 'flex', flexDirection: 'column', marginTop: 6}}>
+                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}> {'NOMBRE: ' + itemDatosAsegurado['nombre_persona']}
+                                  </span>
+                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}>  {'EMAIL: ' + userAccountData['email']}</span>
                                  
-                                  {'NOMBRE: ' + itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
-                                  <br />
-                                  {'EMAIL: ' + userAccountData['email']}
-                                  <br />
-                                  <br />
-                                </Typography>
+                                </Grid>
 
                               </Grid>
 
                               <Grid item lg={6}>
                         
                                 <Typography variant="caption">EQUIPO</Typography>
-                                <Typography variant="h4">
+                               
 
-                                  {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
-                                  <br />
-                                  {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}
-                                  <br />
-                                  {'IMEI: ' + itemDatosAsegurado['imei']} 
-                                  <br />
-                                </Typography>
+                                <Grid style={{ display: 'flex', flexDirection: 'column' , marginTop:6}}>
+                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}>   {'MARCA: ' + itemDatosAsegurado['marca_equipo']}
+                                  </span>
+                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}> {'NUMERO SERIE: ' + itemDatosAsegurado['numero_serie']}</span>
+                                  <span id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '14px' }}>  {'IMEI: ' + itemDatosAsegurado['imei']}</span>
+
+                                </Grid>
                               </Grid>
-
-
-                              <Typography variant="body2" gutterBottom>
-                                {itemRenderDetallePlan && itemRenderDetallePlan}
-                              </Typography>
+  
+                              <Grid item lg={12}>
+                                   {itemRenderDetallePlan && itemRenderDetallePlan}
  
+                                </Grid>
                           
 
                             </Grid>
@@ -1650,6 +1684,31 @@ function RegistrarPerfil() {
             ) : (
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={6}>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="rut_persona"
+                        value={itemDatosAsegurado['rut_persona']}
+                        label="RUT PERSONA"
+                        fullWidth
+                        onChange={event => SaveValue("rut_persona", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+                      <TextField
+                        name="nro_serie"
+                        value={itemDatosAsegurado['nro_serie']}
+                        label="NUMERO DE SERIE CARNET"
+                        fullWidth
+                        onChange={event => SaveValue("nro_serie", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+                
                     <Grid item md={6}>
                       <TextField
                         name="nombre_persona"
@@ -1666,20 +1725,60 @@ function RegistrarPerfil() {
                       />
                     </Grid>
                     <Grid item md={6}>
-                      <TextField
-                        name="apellidos"
-                        label="APELLIDOS"
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
 
-                        onChange={event => SaveValueAccount("apellidos", event.target.value)} variant="outlined"
+
+                      <form noValidate>
+                        <TextField
+                          style={{ marginTop: 8 }}
+                          id="fecha_nacimiento"
+                          label="FECHA NACIMIENTO"
+                          type="date"
+                          fullWidth
+                          value={itemDatosAsegurado['fecha_nacimiento']}
+                          onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </form>
+                    </Grid>
+                    <Grid item md={6}>
+                      <TextField
+                        name="apellido_paterno"
+                        label="APELLIDO PATERNO "
+                        value={itemDatosAsegurado['apellido_paterno']}
+                        fullWidth
+                        onChange={event => SaveValue("apellido_paterno", event.target.value)}
+                        variant="outlined"
                         my={2}
                       />
                     </Grid>
 
-                   
+                    <Grid item md={6}>
+                      <TextField
+                        name="apellido_materno"
+                        label="APELLIDO MATERNO "
+                        value={itemDatosAsegurado['apellido_materno']}
+                        fullWidth
+                        onChange={event => SaveValue("apellido_materno", event.target.value)}
+                        variant="outlined"
+                        my={2}
+                      />
+                    </Grid>
+
+                    <Grid item md={6}>
+
+
+                      <select onChange={event => SaveValue("genero", event.target.value)} style={{ width: '100%', height: '50px' }}>
+                        <option > SELECCIONAR GENERO </option>
+                        <option value="femenino"> FEMENINO </option>
+                        <option value="masculino"> MASCULINO </option>
+                      </select>
+                    </Grid>
+                    <Grid item md={6}>
+
+ 
+                    </Grid>
                     <Grid item md={6}>
                       <TextField
                         name="calle"
@@ -1768,80 +1867,9 @@ function RegistrarPerfil() {
                         my={2}
                       />
                     </Grid>
-                    <Grid item md={6}>
-                      <TextField
-                        name="rut_persona"
-                        value={itemDatosAsegurado['rut_persona']}
-                        label="RUT PERSONA"
-                        fullWidth
-                        onChange={event => SaveValue("rut_persona", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
+                    
 
-                    <Grid item md={6}>
-                      <TextField
-                        name="nro_serie"
-                        value={itemDatosAsegurado['nro_serie']}
-                        label="NUMERO DE SERIE CARNET"
-                        fullWidth
-                        onChange={event => SaveValue("nro_serie", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    <Grid item md={6}>
-
-
-                      <form noValidate>
-                        <TextField
-                          style={{ marginTop: 8 }}
-                          id="fecha_nacimiento"
-                          label="FECHA NACIMIENTO"
-                          type="date"
-                          fullWidth
-                          value={itemDatosAsegurado['fecha_nacimiento']}
-                          onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </form>
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="apellido_paterno"
-                        label="APELLIDO PATERNO "
-                        value={itemDatosAsegurado['apellido_paterno']}
-                        fullWidth
-                        onChange={event => SaveValue("apellido_paterno", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="apellido_materno"
-                        label="APELLIDO MATERNO "
-                        value={itemDatosAsegurado['apellido_materno']}
-                        fullWidth
-                        onChange={event => SaveValue("apellido_materno", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    <Grid item md={6}>
-
-
-                      <select onChange={event => SaveValue("marca_equipo", event.target.value)} style={{ width: '100%', height: '40px' }}>
-                        <option > SELECCIONAR GENERO </option>
-                        <option value="femenino"> FEMENINO </option>
-                        <option value="masculino"> MASCULINO </option>
-                      </select>
-                    </Grid>
+               
                   </Grid>
 
                   <TextField

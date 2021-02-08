@@ -124,8 +124,8 @@ const ChatMessageTime = styled(Typography)`
 const ChatMessageAvatar = styled(Avatar)`
   position: relative;
   display: inline-block;
-  width: 34px;
-  height: 34px;
+  width: 24px;
+  height: 24px;
   margin-right: ${(props) => props.theme.spacing(2)}px;
 `;
 
@@ -210,6 +210,7 @@ let subPlanSeleccionado = {};
 let itemDatosAsegurado = {};
 let userAccountData = {};
 let detallesExtras = {};
+let imagenes = {};
 
 
 
@@ -270,23 +271,16 @@ function RenderDetallePlan(item, subplan) {
   if (detalle) {
     //setDetallePlan(detalle)
     return (<Grid>
-      <Grid>
+      <Grid style={{marginTop:22}}>
        
-        <Typography variant="h2" gutterBottom style={{ marginTop: 12 }}>
-          {detalle['nombre_plan']} {detalleSub['nombre']}
+        
+        <span style={{ fontWeight: 'bold', fontSize: '22px', marginTop: 12 }}>     {detalle['nombre_plan']} {detalleSub['nombre']}</span>
 
-
-        </Typography>
-
-        <Typography variant="body2" gutterBottom>
-          <p style={{ textTransform: 'uppercase', fontSize: '12px' }}>                 La poliza del seguro sera enviada a su correo electronico registrado
-</p>
-        </Typography>
       </Grid>
 
       <Grid lg={12}>
 
-        <Grid lg={12}>
+        <Grid lg={12} style={{marginTop:22}}>
   
               <p style={{ textTransform: 'uppercase', fontSize: '12px' }}></p>
               <Chip
@@ -296,18 +290,19 @@ function RenderDetallePlan(item, subplan) {
                 m={1}
               />
 
-              <h2 style={{
+              <h2  style={{ marginTop:32,
                 textTransform: 'uppercase'
               }}>CARACTERISTICAS </h2>
 
               <Grid style={{ display: 'flex' }} item lg={12}>
                 <Grid item lg={4}>
-                  <h4>COBERTURA</h4>
+              <h4>COBERTURAS (DEDUCIBLE)</h4>
 
 
-                  <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  </p>
-                  <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL    </p>
-                  <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO   </p>
+
+              <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL (DEDUCIBLE DE   UF) </p>
+              <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL (DEDUCIBLE DE   UF)  </p>
+              <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO    (DEDUCIBLE DE   UF)  </p>
 
                 </Grid>
                 <Grid item lg={4}>
@@ -358,7 +353,7 @@ function cargarDetallesCobertura(item) {
   };
 
   cargarDetalleCob().then((data) => {
-    console.log("lista", listaTemporalCoberturas)
+    console.log("listaPreciosTemporalesFINALES", listaTemporalCoberturas)
 
 
     listaTemporalCoberturas.find((item) => {
@@ -366,7 +361,7 @@ function cargarDetallesCobertura(item) {
       switch (item['codigo_cobertura']) {
 
         case "CL-Daño-Total":
-          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL  : <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_total').innerHTML = 'DAÑO PARCIAL (DEDUCIBLE DE 2' + item['deducible'] + '  UF) ' 
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Total": item['deducible']
@@ -374,7 +369,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Daño-Parcial":
-          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL   : <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO TOTAL (DEDUCIBLE DE 1.2' + item['deducible'] + '  UF) ' 
           detallesExtras = {
             ...detallesExtras,
             "CL-Daño-Parcial": item['deducible']
@@ -382,7 +377,7 @@ function cargarDetallesCobertura(item) {
           break;
 
         case "CL-Robo":
-          document.getElementById('cobertura_perdida').innerHTML = 'ROBO   :  <strong>' + item['deducible'] + ' UF </strong>'
+          document.getElementById('cobertura_perdida').innerHTML = 'ROBO (DEDUCIBLE DE 0.6' + item['deducible'] + '  UF) ' 
           detallesExtras = {
             ...detallesExtras,
             "CL-Robo": item['deducible']
@@ -407,6 +402,7 @@ const ObtenerDetallePoliza = () => {
 
 
   const [siniestros, setSiniestros] = useState('undefined');
+  const [imagenes, setImagenes] = useState([]);
 
 
   useEffect(async () => {
@@ -438,7 +434,9 @@ const ObtenerDetallePoliza = () => {
     itemDatosAsegurado = dataSiniestro['asegurado']
     itemRenderDetallePlan = RenderDetallePlan(dataSiniestro['plan'], dataSiniestro['subplan'])
 
-
+    let listaImagenes = [];
+    listaImagenes =  dataSiniestro['imagenes']
+ 
     const handleSubmit = async (
       values,
       { resetForm, setErrors, setStatus, setSubmitting }
@@ -456,8 +454,7 @@ const ObtenerDetallePoliza = () => {
     };
 
 
-    obtenerListaItems();
-
+  
     return (
 
 
@@ -574,6 +571,52 @@ const ObtenerDetallePoliza = () => {
                       </Grid>
                     </Grid>
 
+                    <Grid item lg={12} style={{ marginTop: 22, paddingLeft: 12, marginBottom: 12 }}>
+                      <span style={{ fontWeight: 'bold', fontSize: '22px', marginTop: 12 }}>    FOTOS ADJUNTAS</span>
+                    </Grid>
+
+                    <Grid item lg={12} style={{ display: 'flex' }}>
+                  
+                  
+ 
+                        <Grid item lg={4} style={{ padding: 12, height: 160 }}>
+                          <Grid style={{ border:'1px solid black', height: '100%', width: '100%' }}>
+
+                          <img src={listaImagenes["BOLETA_EQUIPO"]} />
+                          
+                          </Grid>
+                        </Grid>
+                      
+ 
+                      <Grid item lg={4} style={{ padding: 12, height: 160 }}>
+                        <Grid style={{ border: '1px solid black', height: '100%', width: '100%' }}>
+
+                          <img src={listaImagenes["EQUIPO"]} />
+
+                        </Grid>
+                      </Grid>
+
+                      <Grid item lg={4} style={{ padding: 12, height: 160 }}>
+                        <Grid style={{ border: '1px solid black', height: '100%', width: '100%' }}>
+
+                          <img src={listaImagenes["NUMERO_SERIE"]} />
+
+                        </Grid>
+                      </Grid>
+
+                      <Grid item lg={4} style={{ padding: 12, height: 160 }}>
+                        <Grid style={{ border: '1px solid black', height: '100%', width: '100%' }}>
+
+                          <img src={listaImagenes["IMEI"]} />
+
+                        </Grid>
+                      </Grid>
+
+                     
+                   
+                    </Grid>
+
+
                   </Grid>
                 )}
             </CardContent>
@@ -624,7 +667,7 @@ const ObtenerListaSiniestros = () => {
     console.log("listaProductos", listProductos)
 
     return (
-      <Card mb={6} >
+      <Card mb={6} style={{marginTop:22}}>
         <CardContent>
           <Typography variant="h2" gutterBottom>
             SINIESTROS DECLARADOS
@@ -635,6 +678,9 @@ const ObtenerListaSiniestros = () => {
                 <TableRow>
                   <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
                   <TableCell style={{ width: '20%' }}>FECHA INGRESO</TableCell>
+                  <TableCell style={{ width: '20%' }}>NOTIFICACIONES</TableCell>
+
+          
                   <TableCell style={{ width: '60%' }}>RESUMEN</TableCell>
                   <TableCell style={{ width: '10%' }}>DETALLE</TableCell>
                 </TableRow>
@@ -665,6 +711,9 @@ const ObtenerListaSiniestros = () => {
                             {itemTemporal['detalle']['fecha_siniestro']}
                           </Typography>
                         </TableCell>
+
+
+                     
                         <TableCell component="th" scope="row" s >
                           <Typography variant="body2" gutterBottom>
                             {itemTemporal['detalle']['descripcion_siniestro']}
@@ -757,8 +806,6 @@ const ObtenerListaArchivos = () => {
     };
 
 
-    obtenerListaItems();
-
     return (
 
 
@@ -796,14 +843,7 @@ const ObtenerListaArchivos = () => {
                   <Grid container   >
                 <Card mb={6}>
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Lista Archivos
-        </Typography>
-        <Typography variant="body2" gutterBottom>
-          Material-UI-Dropzone is a React component using Material-UI and is
-          based on the excellent react-dropzone library.
-        </Typography>
-
+       
         <Spacer mb={4} />
 
         <Grid container lg={12}  >
@@ -903,14 +943,13 @@ function ChatMessageComponent({
   return (
     <ChatMessage position={position}>
       <ChatMessageInner>
-        <ChatMessageAvatar alt="Lucy Lavender" src={avatar} />
         <ChatMessageBubble highlighted={position === "right"}>
-          <Box>
-            <ChatMessageBubbleName variant="body1">
-           FRDIRECT
-            </ChatMessageBubbleName>
-          </Box>
-          <Typography variant="body2">{message}</Typography>
+          <Grid style={{ display: 'flex', alignItems:'center'}}>
+            <ChatMessageAvatar alt="Lucy Lavender" src={'https://image.flaticon.com/icons/png/128/2645/2645897.png'} />
+            <Typography variant="body2">
+              {message}</Typography>
+         </Grid>
+     
         </ChatMessageBubble>
        </ChatMessageInner>
     </ChatMessage>
@@ -963,7 +1002,7 @@ const ObtenerListaNotificaciones = () => {
             <ChatMessageComponent
               name="Remy Sharp"
               avatar="https://image.freepik.com/vector-gratis/logo-empresa-diseno-avatar_1465-2.jpg"
-              message="Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo."
+              message="NOTIFICACION DE PRUEBA PARA USUARIO"
               time="20 minutes ago"
               position="left"
             />
@@ -971,7 +1010,7 @@ const ObtenerListaNotificaciones = () => {
             <ChatMessageComponent
               name="Remy Sharp"
               avatar="https://image.freepik.com/vector-gratis/logo-empresa-diseno-avatar_1465-2.jpg"
-              message="Cum ea graeci tractatos. 😄"
+              message="NOTIFICACION #2 DE PRUEBA PARA USUARIO"
               time="8 minutes ago"
               position="left"
             />
@@ -979,7 +1018,7 @@ const ObtenerListaNotificaciones = () => {
             <ChatMessageComponent
               name="Remy Sharp"
               avatar="https://image.freepik.com/vector-gratis/logo-empresa-diseno-avatar_1465-2.jpg"
-              message="Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix."
+              message="NOTIFICACION #3 DE PRUEBA PARA USUARIO"
               time="3 minutes ago"
               position="left"
             />
@@ -999,11 +1038,6 @@ const ObtenerListaNotificaciones = () => {
 
 }
 
-function RenderDetalleSiniestro() {
-
-
-  return 'cargando... '
-}
 
 let itemRenderDetalle = 'Cargando';
 
@@ -1039,50 +1073,97 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
     let listProductos = siniestros['data']['listasSiniestros'];
     console.log("listaProductos", listProductos)
 
-    return <TableBody style={{ width: '100%' }}>
+    return (
 
-      {listProductos &&
-        listProductos.map((item, index) => {
-          console.log(item);
+      <TableWrapper>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell style={{ width: '20%' }}>NUMERO SINIESTRO</TableCell>
+              <TableCell style={{ width: '15%' }}>ESTADO</TableCell>
 
-          let itemTemporal = JSON.parse(item['data_siniestro']);
+              <TableCell style={{ width: '15%' }}>FECHA INGRESO</TableCell>
+              <TableCell style={{ width: '15%' }}>SOLICITUDES</TableCell>
+
+              <TableCell style={{ width: '20%' }}>RESUMEN</TableCell>
+              <TableCell style={{ width: '25%' }}>DETALLE</TableCell>
+            </TableRow>
+          </TableHead>
 
 
-          console.log(itemTemporal)
 
-          return (<TableRow style={{ width: '100%' }} key={index}>
-            <TableCell  >
-              <ProductsChip
-                size="small"
-                label="ACTIVO"
-                rgbcolor={blue[500]}
-              />
-            </TableCell>
+          <TableBody style={{ width: '100%' }}>
 
-            <TableCell component="th" scope="row"  >
-              <Typography variant="body2" gutterBottom>
-                {itemTemporal['detalle']['fecha_siniestro']}
-              </Typography>
-            </TableCell>
-            <TableCell component="th" scope="row" s >
-              <Typography variant="body2" gutterBottom>
-                {itemTemporal['detalle']['descripcion_siniestro']}
-              </Typography>
-            </TableCell>
+            {listProductos &&
+              listProductos.map((item, index) => {
+                console.log(item);
 
-            <TableCell component="th" scope="row"  >
-              <Route style={{ marginRight: '6px' }} render={({ history }) => (
-                <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
-                  FICHA
-                </Button>
-              )} />
+                let itemTemporal = JSON.parse(item['data_siniestro']);
 
-            </TableCell>
-          </TableRow>
-          )
-        })
-      }
-    </TableBody>
+
+                console.log(itemTemporal)
+
+                return (
+
+
+
+
+                  <TableRow style={{ width: '100%' }} key={index}>
+                    <TableCell  >
+                      <Typography variant="body2" gutterBottom>
+                        {item['id']}
+                      </Typography>
+                    </TableCell>
+                    <TableCell  >
+                      <ProductsChip
+                        size="small"
+                        label={'ACTIVO'}
+                        rgbcolor={blue[500]}
+                      />
+                    </TableCell>
+                    <TableCell component="th" scope="row"  >
+                      <Typography variant="body2" gutterBottom>
+                        {moment(itemTemporal['detalle']['fecha_siniestro']).format("DD-MM-YYYY")}
+                      </Typography>
+                    </TableCell>
+
+
+                    <TableCell component="th" scope="row"  >
+                      <Grid style={{ display: 'flex',justifyContent:'center', alignItems:'center'}}>
+
+                        <Badge badgeContent={'1'} color="secondary" mr={4}>
+
+
+                        </Badge>
+                      </Grid>
+                    </TableCell>
+                    <TableCell component="th" scope="row" s >
+                      <Typography variant="body2" gutterBottom>
+                        {itemTemporal['detalle']['descripcion_siniestro']}
+                      </Typography>
+                    </TableCell>
+
+                    <TableCell component="th" scope="row"  >
+                      <Route style={{ marginRight: '6px' }} render={({ history }) => (
+                        <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
+                          FICHA SINIESTRO
+                        </Button>
+                      )} />
+
+                    </TableCell>
+                  </TableRow>
+                )
+              })
+            }
+          </TableBody>
+
+        </Table>
+      </TableWrapper>
+    )
+    
+    
+     
+      
   } else {
 
     return siniestros && 'cargando...'
@@ -1093,37 +1174,11 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
 
 }
 
-function Siniestros() {
-
-  let data = ListaRenderSiniestros();
-
-
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Typography variant="h2" gutterBottom>
-          SINIESTROS DECLARADOS
-        </Typography>
-        <TableWrapper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
-                <TableCell style={{ width: '20%' }}>FECHA INGRESO</TableCell>
-                <TableCell style={{ width: '60%' }}>RESUMEN</TableCell>
-                <TableCell style={{ width: '10%' }}>DETALLE</TableCell>
-              </TableRow>
-            </TableHead>
-            {dataAllSiniestros}
-            </Table>
-        </TableWrapper>
-      </CardContent>
-    </Card>
-  );
-}
 
 
 
+
+let tituloPantalla = "FICHA POLIZA"
 
 function RenderPantall() {
 
@@ -1133,28 +1188,18 @@ function RenderPantall() {
   let handleClickFicha = () => {
 
     setItemRender('ficha')
-
+    tituloPantalla = "FICHA POLIZA"
   }
 
   let handleClickSiniestro = () => {
 
     setItemRender('siniestros')
+    tituloPantalla = "SINIESTROS DECLARADOS"
 
   }
 
 
-  let handleClickArchivos = () => {
-
-    setItemRender('archivos')
-
-  }
-
-  let handleClickNotificaciones = () => {
-
-    setItemRender('notificaciones')
-
-  }
-
+  
 
 
   switch (itemRender) {
@@ -1168,13 +1213,6 @@ function RenderPantall() {
 
       break;
 
-    case 'archivos':
-      itemRenderDetalle = itemRender && dataInfoArchivos
-      break;
-
-    case 'notificaciones':
-      itemRenderDetalle = itemRender && dataNotificaciones
-      break;
   }
 
   if (itemRender) {
@@ -1184,48 +1222,41 @@ function RenderPantall() {
 
           <Chip
             avatar={<DescriptionIcon />}
-            label="FICHA"
+            label="FICHA POLIZA"
             onClick={handleClickFicha}
             m={1}
           />
 
           <Chip
             avatar={<NewReleases />}
-            label="SINIESTRO"
+            label="SINIESTROS DECLARADOS"
             onClick={handleClickSiniestro}
             m={1}
           />
 
-
-          <Chip
-            avatar={<BurstModeIcon />}
-            label="ARCHIVOS"
-            onClick={handleClickArchivos}
-            m={1}
-          />
-
-
-          <Chip
-            avatar={<Notifications />}
-            label="NOTIFICACIONES"
-            onClick={handleClickNotificaciones}
-            m={1}
-          />
-          <Badge badgeContent={''} color="secondary" mr={4}>
-
-
-          </Badge>
         </Grid>
-
-
-
         <Divider my={6} />
 
         <Grid>
           <Shadow>
+
+
             <Card>
+
+              <Grid style={{padding:12}}>
+           
+
+                <span style={{ fontWeight: 'bold', fontSize: '22px', marginTop: 12 }}>     {tituloPantalla}</span>
+
+          </Grid>
               {itemRenderDetalle}
-            </Card>
+
+
+             </Card>
+
+
+
+            
           </Shadow>
         </Grid>
       </Grid>

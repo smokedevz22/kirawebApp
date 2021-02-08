@@ -479,7 +479,7 @@ const ListaRenderCotizaciones = (obtenerListaProductos) => {
             </TableCell>
 
 
-            <TableCell component="th" scope="row" style={{ width: '15%', display: 'flex', justifyContent: 'flex-start' }}>
+            <TableCell component="th" scope="row" style={{ width: '15%' }}>
               <Route style={{ marginRight: '6px' }} render={({ history }) => (
                 <Button onClick={() => { history.push(`/pages/cotizaciones/${item['id']}`) }} size="small" color="primary">
                   COMPRAR
@@ -914,13 +914,10 @@ function Profile() {
         <Divider my={6} />
 
         <Grid container spacing={6}>
-          <Grid item xs={12} lg={4} xl={3}>
-            <Details />
 
-          </Grid>
-          <Grid item xs={12} lg={8} xl={9}>
+          <Grid item lg={12}  >
 
-            <Grid container spacing={6}>
+            <Grid container item lg={12} spacing={12}>
 
               <Grid item xs={12} lg={4}>
                 <Orders onClick={{ functionClickListaSeguros }} />

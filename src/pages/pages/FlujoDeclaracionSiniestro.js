@@ -170,10 +170,7 @@ function DefaultDropzone() {
               FOTO DEL EQUIPO
             
         </Typography>
-            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
+            
             <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
@@ -186,10 +183,7 @@ function DefaultDropzone() {
               ADJUNTAR FOTO CARNET DE IDENTIDAD
             
         </Typography>
-            <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
+        
             <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
@@ -200,10 +194,7 @@ function DefaultDropzone() {
               ADJUNTAR FOTO COTIZACION SERVICIO TECNICO
             
         </Typography>
-            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
+             
             <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
 import { Link } from "react-router-dom";
@@ -57,10 +57,10 @@ function handleAuthStateChange(state) {
 
 let renderItem = 'cargando'
 function SignInx() {
-  const dispatch = useDispatch();
-  const history = useHistory();
 
-  let logoutActivo = 'cargando'
+  const [routex, setRoutex] = useState('cargando');
+
+
 
   let fnLogOut = async () => {
 
@@ -68,26 +68,25 @@ function SignInx() {
 
       console.log('asdasd')
       console.log(response)
-      logoutActivo = 'salir'
-      fnChange();
+      setRoutex('salir')
     });
   }
-  let fnChange = () => {
 
-    switch (logoutActivo) {
-      case 'cargando':
-        renderItem = <Redirect to="/" />
-        break;
+  switch (routex) {
+    case 'cargando':
+      renderItem = 'CARGANDO'
+      break;
 
-      case 'salir':
-        renderItem = <Redirect to="/" />
-        break;
-    }
+    case 'salir':
+      renderItem = <Redirect to="/" />
+
+      break;
   }
+
 
 
   fnLogOut();
-  fnChange();
+
 
 
 

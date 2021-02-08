@@ -155,12 +155,9 @@ function DefaultDropzone() {
       <Card mb={6}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          ADJUNTAR ARCHIVOS
+          SUBIR FOTOS
         </Typography>
-        <Typography variant="body2" gutterBottom>
-          Material-UI-Dropzone is a React component using Material-UI and is
-          based on the excellent react-dropzone library.
-        </Typography>
+       
 
         <Spacer mb={4} />
 
@@ -170,46 +167,58 @@ function DefaultDropzone() {
               FOTO DEL EQUIPO
             
         </Typography>
-            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
+            
             <DropzoneArea dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
-
-
           </Grid>
 
-          <Grid lg={6} style={{ marginTop: '22px' }}>
-            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              ADJUNTAR FOTO CARNET DE IDENTIDAD
-            
-        </Typography>
-            <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
-            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
- filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
-
-          </Grid>
-
+          
           <Grid lg={6} style={{ marginTop: '22px', paddingRight: 6  }}>
             <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
-              ADJUNTAR FOTO COTIZACION SERVICIO TECNICO
+                FOTO COTIZACION SERVICIO TECNICO
             
         </Typography>
-            <Typography variant="body2" style={{ marginTop: 6, marginBottom: 6 }} >
-               Material-UI-Dropzone is a React component using Material-UI and is
-              based on the excellent react-dropzone library.
-        </Typography>
+             
             <DropzoneArea dropzoneText={''}   acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
  filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
 
           </Grid>
 
-     
+          
+          <Grid lg={6} style={{ marginTop: '22px' }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+                FOTO CARNET DE IDENTIDAD (DELANTERA)
+            
+        </Typography>
+            
+            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
+          <Grid lg={6} style={{ marginTop: '22px' }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+              FOTO CARNET DE IDENTIDAD  (TRASERA)
+               
+        </Typography>
+            
+            <DropzoneArea  dropzoneText={''}                       acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
+ filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
+          <Grid lg={6} style={{ marginTop: '22px' }}>
+            <Typography variant="h6" style={{ color: '#0fb6e9' }}  >
+              PARTE POLICIAL
+
+        </Typography>
+
+            <DropzoneArea dropzoneText={''} acceptedFiles={['image/*']} dropzoneClass={{ background: 'red' }}
+              filesLimit={1} showFileNamesInPreview={false} showFileNames={false} />
+
+          </Grid>
+
 
         </Grid>
 
@@ -558,7 +567,7 @@ function BasicForm() {
                       >
                         <option value="parcial">DAÑO PARCIAL</option>
                         <option value="total">DAÑO TOTAL</option>
-                        <option value="perdida">PERDIDA</option>
+                        <option value="robo">ROBO</option>
 
                       </select>
                     </Grid>
@@ -568,8 +577,8 @@ function BasicForm() {
 
                       <textarea
                         rows="12"
-                        placeholder="INGRESE DESCRIPCION DEL ACCIDENTE"
-                        style={{ width: '100%' }}
+                        placeholder="Ingrese descripcion de lo ocurrido..."
+                        style={{ width: '100%', padding:12 }}
                         name="descripcion_siniestro"
                         fullWidth
                         value={itemDatosAsegurado['descripcion_siniestro']}
@@ -788,13 +797,9 @@ function FlujoTerminadoRender() {
                                   </Typography>
 
                                   <Typography variant="h2" gutterBottom>
-                                    <h2>SINIESTRO DECLARADO</h2>
+                                    <h2>SINIESTRO INGRESADO</h2>
                                   </Typography>
-                                  <Typography variant="body2" gutterBottom>
-                                    This is the receipt for a payment of $268.85 (USD) you
-                                    made to Material App.
-
-                                   </Typography>
+                                  
                                   <Typography variant="body2" gutterBottom>
 
                                     <a href="#">DESCARGAR PDF</a>
@@ -1229,17 +1234,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function getSteps() {
-  return ['DATOS SINIESTRO', 'ADJUNTOS', ' RESUMEN'];
+  return ['INGRESAR SINIESTRO', 'SUBIR FOTOS', ' RESUMEN SINIESTRO'];
 }
 
+
+let mensajeBotonSiguiente = 'SUBIR FOTOS'
 function getStepContent(step) {
   switch (step) {
     case 0:
+      mensajeBotonSiguiente = 'SUBIR FOTOS'
       return FormulariosIngreso();
 
     case 1:
+      mensajeBotonSiguiente = 'RESUMEN SINIESTRO'
       return FormularioAnexos();
     case 2:
+      mensajeBotonSiguiente = 'FINALIZAR DECLARACION'
+
       return ResumenSeguro();
 
     default:
@@ -1317,23 +1328,7 @@ function HorizontalNonLinearStepper() {
   return (
     <div className={classes.root}>
 
-      <div style={{ marginTop: '16px', marginBottom: '10px', display: 'flex', flexDirection: 'row', }}>
-        <div style={{ flex: 1 }}>
-        
-        </div>
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-          {activeStep !== steps.length &&
-            (completed[activeStep] ? (
-              <Typography variant="caption" className={classes.completed}>
-                Paso {activeStep + 1} completado
-              </Typography>
-            ) : (
-                <Button variant="contained" color="primary" onClick={handleComplete}>
-                  {completedSteps() === totalSteps() - 1 ? 'FINALIZAR' : 'COMPLETAR'}
-                </Button>
-              ))}
-        </div>
-      </div>
+    
 
       <Stepper nonLinear activeStep={activeStep}>
         {steps.map((label, index) => (
@@ -1375,7 +1370,7 @@ function HorizontalNonLinearStepper() {
 
           <Grid item lg={6} style={{ display: 'flex', justifyContent: 'flex-end'}}>
             <Button variant="contained" color="primary" onClick={handleComplete}>
-              {completedSteps() === totalSteps() - 1 ? 'FINALIZAR' : 'COMPLETAR'}
+              {completedSteps() === totalSteps() - 1 ? 'FINALIZAR DECLARACION' : mensajeBotonSiguiente }
             </Button>
           </Grid>
 
@@ -1461,7 +1456,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
           console.log(itemTemporal)
 
           return (<option>
-            {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo'] }
+            {itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo'] + " - " + itemSubPlan['nombre']}
 
           </option>)
         })

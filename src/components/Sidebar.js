@@ -325,6 +325,7 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
 
     return _routes;
   };
+  const [routex, setRoutex] = useState([]);
 
   const [openRoutes, setOpenRoutes] = useState(() => initOpenRoutes());
   const [nada, setNada] = useState('');
@@ -346,12 +347,11 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
   };
   console.log("routes", routes)
 
-  console.log("signIn", SignIn)
-  let d = Auth.currentUserInfo().then((data) => {
 
-    if (!data) {
+  Auth.currentUserInfo().then((data) => {
+
+    if (routex && !data) {
       console.log("--------x--------")
-      setNada('x')
       let itemC = {
         path: "/pages/cotizaciones",
         name: "Login",
@@ -369,10 +369,10 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
       routes[5] = itemC;
       routes[6] = itemA;
       routes[7] = '';
+      setRoutex(routes)
 
     } else {
       console.log("-------y---------")
-      setNada('Y')
 
       let itemBA = {
         path: "/pages/siniestro_global",
@@ -399,11 +399,12 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
       routes[5] = itemBA;
       routes[6] = itemB;
       routes[7] = itemC;
+      setRoutex(routes)
 
     }
   })
 
-  console.log("routesx2", routes)
+  console.log("routesx2", routex)
 
   return (
     <Drawer variant="permanent" {...rest}>
@@ -419,7 +420,7 @@ const Sidebar = ({ classes, staticContext, location, ...rest }) => {
       <Scrollbar>
         <List disablePadding>
           <Items>
-            {routes.map((category, index) => (
+            {routex && routex.map((category, index) => (
               <React.Fragment key={index}>
                 {category.header ? (
                   <SidebarSection>{category.header}</SidebarSection>
