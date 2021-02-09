@@ -1,28 +1,5 @@
 {
-  "auth": {
-    "userPoolGroups": {
-      "service": "Cognito-UserPool-Groups",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "kirawebapp2f9114ac2f9114ac",
-          "attributes": [
-            "UserPoolId",
-            "AppClientIDWeb",
-            "AppClientID",
-            "IdentityPoolId"
-          ]
-        }
-      ]
-    },
-    "kirawebapp2f9114ac2f9114ac": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false
-    }
-  },
+  "auth": {},
   "hosting": {
     "amplifyhosting": {
       "service": "amplifyhosting",
