@@ -2036,18 +2036,7 @@ const [errors, setErrors] = useState('undefined');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
  
-  const handleSubmit = async ()=> {
-    try {
-      await timeOut(1500);
-       setStatus({ sent: true });
-      setIsSubmitting(false);
-    } catch (error) {
-      setStatus({ sent: false });
-      setErrors({ submit: error.message });
-      setIsSubmitting(false);
-    }
-  };
-
+  
   let itemRenderScreen = 'cargando'
 
   if (isSubmitting) {
@@ -2057,7 +2046,7 @@ const [errors, setErrors] = useState('undefined');
     </Box>
   } else if (status && status.sent ) { 
     itemRenderScreen = <Alert severity="success" my={3}>
-      [CUENTA REGISTRADA] La cuenta de usuario ha sido registrada exitosamente!
+      [La cuenta de usuario ha sido registrada exitosamente!] 
               </Alert>
   }else { 
 
@@ -2278,8 +2267,22 @@ const [errors, setErrors] = useState('undefined');
           color="primary"
         mt={3}
         
-        onClick={handleSubmit}
-          
+         onClick={async (event) => {
+          await Auth.signUp(userAccountData.email, userAccountData.password).then((data) => {
+            console.log("usuarioRegistrado", data)
+            // history.push("/pages/mi_cuenta");
+
+            try {
+               setStatus({ sent: true });
+              setIsSubmitting(false);
+            } catch (error) {
+              setStatus({ sent: false });
+              setErrors({ submit: error.message });
+              setIsSubmitting(false);
+            }
+            // 
+          })
+        }}
         >
           GUARDAR
                 </Button>
