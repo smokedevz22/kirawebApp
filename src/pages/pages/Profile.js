@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
 import { API } from "aws-amplify";
+import { Auth } from 'aws-amplify';
 
 import Helmet from "react-helmet";
 
@@ -217,6 +218,9 @@ function CotizacionesCard(props) {
     </Box>
   );
 }
+
+
+let emailFinal = ''
 const renderLista = (tipoListaRender) => {
 
 
@@ -338,11 +342,17 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
   const [polizas, setPolizas] = useState('undefined');
 
 
-
   useEffect(async () => {
+    let temId = ''
+
+    await Auth.currentAuthenticatedUser().then((user) => {
+      console.log('user email = ' + user.attributes.email);
+      temId = user.attributes.email;
+    });
+
     const queryListaActividadGraphql = `
  query MyQuery {
-   listasPolizas {
+   listasPolizas(email:"${temId}") {
      id
     data_poliza
   }

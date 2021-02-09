@@ -705,10 +705,17 @@ export const sidebarRoutes = [
     component: Seguros,
     children: null,
 
-  },
-
-
-
-
-
+  }
+  /*
+    {
+      id: "Changelog",
+      path: "/changelog",
+      badge: "v2.0.0",
+      icon: <List />,
+      component: Changelog,
+      children: null,
+    }
+  
+  
+  */
 ];

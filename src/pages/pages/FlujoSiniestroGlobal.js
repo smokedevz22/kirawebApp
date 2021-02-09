@@ -71,16 +71,27 @@ const Shadow = styled.div`
 const CardMedia = styled(MuiCardMedia)`
   height: 220px;
 `;
-
-const GlobalStyleDropzone = createGlobalStyle`
-  [class^="DropzoneArea-dropZone"] {
-    min-height: 160px;
-  }
-`;
+ 
 
 const timeOut = (time) => new Promise((res) => setTimeout(res, time));
 
 
+
+let listPlanes = [];
+let listSubPlanes = [];
+
+let itemRender = 'cargando';
+let itemRenderSubPlan = 'cargando';
+let itemRenderDetallePlan = 'cargando'
+let itemRenderDetalleSubPlan = 'cargando'
+
+let planSeleccionado = {};
+let subPlanSeleccionado = {};
+
+
+let itemDatosAsegurado = {};
+let userAccountData = {};
+let listaImagenesSeguro = {}
 
 const initialValues = {
   firstName: "Lucy",
@@ -107,49 +118,6 @@ const validationSchema = Yup.object().shape({
     ),
   }),
 });
-
-
-function Project({ id, image, title, description, chip }) {
-  return (
-    <Card mb={6}>
-      {image ? <CardMedia image={image} title="Contemplative Reptile" /> : null}
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {title}
-        </Typography>
-
-        {chip}
-
-        <Typography mb={4} component="p">
-          {description}
-        </Typography>
-
-
-      </CardContent>
-      <CardActions>
-
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/pages/detalle_seguro') }} size="small" color="primary">
-            COTIZACION
-          </Button>)} />
-
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/pages/flujo_compras') }} size="small" color="primary">
-            COMPRAR
-          </Button>
-        )} />
-
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push(`/pages/seguros/detalles/${id}`) }} size="small" color="primary">
-            DETALLES
-          </Button>
-        )} />
-
-      </CardActions>
-    </Card>
-  );
-}
-
 
 function DefaultDropzone() {
   return (
@@ -337,8 +305,6 @@ function DefaultDropzone() {
   );
 }
 
-
-let listaImagenesSeguro = {}
 async function guardarImagen(item, titulo) {
 
   console.log("asdads", item)
@@ -348,95 +314,23 @@ async function guardarImagen(item, titulo) {
       .then(result => {
 
         console.log("RESULTTT", result)
-
         listaImagenesSeguro[titulo] = 'https://kirastoragebucket112236-dev.s3.us-east-2.amazonaws.com/public/' + result['key']
-
-
         console.log("lista", listaImagenesSeguro)
 
 
-      }) // {key: "test.txt"}
+      }) 
       .catch(err => console.log(err));
 
   }
 }
 
-
-function AlertDialog() {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <Paper mt={4}>
-          <span style={{ cursor: 'pointer', color: '#376fd0' }} variant="contained" color="primary" onClick={handleClickOpen}>
-            #COMO CONSEGUIR IMEI DEL TELEFONO
-          </span>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">
-              {"Use Google's location service?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Let Google help apps determine location. This means sending
-                anonymous location data to Google, even when no apps are
-                running.
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                CERRAR
-              </Button>
-              <Button onClick={handleClose} color="primary" autoFocus>
-                ACEPTAR
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Paper>
-      </CardContent>
-    </Card >
-  );
-}
-
-
-let listPlanes = [];
-let listSubPlanes = [];
-
-let itemRender = 'cargando';
-let itemRenderSubPlan = 'cargando';
-let itemRenderDetallePlan = 'cargando'
-let itemRenderDetalleSubPlan = 'cargando'
-
-let planSeleccionado = {};
-let subPlanSeleccionado = {};
-
-
-let itemDatosAsegurado = {};
-let userAccountData = {};
-
-
 function SaveValue(key, value) {
   itemDatosAsegurado[key] = value
 }
 
-
 function SaveValueAccount(key, value) {
   userAccountData[key] = value
 }
-
 
 const ListaRender = (functionRenderDetalle) => {
   const [productos, setProductos] = useState('undefined');
@@ -980,7 +874,6 @@ function ResumenDetail() {
   );
 }
 
-
 function FlujoTerminadoRender() {
   const handleSubmit = async (
     values,
@@ -1081,6 +974,7 @@ function FlujoTerminadoRender() {
     </Formik >
   );
 }
+
 function PlanesForm() {
 
   const [dplan, setDplan] = useState('');
@@ -1414,16 +1308,7 @@ function FlujoTerminado() {
     </Card>
   );
 }
-function EmptyCard() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <PlanesForm />
-
-      </CardContent>
-    </Card>
-  );
-}
+ 
 
 function FormularioPerfil() {
   return (
@@ -1643,6 +1528,10 @@ function HorizontalNonLinearStepper() {
   );
 }
 
+
+
+let idPoliza = 0;
+
 async function registrarProducto() {
 
   const mutation = `
@@ -1655,7 +1544,8 @@ async function registrarProducto() {
 
   let dataSave = JSON.stringify({
     detalle: itemDatosAsegurado,
-    imagenes: listaImagenesSeguro
+    imagenes: listaImagenesSeguro,
+    idPoliza: idPoliza
   });
 
   console.log("save", dataSave)
@@ -1672,6 +1562,12 @@ async function registrarProducto() {
   console.log("SINIESTRO REGISTRADO EXITOSAMENTE!");
 
 }
+
+let functionSetPoliza = (event) => { 
+
+  console.log("evento", event)
+  idPoliza = event.target.value;
+} 
 
 const ListaRenderPolizas = (obtenerListaProductos) => {
   const [polizas, setPolizas] = useState('undefined');
@@ -1707,7 +1603,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
     let listProductos = polizas['data']['listasPolizas'];
     console.log("listaProductos", listProductos)
 
-    return <select style={{ width: '100%', height: 40, textTransform: 'uppercase'}}>
+    return <select style={{ width: '100%', height: 40, textTransform: 'uppercase' }} onChange={functionSetPoliza} >
 
       {listProductos &&
         listProductos.map((item, index) => {
@@ -1720,7 +1616,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
 
           console.log(itemTemporal)
 
-          return (<option style={{textTransform:'uppercase'}}>
+          return (<option style={{ textTransform: 'uppercase' }} value={item['id']}>
             {item['id']+ ' - '+itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo'] + " - " + itemSubPlan['nombre']}
 
           </option>)

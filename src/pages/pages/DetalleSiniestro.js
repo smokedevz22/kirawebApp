@@ -240,7 +240,7 @@ const ObtenerDetalleSiniestro = () => {
                           </Typography>
 
                                 <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
-                                  SAMSUNG - GALAXY S20 - <a href="#">VER POLIZA</a>
+                                  SAMSUNG - GALAXY S20 - <a href={`/pages/polizas/${dataSiniestro['idPoliza']}`} >VER POLIZA</a>
                                 </Typography>
                               </Grid>
 
@@ -446,7 +446,7 @@ const ListaRenderSiniestros = (setListaMensajes, setTitulo) => {
           let itemf = ultimoElementoSeleccionado;
           let itemTemp = JSON.parse(ultimoElementoSeleccionado['data_requerimiento']);
           console.log("iteeemTemporal", itemTemp)
-          setTitulo('SOLICITUD ' + objectoFind['id'])
+          setTitulo('SOLICITUD N°' + (index + 1))
           let listaMensajes = itemTemp['mensajes'];
           console.log("listaMensajesGuardar", listaMensajes)
           itemTemp["mensajes"] = listaMensajesGlobales;
@@ -718,6 +718,21 @@ function DialogDropzone(props) {
     files.forEach(async (item) => {
 
 
+      console.log("asdad", item)
+      await Storage.put(item.name, item)
+        .then(result => {
+
+          console.log("RESULTTT", result)
+
+          let listaMensajes = props.listaElementos
+
+          listaMensajes = [listaMensajes, { mensaje: '', archivo: 'https://kirastoragebucket112236-dev.s3.us-east-2.amazonaws.com/public/' + result['key'] }]
+          props.setLista(listaMensajes)
+          console.log("lista", listaMensajes)
+
+
+        }) // {key: "test.txt"}
+        .catch(err => console.log(err));
 
 
 
@@ -853,12 +868,17 @@ let dataInfoPoliza = 'cargando'
 let dataInfoArchivos = 'cargando'
 let dataNotificaciones = 'cargando'
 
+
+let idPoliza = 0;
 function DetalleSiniestro() {
 
 
 
   dataAllSiniestros = ObtenerDetalleSiniestro();
   let { id } = useParams();
+
+
+  idPoliza = id;
 
 
   return (

@@ -598,7 +598,7 @@ const ObtenerDetallePoliza = () => {
 
   } else {
 
-    return siniestros && 'cargando...'
+    return 'cargando...'
 
   }
 
@@ -606,115 +606,6 @@ const ObtenerDetallePoliza = () => {
 
 }
 
-const ObtenerListaSiniestros = () => {
-  const [siniestroxs, setSiniestroxs] = React.useState();
-
-
-  useEffect(async () => {
-    const myqueryDemo = `
- query MyQuery {
-   listasSiniestros {
-     id
-    data_siniestro
-  }
-}
-
-`;
-
-    console.log(myqueryDemo)
-    const datax= await API.graphql({
-      query: myqueryDemo
-    });
-    console.log("data from GraqweqweqwehQL:", datax);
-    setSiniestroxs(datax)
-
-  }, [])
-
-  console.log("poliiiizaaa", siniestroxs)
-  if (siniestroxs && siniestroxs['data']) {
-    console.log("productos", siniestroxs['data']['listasSiniestros']);
-    let listProductos = siniestroxs['data']['listasSiniestros'];
-    console.log("listaProductos", listProductos)
-
-    return (
-      <Card mb={6} style={{marginTop:22}}>
-        <CardContent>
-          <Typography variant="h2" gutterBottom>
-            SINIESTROS DECLARADOS
-        </Typography>
-          <TableWrapper>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell style={{ width: '5%' }}>ESTADO</TableCell>
-                  <TableCell style={{ width: '20%' }}>FECHA INGRESO</TableCell>
-                  <TableCell style={{ width: '20%' }}>NOTIFICACIONES</TableCell>
-
-          
-                  <TableCell style={{ width: '60%' }}>RESUMEN</TableCell>
-                  <TableCell style={{ width: '10%' }}>DETALLE</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody style={{ width: '100%' }}>
-
-                {listProductos &&
-                  listProductos.map((item, index) => {
-                    console.log(item);
-
-                    let itemTemporal = JSON.parse(item['data_siniestro']);
-                    console.log(itemTemporal)
-
-                    return (
-
-
-                      <TableRow style={{ width: '100%' }} key={index}>
-                        <TableCell  >
-                          <ProductsChip
-                            size="small"
-                            label="ACTIVO"
-                            rgbcolor={blue[500]}
-                          />
-                        </TableCell>
-
-                        <TableCell component="th" scope="row"  >
-                          <Typography variant="body2" gutterBottom>
-                            {itemTemporal['detalle']['fecha_siniestro']}
-                          </Typography>
-                        </TableCell>
-
-
-                     
-                        <TableCell component="th" scope="row" s >
-                          <Typography variant="body2" gutterBottom>
-                            {itemTemporal['detalle']['descripcion_siniestro']}
-                          </Typography>
-                        </TableCell>
-
-                        <TableCell component="th" scope="row" style={{ display: 'flex', justifyContent: 'flex-start' }}>
-                          <Route style={{ marginRight: '6px' }} render={({ history }) => (
-                            <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
-                              FICHA
-                            </Button>
-                          )} />
-
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })
-                }
-              </TableBody>
-            </Table>
-          </TableWrapper>
-        </CardContent >
-      </Card >
-    )
-  } else {
-
-    return siniestroxs && 'cargando...'
-  }
-
-
-}
 
  
 
@@ -901,8 +792,6 @@ const ObtenerListaArchivos = () => {
 
 }
 
-
-
 function ChatMessageComponent({
   name,
   message,
@@ -925,8 +814,6 @@ function ChatMessageComponent({
     </ChatMessage>
   );
 }
-
-
 
 const ObtenerListaNotificaciones = () => {
 
@@ -1146,7 +1033,7 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
                     <TableCell component="th" scope="row"  >
                       <Route style={{ marginRight: '6px' }} render={({ history }) => (
                         <Button onClick={() => { history.push(`/pages/siniestros/${item['id']}`) }} size="small" color="primary">
-                          FICHA SINIESTRO
+                           SINIESTRO
                         </Button>
                       )} />
 
@@ -1178,7 +1065,7 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
 
 
 
-let tituloPantalla = "FICHA POLIZA"
+let tituloPantalla = "POLIZA"
 
 function RenderPantall() {
 
@@ -1222,7 +1109,7 @@ function RenderPantall() {
 
           <Chip
             avatar={<DescriptionIcon />}
-            label="FICHA POLIZA"
+            label="POLIZA"
             onClick={handleClickFicha}
             m={1}
           />

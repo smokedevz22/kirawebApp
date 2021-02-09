@@ -14,8 +14,10 @@ import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
 import moment from 'moment';
 import { Auth } from 'aws-amplify';
+  
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
-
+ 
 import {
 
   CheckCircle as CheckCircle,
@@ -61,6 +63,31 @@ import {
   TagFaces as TagFacesIcon,
 } from "@material-ui/icons";
 import { spacing, display } from "@material-ui/system";
+
+
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'row',
+   },
+  sectionA: {
+     flex: 1,
+    padding: 4,
+     fontSize:12
+  },
+  sectionB: {
+    flex: 2,
+    padding: 4,
+    fontSize: 12
+
+  },
+  texto: {
+    
+    fontSize: 12
+
+  }
+});
+
 
 const Chip = styled(MuiChip)(spacing);
 const Spacer = styled.div(spacing);
@@ -135,6 +162,366 @@ let userAccountData = {};
 let detallesExtras = {};
 
 
+const MyDocumentPdf = (props) => {
+
+  let asegurado = props.object['asegurado'];
+  let usuario = props.object['user'];
+  let plan = props.object['plan'];
+  let planData = JSON.parse(plan['data_plan'])
+
+  let subplan = props.object['subplan'];
+  let subPlanData = JSON.parse(subplan['data_sub_plan'])
+  let detalleDeducible = props.object['detalles'];
+
+  console.log("propiedades_", props)
+  
+
+  let contratante =  asegurado['nombre_persona'] + ' ' + asegurado['apellido_paterno'] + ' ' + asegurado['apellido_materno'] ;
+  return (<Document>
+    <Page size="A4" style={{ padding: 22 }}>
+
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22, textAlign: 'center' }}>
+        <Text style={{ textTransform: 'uppercase' }}>Antecedentes del contratante</Text>
+      </View>
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22 }}>
+        <Text style={{ textTransform: 'uppercase' }}>Antecedentes del contratante</Text>
+      </View>
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Contratante</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>{contratante}</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Rut</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>{asegurado['rut_persona']}</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Domicilio</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>{usuario['calle'] + ', ' + usuario['ciudad'] + ', ' + usuario['comuna'] + ', ' + usuario['region'] + ', ' + usuario['pais']}</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Email</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>{asegurado['email']}</Text>
+        </View>
+      </View>
+
+      
+
+
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22 }}>
+        <Text style={{ textTransform: 'uppercase' }}>Antecedentes del asegurado</Text>
+      </View>
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Aseguradora</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>ASEGURADORA</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Rut</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>-</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Direccion aseguradora</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>{usuario['calle'] + ', ' + usuario['ciudad'] + ', ' + usuario['comuna'] + ', ' + usuario['region'] + ', ' + usuario['pais']}</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Email</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>aseguradora@aseguradora.cl</Text>
+        </View>
+      </View>
+
+
+
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22 }}>
+        <Text style={{ textTransform: 'uppercase' }}>Antecedentes del intermediario</Text>
+      </View>
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Contratante</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>FRGROUP</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Rut</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>-</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Direccion </Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text >Direccion FRGROUP</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Email</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>frgroup@frgroup.cl</Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22 }}>
+        <Text style={{ textTransform: 'uppercase' }}>Informacion del seguro</Text>
+      </View>
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Producto</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>{asegurado['marca_equipo'] + ' - ' + asegurado['modelo_equipo'] + ' - ' + asegurado['numero_serie'] + ' - ' + asegurado['imei']}</Text>
+        </View>
+      </View>
+
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Plan</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>{planData['nombre'] + ' - ' + subPlanData['nombre'] + ' ' + subPlanData['capital'] + 'UF'}</Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Vigencia desde</Text>
+        </View>
+        <View style={styles.sectionB}>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Vigencia hasta</Text>
+        </View>
+        <View style={styles.sectionB}>
+        </View>
+      </View>
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>Costo seguro</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text>{subPlanData['precio_mensual']}</Text>
+        </View>
+      </View>
+
+
+      <View style={{ marginTop: 22 }}>
+
+        
+
+
+
+
+      </View>
+    </Page>
+
+    <Page size="A4" style={{ padding: 22 }}>
+
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22, textAlign: 'center' }}>
+        <Text style={{ textTransform: 'uppercase' }}>SEGURO TELÉFONOS MOVILES</Text>
+      </View>
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>EQUIPO ASEGURADO</Text>
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            TELÉFONOS MÓVILES ADQUIRIDOS, EN CUALQUIER PUNTO DE VENTA A LO LARGO DEL TERRITORIO DE CHILE, Y RESPECTO DE LOS CUALES SE HAYA CONTRATADO EL PRESENTE SEGURO.
+
+            PARA EFECTOS DE ESTE SEGURO, NO SE CONSIDERARÁN PARTE DEL EQUIPO ASEGURADO O DE LA MATERIA ASEGURADA, NINGÚN COMPONENTE O ACCESORIO DE LOS TELÉFONOS MÓVILES, TALES COMO CARGADORES, PROTECTORES, BLUETOOTH, MANOS LIBRES, O SIMILARES E INFORMACIÓN CONTENIDA EN CUALQUIER MEMORIA DEL APARATO. POR CONSIGUIENTE, NINGUNA PÉRDIDA O DAÑO DE TALES ELEMENTOS SERÁ INDEMNIZABLE.
+
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>DETALLE DE LAS COBERTURAS</Text>
+        <Text style={{ textTransform: 'uppercase' }}>PÉRDIDA TOTAL EN CASO DE ROBO</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            LA COMPAÑÍA DE SEGUROS (EN ADELANTE LA “COMPAÑÍA) INDEMNIZARÁ AL ASEGURADO, PREVIO PAGO DEL DEDUCIBLE, CON LA REPOSICIÓN DE LOS TELÉFONOS MÓVILES, QUE HAYAN SUFRIDO LA PÉRDIDA TOTAL DE SUS EQUIPOS A CONSECUENCIA DE ROBO (EXCLUYE EL HURTO).
+
+            SE ENTIENDE COMO PÉRDIDA TOTAL POR ROBO CUANDO EL TELÉFONO HAYA SIDO OBJETO DE UN ROBO CON VIOLENCIA EN LAS PERSONAS O FUERZA EN LAS COSAS, Y EN AMBOS CASOS NO EXISTIEREN ANTECEDENTES QUE HICIEREN FACTIBLE SU PRONTA RECUPERACIÓN.
+
+          </Text>
+        </View>
+      </View>
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>PÉRDIDA TOTAL EN CASO DE DAÑOS ACCIDENTALES</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            LA COMPAÑÍA INDEMNIZARÁ AL ASEGURADO, PREVIO PAGO DEL DEDUCIBLE, CON LA REPOSICIÓN DE LOS TELÉFONOS MÓVILES, QUE HAYAN SUFRIDO LA PÉRDIDA TOTAL DE SUS EQUIPOS A CONSECUENCIA DE DAÑO ACCIDENTAL.
+
+            PARA EFECTOS DEL SEGURO, SE ENTIENDE COMO DAÑO ACCIDENTAL EL DAÑO PROVOCADO FORTUITAMENTE (EXCLUYENDO TODO DAÑO POR EL USO REGULAR O HABITUAL DEL TELÉFONO SEGÚN SU MANUAL DE FUNCIONAMIENTO), QUE AFECTE AL NORMAL FUNCIONAMIENTO DEL EQUIPO.
+
+            SE ENTENDERÁ QUE EXISTE PÉRDIDA TOTAL POR DAÑO ACCIDENTAL, CUANDO LOS GASTOS DE REPARACIÓN DEL EQUIPO CELULAR IGUALAN O EXCEDAN EL 75% DEL VALOR DE REPOSICIÓN DEL MISMO
+
+          </Text>
+        </View>
+      </View>
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>PÉRDIDA PARCIAL EN CASO DE DAÑOS ACCIDENTALES</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            LA COMPAÑÍA INDEMNIZARÁ AL ASEGURADO, CON LA REPARACIÓN DE LOS TELÉFONOS MÓVILES, QUE HAYAN SUFRIDO LA PÉRDIDA PARCIAL DE SUS EQUIPOS A CONSECUENCIA DE DAÑO ACCIDENTAL.
+
+            PARA EFECTOS DEL SEGURO, SE ENTIENDE COMO DAÑO ACCIDENTAL EL DAÑO PROVOCADO FORTUITAMENTE (EXCLUYENDO TODO DAÑO POR EL USO REGULAR O HABITUAL DEL TELÉFONO SEGÚN SU MANUAL DE FUNCIONAMIENTO), QUE AFECTE AL NORMAL FUNCIONAMIENTO DEL EQUIPO.
+
+            NO SE ENTENDERÁ CONFIGURADO UN DAÑO ACCIDENTAL LOS DAÑOS O PÉRDIDAS CAUSADOS POR EL USO U OPERACIÓN ORDINARIA DE LOS EQUIPOS ASEGURADOS, TALES COMO DESGASTE, DEFORMACIÓN, CORROSIÓN, HERRUMBRE Y DETERIORO POR FALTA DE USO O PROVENIENTE DE LAS CONDICIONES ATMOSFÉRICAS NORMALES, COMO TAMBIÉN CUALQUIER OTRO ASÍ DESCRITO EN SU MANUAL DE FUNCIONAMIENTO Y QUE AFECTE AL NORMAL FUNCIONAMIENTO DEL EQUIPO ASEGURADO.
+
+          </Text>
+        </View>
+      </View>
+
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>DEDUCIBLE</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            PARA LAS COBERTURAS DE PERDIDA TOTAL DE EQUIPOS APLICA DEDUCIBLE DEL 25% DEL VALOR LISTA DEL EQUIPO DE REEMPLAZO AL MOMENTO DE LA INDEMNIZACION, EN TODA Y CADA PERDIDA, VALOR QUE DEBERA SER PAGADO POR EL ASEGURADO PARA TENER DERECHO A LA INDEMINIZACION CORRESPONDIENTE.
+
+            PARA LA COBERTURA DE PERDIDA PARCIAL DE EQUIPOS APLICA DEDUCIBLE DEL 15% DEL VALOR LISTA DEL EQUIPO DE REEMPLAZO AL MOMENTO DE LA INDEMNIZACION, EN TODA Y CADA PERDIDA, VALOR QUE DEBERA SER PAGADO POR EL ASEGURADO PARA TENER DERECHO A LA INDEMINIZACION CORRESPONDIENTE.
+
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>LÍMITE MÁXIMO DE EVENTOS </Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            HASTA UN MÁXIMO DE 2 EVENTOS PARA LA COBERTURA DE DAÑO Y 1 EVENTO PARA LA COBERTURA DE ROBO DURANTE EL PERÍODO DE VIGENCIA LUEGO DE CONSUMIDO EL NÚMERO DE EVENTOS MÁXIMOS POR CADA ASEGURADO, SE EXTINGUE LA PÓLIZA RESPECTO DE DICHOS ASEGURADOS.
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>LÍMITE MÁXIMO DE INDEMNIZACIÓN
+ </Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            EL LÍMITE MÁXIMO DE INDEMNIZACIÓN POR CADA EVENTO ES EL VALOR EQUIPO ASEGURADO. PARA TODAS LAS COBERTURAS, LA REPOSICIÓN DEL EQUIPO ASEGURADO SERÁ REALIZADA CON UN “EQUIPO NUEVO O SIMILAR A NUEVO” EN CONDICIONES Y CARACTERÍSTICAS SIMILARES.
+
+            PARA EFECTOS DEL PRESENTE SEGURO, SE ENTIENDE POR “EQUIPO SIMILAR A NUEVO”  A AQUEL EQUIPO QUE HA SIDO INSPECCIONADO, PROBADO Y RESTAURADO EN UNA FÁBRICA O CENTRO DE SERVICIO AUTORIZADO Y QUE SE ENCUENTRA CERTIFICADO PARA SU UTILIZACIÓN.
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>EXCLUSIONES POL 120200020</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            DAÑOS O PÉRDIDAS QUE EXPERIMENTEN LOS COMPONENTES O ACCESORIOS TALES COMO TRANSFORMADORES, CARGADORES, CABLES ELÉCTRICOS, BLUETOOTH, MANOS LIBRES, PEN DRIVES, ADEMÁS DE LOS DAÑOS O PERDIDAS DE LAS BATERÍAS, ASÍ COMO TAMBIÉN PARTES O PIEZAS NO ORIGINALES O NO AUTORIZADAS POR EL FABRICANTE.
+            DAÑOS O PÉRDIDAS POR LAS QUE EL FABRICANTE, PROVEEDOR, VENDEDOR O EMPRESA DE REPARACIONES O DE MANTENIMIENTO RESPONDEN LEGAL O CONTRACTUALMENTE.
+            DAÑOS O PÉRDIDAS QUE DIRECTA O INDIRECTAMENTE SEAN CONSECUENCIA DE FALLAS O DEFECTOS QUE YA EXISTÍAN AL MOMENTO DE CONTRATARSE EL SEGURO.
+            DAÑOS O PÉRDIDAS CAUSADOS POR EL USO U OPERACIÓN ORDINARIA DE LA MATERIA ASEGURADA, TALES COMO DESGASTE, DEFORMACIÓN, CORROSIÓN, HERRUMBRE Y DETERIORO POR FALTA DE USO O PROVENIENTE DE LAS CONDICIONES ATMOSFÉRICAS NORMALES O CUALQUIER DAÑO COSMÉTICO A LA MATERIA ASEGURADA, DE MANERA TAL QUE NO AFECTE LA FUNCIONALIDAD DEL MISMO. ALGUNOS TIPOS EXCLUIDOS DE PÉRDIDA INCLUYEN, DE MANERA ENUNCIATIVA MÁS NO LIMITATIVA, RASGUÑOS, DAÑOS SUPERFICIALES, GRIETAS Y CAMBIOS O MEJORA EN COLOR TEXTURA O TERMINADO SOBRE LA MATERIA ASEGURADA QUE NO AFECTEN LA FUNCIÓN DE LA MISMA.
+            DAÑOS O PÉRDIDAS CAUSADOS DIRECTA O INDIRECTAMENTE POR ACTOS INTENCIONALES O CONSTITUTIVOS DE CULPA GRAVE COMETIDOS POR EL ASEGURADO, POR SUS MANDATARIOS O POR LAS PERSONAS A QUIENES SE HAYA CONFIADO LA MATERIA ASEGURADA.
+            PÉRDIDAS DE BENEFICIOS, LUCRO CESANTE Y OTROS PERJUICIOS INDIRECTOS DE CUALQUIER TIPO.
+            DAÑOS O PÉRDIDAS CAUSADOS DIRECTA O INDIRECTAMENTE POR REACCIÓN NUCLEAR, RADIACIÓN NUCLEAR O CONTAMINACIÓN RADIOACTIVA, O AGRAVADOS POR ESTOS EVENTOS.
+            PÉRDIDA O DAÑO DIRECTO O INDIRECTO QUE OCURRA EN RELACIÓN CON ACTIVIDAD SÍSMICA.
+            PÉRDIDA DEL EQUIPO A CONSECUENCIA DE EXTRAVÍO.
+            DAÑOS DE EQUIPOS CON MAL USO O INTENTO DE REPARACIONES POR CUENTA DEL ASEGURADO SIN SUPERVISIÓN DEL FABRICANTE.
+            CUALQUIER DAÑO O PERDIDA DE INFORMACIÓN ALMACENADA EN EL EQUIPO ASEGURADO O DE SOFTWARE INSTALADOS EN EL MISMO.
+            CUALQUIER EQUIPO CUYO NÚMERO DE IDENTIFICACIÓN (IMEI O ESN, ENTRE OTROS) HAYA SIDO ALTERADO, DAÑADO O REMOVIDO.
+            CUALQUIER EQUIPO QUE EN EL MOMENTO DE LA PÉRDIDA NO ESTÉ CONECTADO A LA RED DE VOZ Y DATOS DEL OPERADOR DE SERVICIOS INALÁMBRICO A LA RED DEL CONTRATANTE.
+            PÉRDIDA CAUSADA O DERIVADA DE LA OMISIÓN A REALIZAR LO RAZONABLEMENTE NECESARIO PARA MINIMIZAR O EVITAR LA PÉRDIDA Y PROTEGER LA MATERIA ASEGURADA DE CUALQUIER PERDIDA O PÉRDIDA ADICIONAL.
+            CUANDO LA MATERIA ASEGURADA ES TRANSPORTADA EN CALIDAD DE CARGA EN POSESIÓN DE TERCEROS (EJEMPLO: MUDANZA, CORREO, ETC.) A BORDO DE AERONAVES, NAVES, O CUALQUIER TIPO DE EMBARCACIONES GRANDES O MENORES. ESTA EXCLUSIÓN NO ALCANZA LA PÉRDIDA QUE PUEDA PRODUCIRSE CUANDO LA MATERIA ASEGURADA ES TRANSPORTADA POR EL ASEGURADO EN OCASIÓN DE UN VIAJE EN ALGUNO DE LOS MEDIOS DESCRITOS DENTRO DE ÁREA GEOGRÁFICA AMPARADA.
+</Text>
+        </View>
+      </View>
+
+    </Page>
+
+
+  
+  </Document>)
+  
+   
+};
 
 function Project({ id, image, title, description, chip }) {
   return (
@@ -212,8 +599,19 @@ async function registrarCotizacion() {
 
 }
 
+let objectFinalPoliza = {}
 
 async function registrarProducto() {
+
+  objectFinalPoliza ={
+    asegurado: itemDatosAsegurado,
+      plan: planSeleccionado,
+        user: userAccountData,
+          subplan: subPlanSeleccionado,
+            detalles: detallesExtras,
+              imagenes: listaImagenesSeguro
+  };
+
 
   const mutation = `
   mutation MyMutation($bank:registrarNuevaPolizaInput!) {
@@ -222,19 +620,16 @@ async function registrarProducto() {
   }
 }
 `;
+  
+  
+  
 
   await API.graphql({
     query: mutation,
     variables: {
       bank: {
-        data_poliza: JSON.stringify({
-          asegurado: itemDatosAsegurado,
-          plan: planSeleccionado,
-          user: userAccountData,
-          subplan: subPlanSeleccionado,
-          detalles: detallesExtras,
-          imagenes: listaImagenesSeguro
-        }),
+        data_poliza: JSON.stringify(objectFinalPoliza),
+        email: itemDatosAsegurado['email']
 
       }
     }
@@ -306,7 +701,7 @@ function DefaultDropzone() {
             
         </Typography>
             <Typography variant="body2" style={{marginTop:6, marginBottom:6}} >
-               PUEDE ENCONTRAR EL NUMERO DE SERIE EN LA CAJA DEL MISMO DISPOSITIVO
+               PUEDE ENCONTRAR EL NUMERO DE SERIE EN LA CAJA DEL EQUIPO
         </Typography>
             <DropzoneArea
               onChange={event =>  
@@ -1331,12 +1726,15 @@ function ResumenDetail() {
 }
 
 
+ 
+
 function FlujoTerminadoRender() {
 
   let showButtons = false; 
 
   itemRenderDetallePlan = RenderDetallePlan(planSeleccionado, subPlanSeleccionado, showButtons)
- 
+
+
 
   const handleSubmit = async (
     values,
@@ -1394,7 +1792,7 @@ function FlujoTerminadoRender() {
                   <Grid container justify="center">
                     <Grid item xs={12} lg={10}>
                       <Shadow>
-
+ 
                         <Card px={6} pt={6}>
                           <CardContent>
                             <Grid container spacing={6}>
@@ -1421,7 +1819,9 @@ function FlujoTerminadoRender() {
 
                                   <Typography variant="body2" gutterBottom>
 
-                                    <a href="#">DESCARGAR POLIZA</a>
+                                    <PDFDownloadLink document={<MyDocumentPdf object={objectFinalPoliza} />} fileName="poliza.pdf">
+                                      {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Descargar Poliza')}
+                                    </PDFDownloadLink>
                                   </Typography>
 
                                 </div>
@@ -1468,7 +1868,7 @@ function FlujoTerminadoRender() {
                             </Grid>
                           </CardContent>
                         </Card>
-          
+ 
                       </Shadow>
                     </Grid>
                   </Grid>
@@ -1948,6 +2348,7 @@ function ResumenSeguro() {
   );
 }
 
+
 function FlujoTerminado() {
   return (
     <Card mb={6}>
@@ -2238,6 +2639,7 @@ function RenderHeaderSteps() {
   setCImagen = setCuarta;
   setQImagen = setQuinta; 
 
+  
   return (<Grid style={{ marginTop: '12px', display: 'flex' }} item lg={12}>
     <Grid item style={{ flex: 1, padding: 6, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ width: '120px', height: '110px', }}>
@@ -2275,8 +2677,7 @@ function FlujoCompra() {
 
   obtenerListaItems();
 
-
-  return (
+   return (
     <React.Fragment>
       <Helmet title="Flujo de compra" />
       <AppBar />
@@ -2290,10 +2691,12 @@ function FlujoCompra() {
         <Divider my={6} />
         <HorizontalNonLinearStepper>
 
-        </HorizontalNonLinearStepper>
-      </Grid>
+         </HorizontalNonLinearStepper>
+         
 
-    </React.Fragment>
+        
+      </Grid>
+     </React.Fragment>
   );
 }
 
