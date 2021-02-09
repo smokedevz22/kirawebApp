@@ -959,14 +959,14 @@ function AlertCompletarFormulario(props) {
 
 
 function AlertDialogNroSerie() {
-  const [open, setOpen] = React.useState(false);
+  const [openS, setOpenS] = React.useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpenS(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenS(false);
   };
 
   return (
@@ -977,7 +977,7 @@ function AlertDialogNroSerie() {
             #COMO CONSEGUIR NRO DE SERIE DEL TELEFONO
           </span>
           <Dialog
-            open={open}
+            open={openS}
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
@@ -2080,256 +2080,254 @@ function RegistrarPerfil() {
               <Box display="flex" justifyContent="center" my={6}>
                 <CircularProgress />
               </Box>
-            ) : (
-                <form onSubmit={handleSubmit}>
-                  <Grid container spacing={6}>
+            ) : 
+              {status && status.sent ? '' : (<form onSubmit={handleSubmit}>
+                <Grid container spacing={6}>
 
-                    <Grid item md={6}>
-                      <TextField
-                        name="rut_persona"
-                        value={itemDatosAsegurado['rut_persona']}
-                        label="RUT PERSONA"
-                        fullWidth
-                        onChange={event => SaveValue("rut_persona", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="nro_serie"
-                        value={itemDatosAsegurado['nro_serie']}
-                        label="NUMERO DE SERIE CARNET"
-                        fullWidth
-                        onChange={event => SaveValue("nro_serie", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                
-                    <Grid item md={6}>
-                      <TextField
-                        name="nombre_persona"
-                        label="NOMBRES"
-
-                        value={itemDatosAsegurado['nombre_persona']}
-                        error={Boolean(touched.firstName && errors.firstName)}
-                        fullWidth
-                        helperText={touched.firstName && errors.firstName}
-
-                        onChange={event => SaveValueAccount("nombre_persona", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    <Grid item md={6}>
-
-
-                      <form noValidate>
-                        <TextField
-                          style={{ marginTop: 8 }}
-                          id="fecha_nacimiento"
-                          label="FECHA NACIMIENTO"
-                          type="date"
-                          fullWidth
-                          value={itemDatosAsegurado['fecha_nacimiento']}
-                          onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
-                      </form>
-                    </Grid>
-                    <Grid item md={6}>
-                      <TextField
-                        name="apellido_paterno"
-                        label="APELLIDO PATERNO "
-                        value={itemDatosAsegurado['apellido_paterno']}
-                        fullWidth
-                        onChange={event => SaveValue("apellido_paterno", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="apellido_materno"
-                        label="APELLIDO MATERNO "
-                        value={itemDatosAsegurado['apellido_materno']}
-                        fullWidth
-                        onChange={event => SaveValue("apellido_materno", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-                    <Grid item md={6}>
-
-
-                      <select onChange={event => SaveValue("genero", event.target.value)} style={{ width: '100%', height: '50px' }}>
-                        <option > SELECCIONAR GENERO </option>
-                        <option value="femenino"> FEMENINO </option>
-                        <option value="masculino"> MASCULINO </option>
-                      </select>
-                    </Grid>
-                    <Grid item md={6}>
-
- 
-                    </Grid>
-                    <Grid item md={6}>
-                      <TextField
-                        name="calle"
-                        label="CALLE "
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['calle']}
-
-                        onChange={event => SaveValueAccount("calle", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
- 
-
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="numero_dpto"
-                        label="NUMERO DPTO/CASA "
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['numero_dpto']}
-
-                        onChange={event => SaveValueAccount("numero_dpto", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="comuna"
-                        label="COMUNA "
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['comuna']}
-
-                        onChange={event => SaveValueAccount("comuna", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="ciudad"
-                        label="CIUDAD "
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['ciudad']}
-
-                        onChange={event => SaveValueAccount("ciudad", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-
-
-                    <Grid item md={6}>
-                      <TextField
-                        name="region"
-                        label="REGION "
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['region']}
-
-                        onChange={event => SaveValueAccount("region", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    <Grid item md={6}>
-                      <TextField
-                        name="pais"
-                        label="PAIS"
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        helperText={touched.lastName && errors.lastName}
-                        value={itemDatosAsegurado['pais']}
-                        fullWidth
-
-                        onChange={event => SaveValueAccount("pais", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    
-
-               
+                  <Grid item md={6}>
+                    <TextField
+                      name="rut_persona"
+                      value={itemDatosAsegurado['rut_persona']}
+                      label="RUT PERSONA"
+                      fullWidth
+                      onChange={event => SaveValue("rut_persona", event.target.value)}
+                      variant="outlined"
+                      my={2}
+                    />
                   </Grid>
 
-                  <TextField
-                    name="email"
-                    label="Email"
-                    value={userAccountData['email']}
-                    onChange={event => SaveValueAccount("email", event.target.value)}
-                    fullWidth
-                    helperText={touched.email && errors.email}
-                    onBlur={handleBlur}
-                    type="email"
-                    variant="outlined"
-                    my={2}
-                  />
+                  <Grid item md={6}>
+                    <TextField
+                      name="nro_serie"
+                      value={itemDatosAsegurado['nro_serie']}
+                      label="NUMERO DE SERIE CARNET"
+                      fullWidth
+                      onChange={event => SaveValue("nro_serie", event.target.value)}
+                      variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
 
-                  <TextField
-                    name="password"
-                    label="Password"
-                    fullWidth
-                    value={userAccountData['password']}
+                  <Grid item md={6}>
+                    <TextField
+                      name="nombre_persona"
+                      label="NOMBRES"
 
-                    helperText={touched.password && errors.password}
-                    onBlur={handleBlur}
-                    onChange={event => SaveValueAccount("password", event.target.value)}
-                    type="password"
-                    variant="outlined"
-                    my={2}
-                  />
+                      value={itemDatosAsegurado['nombre_persona']}
+                      error={Boolean(touched.firstName && errors.firstName)}
+                      fullWidth
+                      helperText={touched.firstName && errors.firstName}
 
-                  <TextField
-                    name="confirmPassword"
-                    label="Confirm password"
+                      onChange={event => SaveValueAccount("nombre_persona", event.target.value)}
+                      variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+                  <Grid item md={6}>
 
-                    fullWidth
-                    helperText={touched.confirmPassword && errors.confirmPassword}
-                    onBlur={handleBlur}
-                    value={userAccountData['repassword']}
-                    onChange={event => SaveValueAccount("repassword", event.target.value)}
-                    type="password"
-                    variant="outlined"
-                    my={2}
-                  />
 
-                  <Button
-                    style={{ marginTop: '60px' }}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    mt={3}
-                    onClick={async (event) => {
-                      await Auth.signUp(userAccountData.email, userAccountData.password).then((data) => {
-                        console.log("usuarioRegistrado", data)
-                        // history.push("/pages/mi_cuenta");
-                        // 
-                      })
-                     }}
-                  >
-                    GUARDAR
+                    <form noValidate>
+                      <TextField
+                        style={{ marginTop: 8 }}
+                        id="fecha_nacimiento"
+                        label="FECHA NACIMIENTO"
+                        type="date"
+                        fullWidth
+                        value={itemDatosAsegurado['fecha_nacimiento']}
+                        onChange={event => SaveValueAccount("fecha_nacimiento", event.target.value)} variant="outlined"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                      />
+                    </form>
+                  </Grid>
+                  <Grid item md={6}>
+                    <TextField
+                      name="apellido_paterno"
+                      label="APELLIDO PATERNO "
+                      value={itemDatosAsegurado['apellido_paterno']}
+                      fullWidth
+                      onChange={event => SaveValue("apellido_paterno", event.target.value)}
+                      variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+                  <Grid item md={6}>
+                    <TextField
+                      name="apellido_materno"
+                      label="APELLIDO MATERNO "
+                      value={itemDatosAsegurado['apellido_materno']}
+                      fullWidth
+                      onChange={event => SaveValue("apellido_materno", event.target.value)}
+                      variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+                  <Grid item md={6}>
+
+
+                    <select onChange={event => SaveValue("genero", event.target.value)} style={{ width: '100%', height: '50px' }}>
+                      <option > SELECCIONAR GENERO </option>
+                      <option value="femenino"> FEMENINO </option>
+                      <option value="masculino"> MASCULINO </option>
+                    </select>
+                  </Grid>
+                  <Grid item md={6}>
+
+
+                  </Grid>
+                  <Grid item md={6}>
+                    <TextField
+                      name="calle"
+                      label="CALLE "
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      fullWidth
+                      helperText={touched.lastName && errors.lastName}
+                      value={itemDatosAsegurado['calle']}
+
+                      onChange={event => SaveValueAccount("calle", event.target.value)} variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+
+
+                  <Grid item md={6}>
+                    <TextField
+                      name="numero_dpto"
+                      label="NUMERO DPTO/CASA "
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      fullWidth
+                      helperText={touched.lastName && errors.lastName}
+                      value={itemDatosAsegurado['numero_dpto']}
+
+                      onChange={event => SaveValueAccount("numero_dpto", event.target.value)} variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+
+                  <Grid item md={6}>
+                    <TextField
+                      name="comuna"
+                      label="COMUNA "
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      fullWidth
+                      helperText={touched.lastName && errors.lastName}
+                      value={itemDatosAsegurado['comuna']}
+
+                      onChange={event => SaveValueAccount("comuna", event.target.value)} variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+
+                  <Grid item md={6}>
+                    <TextField
+                      name="ciudad"
+                      label="CIUDAD "
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      fullWidth
+                      helperText={touched.lastName && errors.lastName}
+                      value={itemDatosAsegurado['ciudad']}
+
+                      onChange={event => SaveValueAccount("ciudad", event.target.value)} variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+
+                  <Grid item md={6}>
+                    <TextField
+                      name="region"
+                      label="REGION "
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      fullWidth
+
+                      helperText={touched.lastName && errors.lastName}
+                      value={itemDatosAsegurado['region']}
+
+                      onChange={event => SaveValueAccount("region", event.target.value)} variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+                  <Grid item md={6}>
+                    <TextField
+                      name="pais"
+                      label="PAIS"
+                      error={Boolean(touched.lastName && errors.lastName)}
+                      helperText={touched.lastName && errors.lastName}
+                      value={itemDatosAsegurado['pais']}
+                      fullWidth
+
+                      onChange={event => SaveValueAccount("pais", event.target.value)} variant="outlined"
+                      my={2}
+                    />
+                  </Grid>
+
+
+
+                </Grid>
+
+                <TextField
+                  name="email"
+                  label="Email"
+                  value={userAccountData['email']}
+                  onChange={event => SaveValueAccount("email", event.target.value)}
+                  fullWidth
+                  onBlur={handleBlur}
+                  type="email"
+                  variant="outlined"
+                  my={2}
+                />
+
+                <TextField
+                  name="password"
+                  label="Password"
+                  fullWidth
+
+                  onBlur={handleBlur}
+                  onChange={event => SaveValueAccount("password", event.target.value)}
+                  type="password"
+                  variant="outlined"
+                  my={2}
+                />
+
+                <TextField
+                  name="confirmPassword"
+                  label="Confirm password"
+
+                  fullWidth
+                  onBlur={handleBlur}
+                  onChange={event => SaveValueAccount("repassword", event.target.value)}
+                  type="password"
+                  variant="outlined"
+                  my={2}
+                />
+
+                <Button
+                  style={{ marginTop: '60px' }}
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  mt={3}
+                  onClick={async (event) => {
+                    await Auth.signUp(userAccountData.email, userAccountData.password).then((data) => {
+                      console.log("usuarioRegistrado", data)
+                      // history.push("/pages/mi_cuenta");
+                      // 
+                    })
+                  }}
+                >
+                  GUARDAR
                 </Button>
-                </form>
-              )}
+              </form>
+             )
+               
+               
+               }}
           </CardContent>
         </Card>
       )}
