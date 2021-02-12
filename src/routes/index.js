@@ -73,9 +73,12 @@ const Blank = async(() => import("../pages/pages/Blank"));
 const FlujoCompra = async(() => import("../pages/pages/FlujoCompraSeguro"));
 const DeclaracionSiniestro = async(() => import("../pages/pages/FlujoDeclaracionSiniestro"));
 const DeclaracionSiniestroGlobal = async(() => import("../pages/pages/FlujoSiniestroGlobal"));
+const FlujoCompraCotizacion = async(() => import("../pages/pages/FLujoCompraCotizacion"));
 
 
 const InvoiceDetails = async(() => import("../pages/pages/InvoiceDetails"));
+const Contacto = async(() => import("../pages/pages/Contacto"));
+
 const DetalleSeguro = async(() => import("../pages/pages/DetalleSeguro"));
 const DetalleSiniestro = async(() => import("../pages/pages/DetalleSiniestro"));
 const DetalleCotizacion = async(() => import("../pages/pages/DetalleCotizacion"));
@@ -193,6 +196,14 @@ const pagesRoutes = {
       component: FlujoCompra,
     },
     {
+      path: "/pages/flujo_compras/:id",
+      name: "Compra cotizacion",
+      id: "Private",
+      icon: <List />,
+      component: FlujoCompraCotizacion,
+
+    },
+    {
       path: "/pages/seguros",
       name: "Mis Seguros",
       id: "Private",
@@ -288,6 +299,11 @@ const invoiceRoutes = {
       path: "/pages/seguros/detalles/:id",
       name: "Details",
       component: InvoiceDetails,
+    },
+    {
+      path: "/pages/contacto",
+      name: "Details",
+      component: Contacto,
     },
     {
       path: "/pages/cotizaciones/:id",
@@ -705,8 +721,16 @@ export const sidebarRoutes = [
     component: Seguros,
     children: null,
 
-  }
-  /*
+  }, {
+    path: "/pages/contacto",
+    name: "Contacto",
+    id: "Contacto",
+    icon: <Storefront />,
+    component: Contacto,
+    children: null,
+
+  }/*
+ ,
     {
       id: "Changelog",
       path: "/changelog",
@@ -716,6 +740,6 @@ export const sidebarRoutes = [
       children: null,
     }
   
-  
   */
+
 ];

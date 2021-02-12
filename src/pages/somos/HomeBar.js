@@ -71,10 +71,15 @@ const AppBarComponent = () => (
                   component={Link}
                   to="/pages/seguros"
                 >
-                  SEGUROS
+                  NUESTROS SEGUROS
                 </Button>
 
-                <Button ml={2} color="inherit" href="mailto:info@bootlab.io">
+                <Button
+                  ml={2}
+                  color="inherit"
+                  component={Link}
+                  to="/pages/contacto"
+                >
                   CONTACTO
                 </Button>
               </Hidden>

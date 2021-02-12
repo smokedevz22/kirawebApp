@@ -130,7 +130,7 @@ function Orders(props) {
 
           <LinearProgress
             variant="determinate"
-            value={30}
+            value={100}
             color="secondary"
             mt={4}
           />
@@ -167,7 +167,7 @@ function Revenue(props) {
           </Grid>
           < LinearProgress
             variant="determinate"
-            value={50}
+            value={100}
             color="secondary"
             mt={4}
           />
@@ -204,13 +204,13 @@ function CotizacionesCard(props) {
 
           <LinearProgress
             variant="determinate"
-            value={50}
+            value={100}
             color="secondary"
             mt={4}
           />
 
           <Button onClick={() => { props.onClick.functionClickListaCotizaciones() }} size="small" color="primary">
-            LISTA DE COTIZACINES
+            LISTA DE COTIZACIONES
             </Button>
 
         </CardContent>
@@ -351,7 +351,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
     });
 
     const queryListaActividadGraphql = `
- query MyQuery {
+    query MyQuery {
    listasPolizas(email:"${temId}") {
      id
     data_poliza

@@ -162,12 +162,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
+
 const MyDocumentPdf = (props) => {
 
   let asegurado = props.object['asegurado'];
   let usuario = props.object['user'];
   let plan = props.object['plan'];
-  console.log("plaaan",plan)
+  console.log("plaaan", plan)
   let planData = JSON.parse(plan['data_plan'])
 
   let subplan = props.object['subplan'];
@@ -175,9 +176,9 @@ const MyDocumentPdf = (props) => {
   let detalleDeducible = props.object['detalles'];
 
   console.log("propiedades_", props)
-  
 
-  let contratante = asegurado['nombre_persona'] + ' ' + usuario['apellido_paterno'] + ' ' + usuario['apellido_materno'] ;
+
+  let contratante = asegurado['nombre_persona'] + ' ' + usuario['apellido_paterno'] + ' ' + usuario['apellido_materno'];
   return (<Document>
     <Page size="A4" style={{ padding: 22 }}>
 
@@ -223,7 +224,7 @@ const MyDocumentPdf = (props) => {
         </View>
       </View>
 
-      
+
 
 
       <View style={{ width: '100%', paddingTop: 22, marginBottom: 22 }}>
@@ -373,7 +374,7 @@ const MyDocumentPdf = (props) => {
           <Text>Vigencia desde</Text>
         </View>
         <View style={styles.sectionB}>
-         <Text>  {momentNow}</Text>
+          <Text>  {momentNow}</Text>
         </View>
       </View>
 
@@ -397,7 +398,7 @@ const MyDocumentPdf = (props) => {
 
       <View style={{ marginTop: 22 }}>
 
-        
+
 
 
 
@@ -559,11 +560,12 @@ const MyDocumentPdf = (props) => {
     </Page>
 
 
-  
+
   </Document>)
-  
-   
+
+
 };
+
 
  
 async function registrarCotizacion() {
@@ -1114,7 +1116,6 @@ function AlertDialogNroSerie() {
   );
 }
 
-
 function SaveValue(key, value, setFormInicial) {
 
   itemDatosAsegurado[key] = value;
@@ -1124,8 +1125,6 @@ function SaveValue(key, value, setFormInicial) {
 }
  
 const ListaRender = (functionRenderDetalle) => {
-
-  renderActive = false;
   const [productos, setProductos] = useState('undefined');
   
   useEffect(async () => {
@@ -1164,7 +1163,7 @@ const ListaRender = (functionRenderDetalle) => {
 
 
 
-    return < select value={planSeleccionado && planSeleccionado['id']}  style={{ width: '100%', height: '40px', textTransform: 'uppercase' }} onChange={functionRenderDetalle} >
+    return < select value={planSeleccionado && planSeleccionado['id']} style={{ width: '100%', height: '40px', textTransform: 'uppercase' }} onChange={functionRenderDetalle} >
       < option value="_" > SELECCIONAR PLAN</option >
 
       {
@@ -1183,27 +1182,10 @@ const ListaRender = (functionRenderDetalle) => {
   }
 }
 
-
-function compare(a, b) {
-
-  let itemTemporalA = JSON.parse(a['data_sub_plan']);
-  let itemTemporalB = JSON.parse(b['data_sub_plan']);
-
-  if (itemTemporalA.nombre < itemTemporalB.nombre) {
-    return -1;
-  }
-  if (itemTemporalA.nombre > itemTemporalB.nombre) {
-    return 1;
-  }
-  return 0;
-}
-
-
 const ListaRenderSubPlan = (functionRenderDetalle) => {
   const [productos, setProductos] = useState('undefined');
   const [error, setError] = useState('undefined');
 
-  renderActive = false;
 
   // console.log("listaProductos", listaProductos)
 
@@ -1242,9 +1224,9 @@ const ListaRenderSubPlan = (functionRenderDetalle) => {
     listSubPlanes = listaSubPlanes;
     console.log("listaProductos", listaSubPlanes)
 
-listaSubPlanes.sort(compare)
 
-    return < select value={subPlanSeleccionado && subPlanSeleccionado['id']}  style={{ width: '100%', height: '40px', textTransform: 'uppercase' }} onChange={functionRenderDetalle} >
+
+    return < select value={subPlanSeleccionado && subPlanSeleccionado['id']} style={{ width: '100%', height: '40px', textTransform: 'uppercase' }} onChange={functionRenderDetalle} >
       < option value="_"  > SELECCIONAR BANDA</option >
 
       {
@@ -1264,130 +1246,50 @@ listaSubPlanes.sort(compare)
 }
 
 
+let isloaded = false;
 
-function cargarDetallesCobertura(item, setRenderDD) {
-
-
-  console.log("listaItems", item)
-
-  let listaTemporalCoberturas = []
-
-  let cargarDetalleCob = async function () {
-    listCoberturas && listCoberturas.forEach((data) => {
-
-      console.log("cobertura", data)
-      console.log("subplan", item)
-
-      if (data['id_sub_plan'] === item['id']) {
-
-        console.log("....---COBERTURAS---...")
-        listaTemporalCoberturas.push(data)
-      }
-    })
-  };
-
-
-  cargarDetalleCob().then((data) => {
-    console.log("lista", listaTemporalCoberturas)
-
-
-    listaTemporalCoberturas.find((item) => {
-
-      switch (item['codigo_cobertura']) {
-
-        case "CL-Daño-Total":
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Daño-Total": item['deducible']
-          }
-          
-
-          break;
-
-        case "CL-Daño-Parcial":
-
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Daño-Parcial": item['deducible']
-          }
-          
-
-          break;
-
-        case "CL-Robo":
-
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Robo": item['deducible']
-          }
-           
-
-
-          break;
-
-      }
-    })
-
-
-  })
-
-
-  setTimeout(() => { setRenderDD(detallesExtras)}
-,100)
-
-}
-
-
-let subPlanAnterio = ''
-
-function RenderDetallePlan(props) {
+function RenderDetallePlan(item, subplan, showButtons, finishStep) {
   // const [detallePlan, setDetallePlan] = useState({});
 
-  let plan = props.plan;
-  let subplan = props.subPlan;
-  
-
-  console.log("SUBPLANaaaaaaa", subplan)
-  console.log("SUBPLANaaaaaaa", detallesExtras)
-
-  let detalle = JSON.parse(props.plan['data_plan'])
-  let detalleSubPlan = JSON.parse(props.subPlan['data_sub_plan'])
+  let detalle = JSON.parse(item['data_plan'])
+  let detalleSubPlan = JSON.parse(subplan['data_sub_plan'])
 
   let verticalSucc = "bottom";
   let horizontalSucc = "center";
   let show = false;
+
   const [renderDD, setRenderDD] = React.useState();
 
   
-  console.log("DETALLE_PLAN", renderDD)
+
+  console.log("Render",renderDD)
+
+  
+  console.log("DETALLE_PLAN", detalle)
 
   let functionShowMensaje = () => { 
     show = true
   }
   
   let fnMostrarModal = () => {
-    let item = props.fnFinish;
-    item()
+    finishStep()
   }
   if (detalle) {
-  
-    let temp = renderDD;
+    
+    
+    if (!isloaded) { 
 
-   
-     if (subPlanAnterio != subplan) {
-      console.log("asdasd")
       cargarDetallesCobertura(subplan, setRenderDD)
-      subPlanAnterio = subplan
-    } else { 
-      subPlanAnterio = ''
-    }
 
+    }
+    
     
 
+     
     //setDetallePlan(detalle)
     return (<Grid  lg={12}>
      <Grid   lg={12}>
-        <Grid item lg={12}>
+    <Grid item lg={12}>
 
           <Typography variant="h2" gutterBottom style={{ marginTop: 12 }}>
             {detalle['nombre_plan']}   {detalleSubPlan['nombre']}
@@ -1419,9 +1321,9 @@ function RenderDetallePlan(props) {
             <Grid style={{ display: 'flex' }} item lg={12}>
               <Grid item lg={4}>
                 <h4> COBERTURAS (DEDUCIBLE) </h4>
-                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL (DEDUCIBLE DE {detallesExtras['CL-Daño-Parcial']} UF) </p>
-                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL (DEDUCIBLE DE {detallesExtras['CL-Daño-Total']}  UF)   </p>
-                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO (DEDUCIBLE DE {detallesExtras['CL-Robo']}  UF) </p>
+                <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL (DEDUCIBLE DE {detallesExtras&&detallesExtras['CL-Daño-Parcial']} UF) </p>
+                <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL (DEDUCIBLE DE {detallesExtras&&detallesExtras['CL-Daño-Total']}  UF)   </p>
+                <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO (DEDUCIBLE DE {detallesExtras&&detallesExtras['CL-Robo']}  UF)  </p>
               </Grid>
               <Grid item lg={4}>
                 <h4>VIGENCIA</h4>
@@ -1438,7 +1340,7 @@ function RenderDetallePlan(props) {
 
             </Grid>
 
-           
+            
         </Grid>
           </Typography>
         </Grid>
@@ -1449,7 +1351,7 @@ function RenderDetallePlan(props) {
           m={1}
         />
 
-        {props.showButtons ? <Grid lg={12} >
+        {showButtons ? <Grid lg={12} >
 
           <div style={{ display: 'flex', width: '100%' }}>
             <AlertDialogCotizacion fn={functionShowMensaje} fnFinishStep={fnMostrarModal} />
@@ -1473,7 +1375,68 @@ function RenderDetallePlan(props) {
   }
   return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
 }
+
+async function cargarDetallesCobertura(item, setRenderDx) {
+
+
+  console.log("listaItems", item)
+  
+  let listaTemporalCoberturas = []
+
+  let cargarDetalleCob = async function () {
+    listCoberturas && listCoberturas.forEach((data) => {
+
+      console.log("cobertura", data)
+      console.log("subplan", item)
+
+      if (data['id_sub_plan'] === item['id']) {
+
+        console.log("....---COBERTURAS---...")
+        listaTemporalCoberturas.push(data)
+      }
+    })
+  };
  
+
+    await cargarDetalleCob().then((data) => {
+      console.log("lista", listaTemporalCoberturas)
+
+
+      listaTemporalCoberturas.find((item) => {
+
+        switch (item['codigo_cobertura']) {
+
+          case "CL-Daño-Total":
+            detallesExtras = {
+              ...detallesExtras,
+              "CL-Daño-Total": item['deducible']
+            }
+            break;
+
+          case "CL-Daño-Parcial":
+            detallesExtras = {
+              ...detallesExtras,
+              "CL-Daño-Parcial": item['deducible']
+            }
+            break;
+
+          case "CL-Robo":
+
+            detallesExtras = {
+              ...detallesExtras,
+              "CL-Robo": item['deducible']
+            }
+            break;
+
+        }
+      }) 
+      
+      isloaded = true;
+      setRenderDx(detallesExtras)
+      return data
+  })
+
+}
 
 function BasicForm(props) {
   const inputRef = React.useRef(null)
@@ -1509,7 +1472,7 @@ function BasicForm(props) {
   const validationSchema = Yup.object().shape({
     nombre: Yup.string().min(12, "Debes al menos tener 6 caracteres").required("Requerido"),
     correo: Yup.string().email().required("Requerido"),
-    telefono: Yup.string().max(9, "Ingrese 9 digitos").required("Requerido"),
+    telefono: Yup.string().max(9, "xxx").required("Requerido"),
     numero_serie: Yup.string().required("Requerido"),
     imei: Yup.string().required("Requerido"),
   });
@@ -1743,8 +1706,7 @@ function FlujoTerminadoRender() {
 
   let showButtons = false; 
 
-  
-  itemRenderDetallePlan = <RenderDetallePlan plan={planSeleccionado} subPlan={subPlanSeleccionado} showButtons={false} fnFinish={null} />
+  itemRenderDetallePlan = RenderDetallePlan(planSeleccionado, subPlanSeleccionado, showButtons)
 
  
  
@@ -1864,35 +1826,22 @@ function FlujoTerminadoRender() {
 
 let estadoGlobal = 0;
 let estadoLocal = 0;
-let renderActive = false;
-let isFinishSelectPlan = false;
-
 
 function PlanesForm(props) {
-
-
-  const [dplan, setDplan] = useState('');
-  const [splan, setSplan] = useState('');
-
-
-
   let vertical = 'bottom';
   let horizontal = 'right';
 
 
   let show = false;
   let mensajeSeleccion = '';
- 
+  
+
   console.log("prooops", props)
 
   let fnClickButtonNext = props.clickNext;
   let finishStep = props.completeFn;
-  
- 
-  
-  if (fnClickButtonNext > 0) {
 
-    console.log("viewStatus", renderActive)
+  if (fnClickButtonNext > 0) {
     console.log("mensajeRecibido", fnClickButtonNext)
     console.log("ESTADO", estadoLocal)
 
@@ -1908,21 +1857,51 @@ function PlanesForm(props) {
       show = true;
       estadoLocal = 2;
 
-    } else
-      if (renderActive && planSeleccionado && subPlanSeleccionado) {
-        console.log("IIIIR")
-        finishStep(); renderActive = false;
-        isFinishSelectPlan = true;
-      }
-      
-       
-       
+    } else if (estadoLocal == 2) {
+      console.log("ESTADO", estadoLocal)
      
-  } 
-
-  console.log("Saaaaaa",renderActive)
+      estadoLocal = 3;
+      
+    } else if (
+      estadoGlobal == 4
+    ) {
+      console.log("AQUI")
  
+  
+     // finishStep();
+       
+
+    }
+    else if (
+      estadoGlobal == 5
+    ) {
+      console.log("AQUI")
+
+      estadoGlobal =4
+      //finishStep();
+
+
+    }
+    else if (
+      estadoLocal == 3
+    ) {
+      finishStep();
+      estadoLocal = 4;
+      estadoGlobal = 5
+
+    }
+      
+  } else {
+
+  }
+ 
+
   fnxCompleteStep = props.fn;
+  
+  const [dplan, setDplan] = useState('');
+  const [splan, setSplan] = useState('');
+  const [changeInfo, setChangeInfo] = useState('');
+
 
   function handleChangePlan(event) {
     console.log(event)
@@ -1934,12 +1913,11 @@ function PlanesForm(props) {
 
     });
     console.log("planSeleccionado", plan)
- 
+    setDplan(plan)
     planSeleccionado = plan;
-    renderActive = false;
-
     // this.setState({ value: event.target.value });
     // RenderDetallePlan(user)
+    itemRenderDetallePlan = null;
   };
 
   function handleChangeSubPlan(event) {
@@ -1949,27 +1927,30 @@ function PlanesForm(props) {
       u['id'] === String(event.target.value));
     console.log("subPlaneSeleccionado", subPlan)
     subPlanSeleccionado = subPlan;
-    
-    
-      itemRenderDetallePlan = <RenderDetallePlan plan={planSeleccionado} subPlan={subPlanSeleccionado} showButtons={true} fnFinish={props.completeFn} />
-    renderActive = false;
     setSplan(subPlan)
-
-
-     // this.setState({ value: event.target.value });
+    // this.setState({ value: event.target.value });
     // RenderDetallePlan(user)
+    itemRenderDetallePlan = null;
+    isloaded = false;
+
   };
 
-  console.log("plan_seleccionado", dplan)
-  console.log("sub_seleccionado", splan)
+ console.log("plan_seleccionado",planSeleccionado)
+  console.log("sub_seleccionado", subPlanSeleccionado)
 
   
-   itemRender = ListaRender(handleChangePlan)
+  itemRender = ListaRender(handleChangePlan)
   itemRenderSubPlan = ListaRenderSubPlan(handleChangeSubPlan)
-  
+  itemRenderDetallePlan = planSeleccionado && subPlanSeleccionado && RenderDetallePlan(planSeleccionado, subPlanSeleccionado, true, props.completeFn,setChangeInfo)
+  estadoLocal = 3
  
 
-  
+  if (itemRenderDetallePlan) { 
+    setTimeout(() => {
+
+    }, 1000);
+  }
+ 
   return (
     
         <Card mb={6}>
@@ -1978,7 +1959,12 @@ function PlanesForm(props) {
 
             </Typography>
             <Typography variant="body2" gutterBottom>
-            </Typography>        
+
+
+            </Typography>
+
+
+        
                 <Grid container spacing={6} justify="center">
 
 
@@ -2005,7 +1991,7 @@ function PlanesForm(props) {
 
                               </Grid>
                               <Grid item xs={12}>
-                        {itemRenderDetallePlan}
+                                   {itemRenderDetalleSubPlan && itemRenderDetallePlan}
                             
 
  
@@ -2220,9 +2206,10 @@ function RegistrarPerfil(props) {
                         fullWidth
                         variant="inline"
                         inputVariant="outlined"
-                          label="FECHA NACIMIENTO"
-                     format="DD/MM/YYYY"
-                     value={selectedDate}
+                         label="FECHA NACIMIENTO"
+                          format="DD/MM/YYYY"
+
+                        value={selectedDate}
                         onChange={handleDateChange}
 
 
@@ -2555,7 +2542,65 @@ function getStepContent(step, fnClickButtonNext, fnCompleteStep, formInicial, se
   }
 }
 
+
+
+async function ObtenerDetalleCotizacion(setFormInicialx, handleComplete )  {
+
+  let { id } = useParams();
+
+  let temId = String(id)
+  console.log(id)
+
+
  
+ 
+    const queryListaActividadGraphql = `
+ query MyQuery {
+   detalleCotizacion(numero_cotizacion:"${temId}") {
+     id
+    data_cotizacion
+  }
+}
+
+`;
+
+    console.log(queryListaActividadGraphql)
+    const data = await API.graphql({
+      query: queryListaActividadGraphql
+    });
+    console.log("data from GraphQL:", data);
+ 
+  
+
+  console.log("polizaaa", data)
+  if (data && data['data']) {
+    console.log("productos", data['data']['detalleCotizacion']['data_cotizacion']);
+    let listProductos = JSON.parse(data['data']['detalleCotizacion']['data_cotizacion']);
+
+    console.log("listproduct", listProductos);
+    itemDatosAsegurado = listProductos['asegurado']
+
+    setFormInicialx(itemDatosAsegurado)
+    planSeleccionado = listProductos['plan'];
+    subPlanSeleccionado = listProductos['subplan'];
+    detallesExtras = listProductos['detalles'];
+
+    console.log("subPlanSeleccionado", subPlanSeleccionado)
+
+    handleComplete();
+   
+    
+    //let itemSubPlanData = JSON.parse(subPlanSeleccionado['data_sub_plan'])
+
+    //itemRenderDetallePlan = RenderDetallePlan(planSeleccionado)
+    //itemRenderDetalleSubPlan = RenderDetalleSubPlan(subPlanSeleccionado)
+
+   
+   }
+   
+   return true
+}
+
 
 
 function HorizontalNonLinearStepper() {
@@ -2623,10 +2668,9 @@ function HorizontalNonLinearStepper() {
   };
 
 
-  const handleClickButtonComplete = (e) => {
+  const handleClickButtonComplete = () => {
+     setNextEvent(Math.random())
 
-      setNextEvent(Math.random())
-    
   };
 
 
@@ -2646,7 +2690,6 @@ function HorizontalNonLinearStepper() {
     newCompleted[activeStep] = true;
     setCompleted(newCompleted);
     handleNext();
-    renderActive = false;
 
 
   };
@@ -2656,7 +2699,19 @@ function HorizontalNonLinearStepper() {
     setCompleted({});
   };
 
-  
+  console.log("formInicial", formInicial)
+  if (Object.keys(formInicial).length == 0) {
+    console.log("itemS")
+
+    ObtenerDetalleCotizacion(setFormInicial, handleComplete)
+  } else {
+
+    console.log("xxxx")
+    itemDatosAsegurado = formInicial;
+   // handleComplete()
+
+  }
+
 
   return (
     <div className={classes.root}>

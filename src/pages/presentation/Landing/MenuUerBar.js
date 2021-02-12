@@ -58,28 +58,13 @@ const AppBarComponent = () => (
                   ml={2}
                   color="inherit"
                   component={Link}
-                  to="/pages/somos"
+                  to="/pages/mi_cuenta"
                 >
-                  QUIENES SOMOS
+                  MI CUENTA
                 </Button>
 
-                <Button
-                  ml={2}
-                  color="inherit"
-                  component={Link}
-                  to="/pages/seguros"
-                >
-                  NUESTROS SEGUROS
-                </Button>
 
-                <Button
-                  ml={2}
-                  color="inherit"
-                  component={Link}
-                  to="/pages/contacto"
-                >
-                  CONTACTO
-                </Button>
+
               </Hidden>
               <Button
                 ml={2}

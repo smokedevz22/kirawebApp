@@ -12,14 +12,16 @@ import { Formik } from "formik";
 import { API } from "aws-amplify";
 import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
+ import Amplify, { Storage } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import moment from 'moment';
-import Amplify, { Storage } from 'aws-amplify';
+import MomentUtils from "@date-io/moment";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import "moment/locale/es";
 
 
 import {
-
   CheckCircle as CheckCircle,
-
 } from "@material-ui/icons";
 
 
@@ -56,6 +58,11 @@ import {
 import { color, spacing } from "@material-ui/system";
 import { Alert as MuiAlert } from "@material-ui/lab";
 import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+
+
+moment.locale("es");
+
 
 const Spacer = styled.div(spacing);
 const Divider = styled(MuiDivider)(spacing);
@@ -71,11 +78,244 @@ const Shadow = styled.div`
 const CardMedia = styled(MuiCardMedia)`
   height: 220px;
 `;
- 
+
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'row',
+  },
+  sectionA: {
+    flex: 1,
+    padding: 4,
+    fontSize: 12
+  },
+  sectionB: {
+    flex: 2,
+    padding: 4,
+    fontSize: 12
+
+  },
+  texto: {
+
+    fontSize: 12
+
+  }
+});
+
 
 const timeOut = (time) => new Promise((res) => setTimeout(res, time));
 
 
+const MyDocumentPdf = (props) => {
+
+  let asegurado = props.object;
+
+  console.log("SINIESTRO", asegurado)
+
+  let fechaSiniestro = moment(itemDatosAsegurado['fecha_siniestro']).format("DD-MM-YYYY").toString();
+
+  return (<Document>
+    <Page size="A4" style={{ padding: 22 }}>
+
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22, textAlign: 'center' }}>
+        <Text style={{ textTransform: 'uppercase' }}>DETALLE SINIESTRO</Text>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>FECHA DECLARACION</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>
+            {fechaSiniestro}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>MI CELULAR</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>
+            {asegurado['polizaItem']}
+
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>RESUMEN</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>
+            {asegurado['detalle']['descripcion_siniestro']}
+
+          </Text>
+        </View>
+      </View>
+
+    </Page>
+    <Page size="A4" style={{ padding: 22 }}>
+
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22, textAlign: 'center' }}>
+        <Text style={{ textTransform: 'uppercase' }}>SEGURO TELÉFONOS MOVILES</Text>
+      </View>
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>EQUIPO ASEGURADO</Text>
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            TELÉFONOS MÓVILES ADQUIRIDOS, EN CUALQUIER PUNTO DE VENTA A LO LARGO DEL TERRITORIO DE CHILE, Y RESPECTO DE LOS CUALES SE HAYA CONTRATADO EL PRESENTE SEGURO.
+
+            PARA EFECTOS DE ESTE SEGURO, NO SE CONSIDERARÁN PARTE DEL EQUIPO ASEGURADO O DE LA MATERIA ASEGURADA, NINGÚN COMPONENTE O ACCESORIO DE LOS TELÉFONOS MÓVILES, TALES COMO CARGADORES, PROTECTORES, BLUETOOTH, MANOS LIBRES, O SIMILARES E INFORMACIÓN CONTENIDA EN CUALQUIER MEMORIA DEL APARATO. POR CONSIGUIENTE, NINGUNA PÉRDIDA O DAÑO DE TALES ELEMENTOS SERÁ INDEMNIZABLE.
+
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>DETALLE DE LAS COBERTURAS</Text>
+        <Text style={{ textTransform: 'uppercase' }}>PÉRDIDA TOTAL EN CASO DE ROBO</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            LA COMPAÑÍA DE SEGUROS (EN ADELANTE LA “COMPAÑÍA) INDEMNIZARÁ AL ASEGURADO, PREVIO PAGO DEL DEDUCIBLE, CON LA REPOSICIÓN DE LOS TELÉFONOS MÓVILES, QUE HAYAN SUFRIDO LA PÉRDIDA TOTAL DE SUS EQUIPOS A CONSECUENCIA DE ROBO (EXCLUYE EL HURTO).
+
+            SE ENTIENDE COMO PÉRDIDA TOTAL POR ROBO CUANDO EL TELÉFONO HAYA SIDO OBJETO DE UN ROBO CON VIOLENCIA EN LAS PERSONAS O FUERZA EN LAS COSAS, Y EN AMBOS CASOS NO EXISTIEREN ANTECEDENTES QUE HICIEREN FACTIBLE SU PRONTA RECUPERACIÓN.
+
+          </Text>
+        </View>
+      </View>
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>PÉRDIDA TOTAL EN CASO DE DAÑOS ACCIDENTALES</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            LA COMPAÑÍA INDEMNIZARÁ AL ASEGURADO, PREVIO PAGO DEL DEDUCIBLE, CON LA REPOSICIÓN DE LOS TELÉFONOS MÓVILES, QUE HAYAN SUFRIDO LA PÉRDIDA TOTAL DE SUS EQUIPOS A CONSECUENCIA DE DAÑO ACCIDENTAL.
+
+            PARA EFECTOS DEL SEGURO, SE ENTIENDE COMO DAÑO ACCIDENTAL EL DAÑO PROVOCADO FORTUITAMENTE (EXCLUYENDO TODO DAÑO POR EL USO REGULAR O HABITUAL DEL TELÉFONO SEGÚN SU MANUAL DE FUNCIONAMIENTO), QUE AFECTE AL NORMAL FUNCIONAMIENTO DEL EQUIPO.
+
+            SE ENTENDERÁ QUE EXISTE PÉRDIDA TOTAL POR DAÑO ACCIDENTAL, CUANDO LOS GASTOS DE REPARACIÓN DEL EQUIPO CELULAR IGUALAN O EXCEDAN EL 75% DEL VALOR DE REPOSICIÓN DEL MISMO
+
+          </Text>
+        </View>
+      </View>
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>PÉRDIDA PARCIAL EN CASO DE DAÑOS ACCIDENTALES</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            LA COMPAÑÍA INDEMNIZARÁ AL ASEGURADO, CON LA REPARACIÓN DE LOS TELÉFONOS MÓVILES, QUE HAYAN SUFRIDO LA PÉRDIDA PARCIAL DE SUS EQUIPOS A CONSECUENCIA DE DAÑO ACCIDENTAL.
+
+            PARA EFECTOS DEL SEGURO, SE ENTIENDE COMO DAÑO ACCIDENTAL EL DAÑO PROVOCADO FORTUITAMENTE (EXCLUYENDO TODO DAÑO POR EL USO REGULAR O HABITUAL DEL TELÉFONO SEGÚN SU MANUAL DE FUNCIONAMIENTO), QUE AFECTE AL NORMAL FUNCIONAMIENTO DEL EQUIPO.
+
+            NO SE ENTENDERÁ CONFIGURADO UN DAÑO ACCIDENTAL LOS DAÑOS O PÉRDIDAS CAUSADOS POR EL USO U OPERACIÓN ORDINARIA DE LOS EQUIPOS ASEGURADOS, TALES COMO DESGASTE, DEFORMACIÓN, CORROSIÓN, HERRUMBRE Y DETERIORO POR FALTA DE USO O PROVENIENTE DE LAS CONDICIONES ATMOSFÉRICAS NORMALES, COMO TAMBIÉN CUALQUIER OTRO ASÍ DESCRITO EN SU MANUAL DE FUNCIONAMIENTO Y QUE AFECTE AL NORMAL FUNCIONAMIENTO DEL EQUIPO ASEGURADO.
+
+          </Text>
+        </View>
+      </View>
+
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>DEDUCIBLE</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            PARA LAS COBERTURAS DE PERDIDA TOTAL DE EQUIPOS APLICA DEDUCIBLE DEL 25% DEL VALOR LISTA DEL EQUIPO DE REEMPLAZO AL MOMENTO DE LA INDEMNIZACION, EN TODA Y CADA PERDIDA, VALOR QUE DEBERA SER PAGADO POR EL ASEGURADO PARA TENER DERECHO A LA INDEMINIZACION CORRESPONDIENTE.
+
+            PARA LA COBERTURA DE PERDIDA PARCIAL DE EQUIPOS APLICA DEDUCIBLE DEL 15% DEL VALOR LISTA DEL EQUIPO DE REEMPLAZO AL MOMENTO DE LA INDEMNIZACION, EN TODA Y CADA PERDIDA, VALOR QUE DEBERA SER PAGADO POR EL ASEGURADO PARA TENER DERECHO A LA INDEMINIZACION CORRESPONDIENTE.
+
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>LÍMITE MÁXIMO DE EVENTOS </Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            HASTA UN MÁXIMO DE 2 EVENTOS PARA LA COBERTURA DE DAÑO Y 1 EVENTO PARA LA COBERTURA DE ROBO DURANTE EL PERÍODO DE VIGENCIA LUEGO DE CONSUMIDO EL NÚMERO DE EVENTOS MÁXIMOS POR CADA ASEGURADO, SE EXTINGUE LA PÓLIZA RESPECTO DE DICHOS ASEGURADOS.
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>LÍMITE MÁXIMO DE INDEMNIZACIÓN
+ </Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            EL LÍMITE MÁXIMO DE INDEMNIZACIÓN POR CADA EVENTO ES EL VALOR EQUIPO ASEGURADO. PARA TODAS LAS COBERTURAS, LA REPOSICIÓN DEL EQUIPO ASEGURADO SERÁ REALIZADA CON UN “EQUIPO NUEVO O SIMILAR A NUEVO” EN CONDICIONES Y CARACTERÍSTICAS SIMILARES.
+
+            PARA EFECTOS DEL PRESENTE SEGURO, SE ENTIENDE POR “EQUIPO SIMILAR A NUEVO”  A AQUEL EQUIPO QUE HA SIDO INSPECCIONADO, PROBADO Y RESTAURADO EN UNA FÁBRICA O CENTRO DE SERVICIO AUTORIZADO Y QUE SE ENCUENTRA CERTIFICADO PARA SU UTILIZACIÓN.
+          </Text>
+        </View>
+      </View>
+
+
+      <View style={{ width: '100%', paddingTop: 22, }}>
+        <Text style={{ textTransform: 'uppercase' }}>EXCLUSIONES POL 120200020</Text>
+
+      </View>
+      <View style={styles.page} >
+
+        <View  >
+          <Text style={styles.texto}>
+            DAÑOS O PÉRDIDAS QUE EXPERIMENTEN LOS COMPONENTES O ACCESORIOS TALES COMO TRANSFORMADORES, CARGADORES, CABLES ELÉCTRICOS, BLUETOOTH, MANOS LIBRES, PEN DRIVES, ADEMÁS DE LOS DAÑOS O PERDIDAS DE LAS BATERÍAS, ASÍ COMO TAMBIÉN PARTES O PIEZAS NO ORIGINALES O NO AUTORIZADAS POR EL FABRICANTE.
+            DAÑOS O PÉRDIDAS POR LAS QUE EL FABRICANTE, PROVEEDOR, VENDEDOR O EMPRESA DE REPARACIONES O DE MANTENIMIENTO RESPONDEN LEGAL O CONTRACTUALMENTE.
+            DAÑOS O PÉRDIDAS QUE DIRECTA O INDIRECTAMENTE SEAN CONSECUENCIA DE FALLAS O DEFECTOS QUE YA EXISTÍAN AL MOMENTO DE CONTRATARSE EL SEGURO.
+            DAÑOS O PÉRDIDAS CAUSADOS POR EL USO U OPERACIÓN ORDINARIA DE LA MATERIA ASEGURADA, TALES COMO DESGASTE, DEFORMACIÓN, CORROSIÓN, HERRUMBRE Y DETERIORO POR FALTA DE USO O PROVENIENTE DE LAS CONDICIONES ATMOSFÉRICAS NORMALES O CUALQUIER DAÑO COSMÉTICO A LA MATERIA ASEGURADA, DE MANERA TAL QUE NO AFECTE LA FUNCIONALIDAD DEL MISMO. ALGUNOS TIPOS EXCLUIDOS DE PÉRDIDA INCLUYEN, DE MANERA ENUNCIATIVA MÁS NO LIMITATIVA, RASGUÑOS, DAÑOS SUPERFICIALES, GRIETAS Y CAMBIOS O MEJORA EN COLOR TEXTURA O TERMINADO SOBRE LA MATERIA ASEGURADA QUE NO AFECTEN LA FUNCIÓN DE LA MISMA.
+            DAÑOS O PÉRDIDAS CAUSADOS DIRECTA O INDIRECTAMENTE POR ACTOS INTENCIONALES O CONSTITUTIVOS DE CULPA GRAVE COMETIDOS POR EL ASEGURADO, POR SUS MANDATARIOS O POR LAS PERSONAS A QUIENES SE HAYA CONFIADO LA MATERIA ASEGURADA.
+            PÉRDIDAS DE BENEFICIOS, LUCRO CESANTE Y OTROS PERJUICIOS INDIRECTOS DE CUALQUIER TIPO.
+            DAÑOS O PÉRDIDAS CAUSADOS DIRECTA O INDIRECTAMENTE POR REACCIÓN NUCLEAR, RADIACIÓN NUCLEAR O CONTAMINACIÓN RADIOACTIVA, O AGRAVADOS POR ESTOS EVENTOS.
+            PÉRDIDA O DAÑO DIRECTO O INDIRECTO QUE OCURRA EN RELACIÓN CON ACTIVIDAD SÍSMICA.
+            PÉRDIDA DEL EQUIPO A CONSECUENCIA DE EXTRAVÍO.
+            DAÑOS DE EQUIPOS CON MAL USO O INTENTO DE REPARACIONES POR CUENTA DEL ASEGURADO SIN SUPERVISIÓN DEL FABRICANTE.
+            CUALQUIER DAÑO O PERDIDA DE INFORMACIÓN ALMACENADA EN EL EQUIPO ASEGURADO O DE SOFTWARE INSTALADOS EN EL MISMO.
+            CUALQUIER EQUIPO CUYO NÚMERO DE IDENTIFICACIÓN (IMEI O ESN, ENTRE OTROS) HAYA SIDO ALTERADO, DAÑADO O REMOVIDO.
+            CUALQUIER EQUIPO QUE EN EL MOMENTO DE LA PÉRDIDA NO ESTÉ CONECTADO A LA RED DE VOZ Y DATOS DEL OPERADOR DE SERVICIOS INALÁMBRICO A LA RED DEL CONTRATANTE.
+            PÉRDIDA CAUSADA O DERIVADA DE LA OMISIÓN A REALIZAR LO RAZONABLEMENTE NECESARIO PARA MINIMIZAR O EVITAR LA PÉRDIDA Y PROTEGER LA MATERIA ASEGURADA DE CUALQUIER PERDIDA O PÉRDIDA ADICIONAL.
+            CUANDO LA MATERIA ASEGURADA ES TRANSPORTADA EN CALIDAD DE CARGA EN POSESIÓN DE TERCEROS (EJEMPLO: MUDANZA, CORREO, ETC.) A BORDO DE AERONAVES, NAVES, O CUALQUIER TIPO DE EMBARCACIONES GRANDES O MENORES. ESTA EXCLUSIÓN NO ALCANZA LA PÉRDIDA QUE PUEDA PRODUCIRSE CUANDO LA MATERIA ASEGURADA ES TRANSPORTADA POR EL ASEGURADO EN OCASIÓN DE UN VIAJE EN ALGUNO DE LOS MEDIOS DESCRITOS DENTRO DE ÁREA GEOGRÁFICA AMPARADA.
+</Text>
+        </View>
+      </View>
+
+    </Page>
+
+
+
+  </Document>)
+
+
+};
 
 let listPlanes = [];
 let listSubPlanes = [];
@@ -142,7 +382,7 @@ function DefaultDropzone() {
             
                 </Typography>
             
-                <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
                           guardarImagen(event, "CARNET_DELANTERA")
 
                         }                 acceptedFiles={['image/*']}  
@@ -155,7 +395,7 @@ function DefaultDropzone() {
             
                 </Typography>
             
-                <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
                           guardarImagen(event, "CARNET_TRASERA")
 
                         }                 acceptedFiles={['image/*']} 
@@ -169,7 +409,7 @@ function DefaultDropzone() {
             
                 </Typography>
             
-                <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
                           guardarImagen(event, "EQUIPO")
 
                         }                 acceptedFiles={['image/*']}  
@@ -184,7 +424,7 @@ function DefaultDropzone() {
             
         </Typography>
              
-            <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
               guardarImagen(event, "SERVICIO_TECNICO")
 
             }     acceptedFiles={['image/*']}   
@@ -203,7 +443,7 @@ function DefaultDropzone() {
             
                 </Typography>
             
-                <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
                           guardarImagen(event, "CARNET_DELANTERA")
 
                         }                 acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
@@ -217,7 +457,7 @@ function DefaultDropzone() {
             
                 </Typography>
             
-                <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
                           guardarImagen(event, "CARNET_TRASERA")
 
                         }                 acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
@@ -232,7 +472,7 @@ function DefaultDropzone() {
             
         </Typography>
              
-            <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
               guardarImagen(event, "SERVICIO_TECNICO")
 
             }     acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
@@ -250,7 +490,7 @@ function DefaultDropzone() {
                 Foto Delantera CI 
                  
              </Typography>
-            <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
               guardarImagen(event, "CARNET_DELANTERA")
 
             }                    acceptedFiles={['image/*']} dropzoneClass={{background:'red'}}
@@ -267,7 +507,7 @@ function DefaultDropzone() {
                  
         </Typography>
             
-            <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
               guardarImagen(event, "CARNET_TRASERA")
 
             }              acceptedFiles={['image/*']}  
@@ -284,7 +524,7 @@ function DefaultDropzone() {
 
         </Typography>
 
-              <DropzoneArea dropzoneText={''} onChange={event =>
+              <DropzoneArea maxFileSize={30000000} dropzoneText={''} onChange={event =>
                 guardarImagen(event, "PARTE_POLICIAL")
 
               } acceptedFiles={['image/*']} 
@@ -327,188 +567,14 @@ async function guardarImagen(item, titulo) {
 function SaveValue(key, value) {
   itemDatosAsegurado[key] = value
 }
-
-function SaveValueAccount(key, value) {
-  userAccountData[key] = value
-}
-
-const ListaRender = (functionRenderDetalle) => {
-  const [productos, setProductos] = useState('undefined');
-  const [error, setError] = useState('undefined');
-
-
-  // console.log("listaProductos", listaProductos)
-
-  useEffect(async () => {
-
-
-    const queryListaActividadGraphql = `
- query MyQuery {
-      listasPlanes {
-  codigo_producto
-    plan
-    nombre_plan
-    caracteristicas
-    brief
-  }
-}
-
-`;
-
-    console.log(queryListaActividadGraphql)
-    await API.graphql({
-      query: queryListaActividadGraphql
-    }).then(result => {
-      console.log(result);
-      setProductos(result);
-
-
-    }
-    )
-
-  }, []);
-
-
-  if (productos && productos['data']) {
-
-    console.log("productos", productos['data']['listasPlanes']);
-
-    let listaPlanes = productos['data']['listasPlanes'];
-    listPlanes = listaPlanes;
-
-    console.log("listaProductos", listaPlanes)
-
-
-
-    return < select style={{ width: '100%', height: '40px' }} onChange={functionRenderDetalle} >
-      < option value="_" > SELECCIONAR PLAN</option >
-
-      {
-        listaPlanes.map(item => {
-          console.log(item);
-          return <option value={item['codigo_producto']}> {item['nombre_plan']}</option>
-
-        })
-      }
-    </select >
-  } else {
-
-    return productos && 'cargando...'
-
-  }
-}
-
-const ListaRenderSubPlan = (functionRenderDetalle) => {
-  const [productos, setProductos] = useState('undefined');
-  const [error, setError] = useState('undefined');
-
-
-  // console.log("listaProductos", listaProductos)
-
-  useEffect(async () => {
-
-
-    const queryListaActividadGraphql = `
- query MyQuery {
-    listasSubPlanes {
-  codigo_producto
-    plan
-    nombre_plan
-    caracteristicas
-    brief
-  }
-}
-
-`;
-
-    console.log(queryListaActividadGraphql)
-    await API.graphql({
-      query: queryListaActividadGraphql
-    }).then(result => {
-      console.log(result);
-      setProductos(result);
-
-
-    }
-    )
-
-  }, []);
-
-
-  if (productos && productos['data']) {
-
-    console.log("productos", productos['data']['listasSubPlanes']);
-
-    let listaSubPlanes = productos['data']['listasSubPlanes'];
-    listSubPlanes = listaSubPlanes;
-    console.log("listaProductos", listaSubPlanes)
-
-
-
-    return < select style={{ width: '100%', height: '40px' }} onChange={functionRenderDetalle} >
-      < option value="_"  > SELECCIONAR PLAN</option >
-
-      {
-        listaSubPlanes.map(item => {
-          console.log(item);
-          return <option value={item['codigo_producto']}> {item['nombre_plan']}</option>
-
-        })
-      }
-    </select >
-  } else {
-
-    return productos && 'cargando...'
-
-  }
-}
-
-function RenderDetallePlan(detalle) {
-  // const [detallePlan, setDetallePlan] = useState({});
-
-  console.log("DETALLE_PLAN", detalle)
-  if (detalle) {
-    //setDetallePlan(detalle)
-    return (<Grid>
-      <Grid>
-
-        <Typography variant="h6" gutterBottom>
-
-          <h2>NOMBRE PLAN : {detalle['nombre_plan']}</h2>
-          <p>CARACTERISTICAS : {detalle['caracteristicas']}</p>
-          <p>BRIEF : {detalle['brief']}</p>
-
-        </Typography>
-      </Grid>
-    </Grid>)
-  }
-  return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
-}
-
-function RenderDetalleSubPlan(detalle) {
-  // const [detallePlan, setDetallePlan] = useState({});
-
-  console.log("DETALLE_PLAN", detalle)
-  if (detalle) {
-    //setDetallePlan(detalle)
-    return (<Grid>
-      <Grid>
-
-        <Typography variant="h6" gutterBottom>
-
-          <h2>NOMBRE SUBPLAN : {detalle['nombre_plan']}</h2>
-          <p>CARACTERISTICAS : {detalle['caracteristicas']}</p>
-          <p>BRIEF : {detalle['brief']}</p>
-
-        </Typography>
-      </Grid>
-    </Grid>)
-  }
-  return detalle && 'OBTENIENDO INFORMACION DEL PLAN'
-}
-
+ 
 function BasicForm() {
   let data = ListaRenderPolizas();
+
+  const [selectedDate, handleDateChange] = useState(null);
+  itemDatosAsegurado['fecha_siniestro'] = selectedDate;
+  
+
 
   const handleSubmit = async (
     values,
@@ -562,7 +628,7 @@ function BasicForm() {
                   <Grid container spacing={6}>
                     <Grid item md={12}>
 
-                      <h4>¿En que poliza deseas registrar un siniestro?</h4>
+                      <h4>¿En qué póliza deseas registrar un siniestro?</h4>
 
                       {data}
                     </Grid>
@@ -570,19 +636,27 @@ function BasicForm() {
 
                       <h4>¿Cuando ocurrió?</h4>
 
+                      
+
                       <form noValidate>
-                        <TextField
-                          style={{ marginTop: 8 }}
-                          id="fecha_siniestro"
-                          label="FECHA SINIESTRO"
-                          type="date"
+                        <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils} locale="es" >
+
+                        <DatePicker style={{ marginTop: 10}}
+                          autoOk
+                           disableFuture
                           fullWidth
-                          value={itemDatosAsegurado['fecha_siniestro']}
-                          onChange={event => SaveValue("fecha_siniestro", event.target.value)} variant="outlined"
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                        />
+                          variant="inline"
+                          inputVariant="outlined"
+                             format="DD/MM/YYYY"
+
+                            value={selectedDate}
+                          onChange={handleDateChange}
+ 
+                          maxDateMessage = "Debe seleccionar una fecha valida"
+                         />
+</MuiPickersUtilsProvider>
+
+                        
                       </form>
                     </Grid>
                     <Grid item md={6}>
@@ -633,7 +707,8 @@ function BasicForm() {
 
 function ResumenDetail() {
 
-  console.log("itemAsegurado",itemDatosAsegurado)
+  console.log("itemAsegurado", itemDatosAsegurado)
+  
   const handleSubmit = async (
     values,
     { resetForm, setErrors, setStatus, setSubmitting }
@@ -737,122 +812,122 @@ function ResumenDetail() {
                                   </div>
                                 </Grid>
 
+                                <Grid item lg={12} style={{ paddingLeft: 6, marginTop: 32 }}>
+
+                                  <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
+                                    FOTOS ADJUNTAS
+                          </Typography></Grid>
+                                <Grid item lg={12} style={{ display: 'flex',   marginTop: 22 }} >
+
+
+                                  {itemDatosAsegurado['tipo_siniestro'] === 'parcial' ? (<Grid lg={12} style={{ display: 'flex' }}><Grid lg={3} style={{ paddingRight: 2 }}>
+                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                      <img style={{ width: '100%', height: '100%' }} style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['EQUIPO']} />
+                                    </div>
+                                  </Grid>
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['SERVICIO_TECNICO']} />
+                                      </div>
+                                    </Grid>
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                      </div>
+                                    </Grid>
+
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                      </div>
+                                    </Grid>
+                                  </Grid>
+                                  ) : ''}
+
+
+
+
+                                  {itemDatosAsegurado['tipo_siniestro'] === 'total' ? (<Grid lg={12} style={{ display: 'flex' }}>
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['SERVICIO_TECNICO']} />
+                                      </div>
+                                    </Grid>
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                      </div>
+                                    </Grid>
+
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                      </div>
+                                    </Grid>
+                                  </Grid>
+                                  ) : ''}
+
+
+
+
+                                  {itemDatosAsegurado['tipo_siniestro'] === 'robo' ? (<Grid lg={12} style={{ display: 'flex' }}>
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['PARTE_POLICIAL']} />
+                                      </div>
+                                    </Grid>
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                      </div>
+                                    </Grid>
+
+
+                                    <Grid item lg={3} style={{ paddingRight: 2 }}>
+                                      <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
+
+                                        <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                      </div>
+                                    </Grid>
+                                  </Grid>
+                                  ) : ''}
+
+
+
+                                </Grid>
+
 
                               </Grid>
 
-                              <Grid style={{ marginTop: 22, paddingLeft: 12}}>
+                              <Grid style={{ marginTop: 22, paddingLeft: 12}} item lg={12}>
 
                                 <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
                                   RESUMEN
                           </Typography>
-                                <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
+                                <textarea disabled readonly rows="14" style={{ marginTop: 6, width:'100%' , border:'none', background:'transparent'}}   >
                                   {itemDatosAsegurado['descripcion_siniestro']}
 
-                                </Typography>
+                                </textarea>
 
 
                               </Grid>
 
-
-                              <Grid lg={12} style={{   paddingLeft: 12, marginTop: 32 }}>
-
-                                <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
-                                  FOTOS ADJUNTAS
-                          </Typography></Grid> 
-                              <Grid   lg={12} style={{display:'flex',paddingLeft:12, marginTop:22}} >
-                               
-                                 
-                                {itemDatosAsegurado['tipo_siniestro'] === 'parcial' ? (<Grid lg={12} style={{ display: 'flex' }}><Grid lg={3} style={{ paddingRight: 2 }}>
-                                  <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                    <img style={{ width: '100%', height: '100%' }}  style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['EQUIPO']} />
-                                  </div>
-                                </Grid>
-                                <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                  <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['SERVICIO_TECNICO']} />
-                                  </div>
-                                  </Grid>
-
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_DELANTERA']} />
-                                    </div>
-                                  </Grid>
-
-
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_TRASERA']} />
-                                    </div>
-                                  </Grid>
-                                </Grid>
-                                ) : ''}
-
-                                
-
-
-                                {itemDatosAsegurado['tipo_siniestro'] === 'total' ? (<Grid lg={12} style={{ display: 'flex' }}>
-                                   
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['SERVICIO_TECNICO']} />
-                                    </div>
-                                  </Grid>
-
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_DELANTERA']} />
-                                    </div>
-                                  </Grid>
-
-
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_TRASERA']} />
-                                    </div>
-                                  </Grid>
-                                </Grid>
-                                ) : ''}
-
-                             
-                                
-
-                                {itemDatosAsegurado['tipo_siniestro'] === 'robo' ? (<Grid lg={12} style={{ display: 'flex' }}>
-      
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['PARTE_POLICIAL']} />
-                                    </div>
-                                  </Grid>
-
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_DELANTERA']} />
-                                    </div>
-                                  </Grid>
-
-
-                                  <Grid item lg={3} style={{ paddingRight: 2 }}>
-                                    <div style={{ height: '120px', paddingRight: 2, border: '1px dashed black' }}>
-
-                                      <img style={{ width: '100%', height: '100%' }}  src={listaImagenesSeguro['CARNET_TRASERA']} />
-                                    </div>
-                                  </Grid>
-                                </Grid>
-                                ) : ''}
-
-
-                               
-                              </Grid>
 
                             </Grid>
 
@@ -949,11 +1024,15 @@ function FlujoTerminadoRender() {
                                     <h2>SINIESTRO INGRESADO</h2>
                                   </Typography>
                                   
+                          
+
+                                  
+
+
                                   <Typography variant="body2" gutterBottom>
 
-                                    <a href="#">DESCARGAR PDF</a>
+                                     <a href="/pages/mi_cuenta"> Ir a mi cuenta</a>
                                   </Typography>
-
                                 </div>
                               </Grid>
 
@@ -975,319 +1054,16 @@ function FlujoTerminadoRender() {
   );
 }
 
-function PlanesForm() {
-
-  const [dplan, setDplan] = useState('');
-  const [splan, setSplan] = useState('');
-
-
-  function handleChangePlan(event) {
-    console.log(event)
-
-    let plan = listPlanes.find(u => u['codigo_producto'] === event.target.value);
-    console.log("planSeleccionado", plan)
-    setDplan(plan)
-    planSeleccionado = plan;
-    // this.setState({ value: event.target.value });
-    // RenderDetallePlan(user)
-  };
-
-  function handleChangeSubPlan(event) {
-    console.log(event.target.value)
-
-    let subPlan = listSubPlanes.find((u) =>
-      u['codigo_producto'] === String(event.target.value));
-    console.log("subPlaneSeleccionado", subPlan)
-    subPlanSeleccionado = subPlan;
-    setSplan(subPlan)
-    // this.setState({ value: event.target.value });
-    // RenderDetallePlan(user)
-  };
-
-  itemRender = ListaRender(handleChangePlan)
-  itemRenderSubPlan = ListaRenderSubPlan(handleChangeSubPlan)
-  itemRenderDetallePlan = dplan && RenderDetallePlan(dplan)
-  itemRenderDetalleSubPlan = splan && RenderDetalleSubPlan(splan)
-
-
-
-  const handleSubmit = async (
-    values,
-    { resetForm, setErrors, setStatus, setSubmitting }
-  ) => {
-    try {
-      await timeOut(1500);
-      resetForm();
-      setStatus({ sent: true });
-      setSubmitting(false);
-    } catch (error) {
-      setStatus({ sent: false });
-      setErrors({ submit: error.message });
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        touched,
-        values,
-        status,
-      }) => (
-        <Card mb={6}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-
-
-            </Typography>
-
-
-            {isSubmitting ? (
-              <Box display="flex" justifyContent="center" my={6}>
-                <CircularProgress />
-              </Box>
-            ) : (
-                <Grid container spacing={6} justify="center">
-
-
-                  <Grid container justify="center">
-                    <Grid item xs={12} lg={10}>
-                      <Shadow>
-
-                        <Card px={6} pt={6}>
-                          <CardContent>
-                            <Grid container spacing={6}>
-
-                              <Grid item md={12}>
-                                {itemRender}
-
-
-                              </Grid>
-                              <Grid item xs={12}>
-                                <Typography variant="body2" gutterBottom>
-                                  {itemRenderDetallePlan}
-                                </Typography>
-                              </Grid>
-
-                              <Grid item md={12}>
-                                {itemRenderSubPlan}
-
-                              </Grid>
-                              <Grid item xs={12}>
-                                <Typography variant="body2" gutterBottom>
-                                  {itemRenderDetalleSubPlan}
-
-                                </Typography>
-                              </Grid>
-
-                              <Grid item xs={12}>
-                                <Divider />
-                              </Grid>
-                              <Grid item xs={12} md={6}>
-                                <Typography variant="caption">Client</Typography>
-                                <Typography variant="body2">
-                                  Anna Walley
-                      <br />
-                      4183 Forest Avenue
-                      <br />
-                      New York City
-                      <br />
-                      10011
-                      <br />
-                      USA
-                      <br />
-                                  <Link href="mailto:anna@walley.com">anna@walley.com</Link>
-                                </Typography>
-                              </Grid>
-                              <Grid item xs={12} md={6}>
-                                <Typography variant="caption" align="right" display="block">
-                                  Payment To
-                    </Typography>
-                                <Typography variant="body2" align="right">
-                                  Material App LLC
-                      <br />
-                      354 Roy Alley
-                      <br />
-                      Denver
-                      <br />
-                      80202
-                      <br />
-                      USA
-                      <br />
-                                  <Link href="mailto:info@material-app.com">
-                                    info@material-app.com
-                      </Link>
-                                </Typography>
-                              </Grid>
-                            </Grid>
-                          </CardContent>
-                        </Card>
-                      </Shadow>
-                    </Grid>
-                  </Grid>
-
-                </Grid>
-              )}
-          </CardContent>
-        </Card>
-      )}
-    </Formik>
-  );
-}
-
-function RegistrarPerfil() {
-  const handleSubmit = async (
-    values,
-    { resetForm, setErrors, setStatus, setSubmitting }
-  ) => {
-    try {
-      await timeOut(1500);
-      resetForm();
-      setStatus({ sent: true });
-      setSubmitting(false);
-    } catch (error) {
-      setStatus({ sent: false });
-      setErrors({ submit: error.message });
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {({
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        isSubmitting,
-        touched,
-        values,
-        status,
-      }) => (
-        <Card mb={6}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              REGISTRAR CUENTA USUARIO
-            </Typography>
-            <Typography variant="body2" gutterBottom style={{ marginBottom: '60px' }}>
-            </Typography>
-
-            {status && status.sent && (
-              <Alert severity="success" my={3}>
-                [CUENTA REGISTRADA] La cuenta de usuario ha sido registrada exitosamente!
-              </Alert>
-            )}
-
-            {isSubmitting ? (
-              <Box display="flex" justifyContent="center" my={6}>
-                <CircularProgress />
-              </Box>
-            ) : (
-                <form onSubmit={handleSubmit}>
-                  <Grid container spacing={6}>
-                    <Grid item md={6}>
-                      <TextField
-                        name="nombre_persona"
-                        label="NOMBRE PERSONA"
-                        value={itemDatosAsegurado['nombre_persona']}
-                        error={Boolean(touched.firstName && errors.firstName)}
-                        fullWidth
-                        helperText={touched.firstName && errors.firstName}
-                        onBlur={handleBlur}
-
-                        onChange={event => SaveValueAccount("nombre_persona", event.target.value)}
-                        variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                    <Grid item md={6}>
-                      <TextField
-                        name="apellido_persona"
-                        label="APELLIDO PERSONA"
-                        error={Boolean(touched.lastName && errors.lastName)}
-                        fullWidth
-                        helperText={touched.lastName && errors.lastName}
-                        onBlur={handleBlur}
-                        value={itemDatosAsegurado['apellido_persona']}
-
-                        onChange={event => SaveValueAccount("apellido_persona", event.target.value)} variant="outlined"
-                        my={2}
-                      />
-                    </Grid>
-                  </Grid>
-
-                  <TextField
-                    name="email"
-                    label="Email"
-                    onChange={event => SaveValueAccount("email", event.target.value)}
-                    fullWidth
-                    helperText={touched.email && errors.email}
-                    onBlur={handleBlur}
-                    type="email"
-                    variant="outlined"
-                    my={2}
-                  />
-
-                  <TextField
-                    name="password"
-                    label="Password"
-                    fullWidth
-                    helperText={touched.password && errors.password}
-                    onBlur={handleBlur}
-                    onChange={event => SaveValueAccount("password", event.target.value)}
-                    type="password"
-                    variant="outlined"
-                    my={2}
-                  />
-
-                  <TextField
-                    name="confirmPassword"
-                    label="Confirm password"
-
-                    fullWidth
-                    helperText={touched.confirmPassword && errors.confirmPassword}
-                    onBlur={handleBlur}
-                    onChange={event => SaveValueAccount("repassword", event.target.value)}
-                    type="password"
-                    variant="outlined"
-                    my={2}
-                  />
-
-                  <Button
-                    style={{ marginTop: '60px' }}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    mt={3}
-                  >
-                    REGISTRAR USUARIO
-                </Button>
-                </form>
-              )}
-          </CardContent>
-        </Card>
-      )}
-    </Formik>
-  );
-}
 
 function ResumenSeguro() {
+
+  itemFinal = {
+    detalle: itemDatosAsegurado,
+    imagenes: listaImagenesSeguro,
+    idPoliza: idPoliza,
+    polizaItem: polizaItem
+  };
+  
   return (
     <Card mb={6}>
       <CardContent>
@@ -1310,16 +1086,6 @@ function FlujoTerminado() {
 }
  
 
-function FormularioPerfil() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <RegistrarPerfil />
-
-      </CardContent>
-    </Card>
-  );
-}
 
 function FormularioAnexos() {
   return (
@@ -1332,16 +1098,7 @@ function FormularioAnexos() {
   );
 }
 
-function FormularioPlanes() {
-  return (
-    <Card mb={6}>
-      <CardContent>
-        <PlanesForm />
 
-      </CardContent>
-    </Card>
-  );
-}
 
 function FormulariosIngreso() {
 
@@ -1380,6 +1137,7 @@ function getSteps() {
 
 
 let mensajeBotonSiguiente = 'SUBIR FOTOS'
+
 function getStepContent(step) {
   switch (step) {
     case 0:
@@ -1529,8 +1287,11 @@ function HorizontalNonLinearStepper() {
 }
 
 
-
 let idPoliza = 0;
+let polizaItem = '';
+let itemFinal = {}
+
+
 
 async function registrarProducto() {
 
@@ -1542,18 +1303,17 @@ async function registrarProducto() {
 }
 `;
 
-  let dataSave = JSON.stringify({
-    detalle: itemDatosAsegurado,
-    imagenes: listaImagenesSeguro,
-    idPoliza: idPoliza
-  });
 
+
+
+  let dataSave = JSON.stringify(itemFinal);
   console.log("save", dataSave)
   await API.graphql({
     query: mutation,
     variables: {
       bank: {
-        data_siniestro: dataSave
+        data_siniestro: dataSave,
+        idPoliza: idPoliza
 
       }
     }
@@ -1567,17 +1327,36 @@ let functionSetPoliza = (event) => {
 
   console.log("evento", event)
   idPoliza = event.target.value;
+
+  var index = event.nativeEvent.target.selectedIndex;
+ 
+  
+  polizaItem = event.nativeEvent.target[index].text;
 } 
 
+
+let functionSetPolizaItem = (poliza) => {
+
+  console.log("evento", poliza)
+  polizaItem = poliza;
+} 
 const ListaRenderPolizas = (obtenerListaProductos) => {
   const [polizas, setPolizas] = useState('undefined');
 
 
 
   useEffect(async () => {
+    let temId = ''
+
+
+    await Auth.currentAuthenticatedUser().then((user) => {
+      console.log('user email = ' + user.attributes.email);
+      temId = user.attributes.email;
+    });
+
     const queryListaActividadGraphql = `
  query MyQuery {
-   listasPolizas {
+   listasPolizas(email:"${temId}") {
      id
     data_poliza
   }
@@ -1604,6 +1383,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
     console.log("listaProductos", listProductos)
 
     return <select style={{ width: '100%', height: 40, textTransform: 'uppercase' }} onChange={functionSetPoliza} >
+      <option  >SELECCIONAR POlIZA</option>
 
       {listProductos &&
         listProductos.map((item, index) => {
@@ -1616,7 +1396,7 @@ const ListaRenderPolizas = (obtenerListaProductos) => {
 
           console.log(itemTemporal)
 
-          return (<option style={{ textTransform: 'uppercase' }} value={item['id']}>
+          return (<option  style={{ textTransform: 'uppercase' }} value={item['id']}>
             {item['id']+ ' - '+itemTemporal['asegurado']['marca_equipo'] + ' - ' + itemTemporal['asegurado']['modelo_equipo'] + " - " + itemSubPlan['nombre']}
 
           </option>)

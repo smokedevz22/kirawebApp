@@ -167,7 +167,7 @@ function Introduction() {
 
                   <CheckCircle style={{ color: 'black', fontSize: 22 }}></CheckCircle>
                   <Typography style={{ color: 'black', fontSize: 22, marginTop: 8, marginLeft: 4 }} gutterBottom>
-                    Pérdida total
+                    Pérdida total por accidente
                   </Typography>
                 </Grid>
 

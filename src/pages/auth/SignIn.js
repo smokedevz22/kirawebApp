@@ -106,9 +106,7 @@ function SignInx() {
           values,
         }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Alert mt={3} mb={1} severity="info">
-              ESTE PODRIA SER UN ESPACIO PUBLICITARIO
-            </Alert>
+
             {errors.submit && (
               <Alert mt={2} mb={1} severity="warning">
                 {errors.submit}
@@ -151,14 +149,7 @@ function SignInx() {
             >
               Ingresar
             </Button>
-            <Button
-              component={Link}
-              to="/auth/reset-password"
-              fullWidth
-              color="primary"
-            >
-              Recuperar contraseña
-            </Button>
+
           </form>
         )}
 

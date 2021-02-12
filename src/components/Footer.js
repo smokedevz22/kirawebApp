@@ -40,20 +40,12 @@ function Footer() {
       <Grid container spacing={0} >
         <Hidden smDown>
           <Grid container item xs={12} md={6} >
-            <List>
-              <ListItem button={true} component="a" href="#">
-                <ListItemText
-                  primary="- "
-                />
-                <ListItemText primary="Powered by KIRA" />
-              </ListItem>
 
-            </List>
           </Grid>
         </Hidden>
         <Grid container item xs={12} md={6} justify="flex-end">
           <List>
-            <ListItem button={true}>
+            <ListItem button={true} component="a" href="/pages/contacto">
               <ListItemText
                 primary="CONTACTANOS "
               />

@@ -3,6 +3,9 @@ import styled from "styled-components/macro";
 import { NavLink } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import { API } from "aws-amplify";
+import AppBar from "../presentation/Landing/HomeBar";
+import { Link } from "react-router-dom";
+
 import {
 
   CheckCircle as CheckCircle,
@@ -15,7 +18,6 @@ import moment from 'moment';
 import {
   CardContent,
   Grid,
-  Link,
   Button as MuiButton,
   Breadcrumbs as MuiBreadcrumbs,
   Card as MuiCard,
@@ -102,100 +104,9 @@ function RenderDetallePlan(item) {
 }
 
 
-async function obtenerListaItems() {
-
-  listCoberturas = []
-  const queryListaActividadGraphql = `
- query MyQuery {
-   listasCoberturas{
-     id
-     id_sub_plan
-    data_cobertura
-  }
-}
-
-`;
-
-  console.log(queryListaActividadGraphql)
-  const data = await API.graphql({
-    query: queryListaActividadGraphql
-  });
-  console.log("data from GraphQL:", data);
-
-  let listasProductos = data['data']['listasCoberturas'];
-  listasProductos && listasProductos.forEach(element => {
-
-    let itemPlan = JSON.parse(element['data_cobertura'])
-    let itemCobertura = {
-      ...itemPlan,
-      id: element['id'],
-      id_sub_plan: element['id_sub_plan']
-
-    }
-    console.log(itemCobertura);
-    listCoberturas.push(itemCobertura);
-
-  });
-  console.log(listCoberturas)
 
 
-  return true;
-}
 
-
-function cargarDetallesCobertura(item) {
-  let listaTemporalCoberturas = []
-
-  let cargarDetalleCob = async function () {
-    listCoberturas && listCoberturas.forEach((data) => {
-
-      console.log("cobertura", data)
-      console.log("subplan", item)
-
-      if (data['id_sub_plan'] === item['id']) {
-
-        listaTemporalCoberturas.push(data)
-      }
-    })
-  };
-
-  cargarDetalleCob().then((data) => {
-    console.log("lista", listaTemporalCoberturas)
-
-
-    listaTemporalCoberturas.find((item) => {
-
-      switch (item['codigo_cobertura']) {
-
-        case "CL-Daño-Total":
-          document.getElementById('cobertura_total').innerHTML = 'DAÑO TOTAL (DEDUCIBLE DE <strong>' + item['deducible'] + ' UF</strong>)'
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Daño-Total": item['deducible']
-          }
-          break;
-
-        case "CL-Daño-Parcial":
-          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO PARCIAL (DEDUCIBLE DE <strong>' + item['deducible'] + ' UF</strong>)'
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Daño-Parcial": item['deducible']
-          }
-          break;
-
-        case "CL-Robo":
-          document.getElementById('cobertura_perdida').innerHTML = 'ROBO  (DEDUCIBLE DE  <strong>' + item['deducible'] + ' UF</strong>)'
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Robo": item['deducible']
-          }
-          break;
-
-      }
-    })
-  })
-
-}
 
 
 function RenderDetalleSubPlan(item) {
@@ -209,7 +120,6 @@ function RenderDetalleSubPlan(item) {
   console.log("DETALLE_SUBPLAN", detalle)
 
   if (detalle) {
-    cargarDetallesCobertura(item)
 
     //setDetallePlan(detalle)
     return (<Grid lg={12}>
@@ -283,6 +193,7 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
     planSeleccionado = listProductos['plan'];
     subPlanSeleccionado = listProductos['subplan'];
+    detallesExtras = listProductos['detalles'];
 
     console.log("subPlanSeleccionado", subPlanSeleccionado)
 
@@ -337,9 +248,9 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
                   <h4>COBERTURAS (DEDUCIBLE)</h4>
 
 
-                  <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL  </p>
-                  <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL    </p>
-                  <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO   </p>
+                  <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL (DEDUCIBLE DE {detallesExtras['CL-Daño-Parcial']}  UF) </p>
+                  <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL (DEDUCIBLE DE {detallesExtras['CL-Daño-Total']}  UF)  </p>
+                  <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO    (DEDUCIBLE DE {detallesExtras['CL-Robo']}  UF)  </p>
 
                 </Grid>
                 <Grid item lg={4}>
@@ -368,10 +279,17 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
             m={1}
           />
 
-          <Button variant="contained" color="primary" style={{ marginLeft: '22px', marginTop: '37px' }} mt={2} >
-            CONTRATAR SEGURO
-                                   </Button>
 
+          <Button
+            style={{ marginLeft: '22px', marginTop: '37px' }}
+            ml={2}
+            color="primary"
+            variant="contained"
+            component={Link}
+            to={"/pages/flujo_compras/" + idCaso}
+          >
+            CONTRATAR SEGURO
+              </Button>
 
 
 
@@ -393,20 +311,20 @@ const ObtenerDetalleCotizacion = (obtenerListaProductos) => {
 
 
 
-
+let idCaso = ''
 
 
 function DetalleCotizacion() {
 
   let data = ObtenerDetalleCotizacion();
-  obtenerListaItems();
 
   let { id } = useParams();
+  idCaso = id;
 
   return (
     <React.Fragment>
       <Helmet title="Invoice Details" />
-
+      <AppBar />
       <Typography variant="h3" gutterBottom display="inline">
         DETALLE COTIZACION
       </Typography>
@@ -418,9 +336,9 @@ function DetalleCotizacion() {
 
       <Divider my={6} />
 
-      {data}
+      { data}
 
-    </React.Fragment>
+    </React.Fragment >
   );
 }
 

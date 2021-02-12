@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 
 import DateFnsUtils from "@date-io/date-fns";
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider as MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { StylesProvider } from "@material-ui/styles";
 import { ThemeProvider } from "styled-components/macro";
@@ -14,6 +14,9 @@ import Routes from "./routes/Routes";
 import Amplify, { Auth } from 'aws-amplify';
 import awsconfig from './aws-exports';
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
+import {
+  esES
+} from '@material-ui/core/locale';
 
 
 Amplify.configure({
@@ -34,7 +37,11 @@ function App() {
 
 
   const theme = useSelector((state) => state.themeReducer);
-
+  const themex = createMuiTheme({
+    palette: {
+      primary: { main: '#1976d2' },
+    },
+  }, esES);
   return (
     <React.Fragment>
       <Helmet

@@ -9,6 +9,7 @@ import moment from 'moment';
 import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
 import SendIcon from "@material-ui/icons/Send";
 import { red, green, orange } from "@material-ui/core/colors";
+import AppBar from "../presentation/Landing/MenuUerBar";
 
 import Helmet from "react-helmet";
 
@@ -262,20 +263,6 @@ const ObtenerDetalleSiniestro = () => {
 
 
                         </Grid>
-
-                        <Grid style={{ marginTop: 22, paddingLeft: 12 }}>
-
-                          <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
-                            RESUMEN
-                          </Typography>
-                          <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
-                            {dataSiniestro['detalle']['descripcion_siniestro']}
-
-                          </Typography>
-
-
-                        </Grid>
-
                         <Grid lg={12} style={{ paddingLeft: 12, marginTop: 32 }}>
 
                           <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
@@ -285,30 +272,30 @@ const ObtenerDetalleSiniestro = () => {
 
 
                           {dataSiniestro['detalle']['tipo_siniestro'] === 'parcial' ? (<Grid lg={12} style={{ display: 'flex' }}><Grid lg={3} style={{ paddingRight: 4 }}>
-                            <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                            <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                              <img style={{ width: '100%', height: '100%' }} style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['EQUIPO']} />
+                              <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['EQUIPO']} />
                             </div>
                           </Grid>
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['SERVICIO_TECNICO']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['SERVICIO_TECNICO']} />
                               </div>
                             </Grid>
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
                               </div>
                             </Grid>
 
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
                               </div>
                             </Grid>
                           </Grid>
@@ -320,24 +307,24 @@ const ObtenerDetalleSiniestro = () => {
                           {dataSiniestro['detalle']['tipo_siniestro'] === 'total' ? (<Grid lg={12} style={{ display: 'flex' }}>
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['SERVICIO_TECNICO']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['SERVICIO_TECNICO']} />
                               </div>
                             </Grid>
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
                               </div>
                             </Grid>
 
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
                               </div>
                             </Grid>
                           </Grid>
@@ -349,24 +336,24 @@ const ObtenerDetalleSiniestro = () => {
                           {dataSiniestro['detalle']['tipo_siniestro'] === 'robo' ? (<Grid lg={12} style={{ display: 'flex' }}>
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['PARTE_POLICIAL']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['PARTE_POLICIAL']} />
                               </div>
                             </Grid>
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['CARNET_DELANTERA']} />
                               </div>
                             </Grid>
 
 
                             <Grid item lg={3} style={{ paddingRight: 4 }}>
-                              <div style={{ height: '140px', paddingRight: 4, border: '1px dashed black' }}>
+                              <div style={{ height: '160px', paddingRight: 4, border: '1px dashed black' }}>
 
-                                <img style={{ width: '100%', height: '100%' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
+                                <img style={{ width: '100%', height: '100%', objectFit: 'cover' }} src={listaImagenesSeguro['CARNET_TRASERA']} />
                               </div>
                             </Grid>
                           </Grid>
@@ -375,6 +362,20 @@ const ObtenerDetalleSiniestro = () => {
 
 
                         </Grid>
+
+                        <Grid style={{ marginTop: 22, paddingLeft: 12 }}>
+
+                          <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
+                            RESUMEN
+                          </Typography>
+                          <textarea style={{ width: '100%', border: 'none' }} rows="18">
+                            {dataSiniestro['detalle']['descripcion_siniestro']}
+
+                          </textarea>
+
+
+                        </Grid>
+
 
 
                       </CardContent>
@@ -885,6 +886,7 @@ function DetalleSiniestro() {
     <React.Fragment>
       <Helmet title="Invoice Details" />
 
+      <AppBar />
       <Typography variant="h3" gutterBottom display="inline">
         FICHA SINIESTRO
       </Typography>

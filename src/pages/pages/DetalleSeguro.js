@@ -10,6 +10,7 @@ import AppBar from "../presentation/Landing/HomeBar";
 import moment from 'moment';
 import * as Yup from "yup";
 import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
+import EllipsisText from "react-ellipsis-text";
 
 import {
   CardContent,
@@ -223,7 +224,7 @@ function RenderDetallePlan(item, subplan) {
   console.log("DETALLE_PLAN", detalle)
 
   let detalleSub = JSON.parse(subplan['data_sub_plan'])
-
+   
 
 
   console.log("DETALLE_SUBPLAN", detalleSub)
@@ -231,11 +232,7 @@ function RenderDetallePlan(item, subplan) {
 
   if (detalle) {
     //setDetallePlan(detalle)
-    setTimeout(() => { 
-
-      cargarDetallesCobertura(subplan)
-
-    },1000)
+    
     return (<Grid>
       <Grid style={{marginTop:22}}>
        
@@ -266,9 +263,9 @@ function RenderDetallePlan(item, subplan) {
 
 
 
-              <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL (DEDUCIBLE DE   UF) </p>
-              <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL (DEDUCIBLE DE   UF)  </p>
-              <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO    (DEDUCIBLE DE   UF)  </p>
+              <p id="cobertura_parcial" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO PARCIAL (DEDUCIBLE DE {detallesExtras && detallesExtras['CL-Daño-Parcial']}  UF) </p>
+              <p id="cobertura_total" style={{ textTransform: 'uppercase', fontSize: '12px' }}>DAÑO TOTAL (DEDUCIBLE DE {detallesExtras && detallesExtras['CL-Daño-Total']}  UF)  </p>
+              <p id="cobertura_perdida" style={{ textTransform: 'uppercase', fontSize: '12px' }}>ROBO    (DEDUCIBLE DE { detallesExtras && detallesExtras['CL-Robo']}  UF)  </p>
 
                 </Grid>
                 <Grid item lg={4}>
@@ -302,63 +299,7 @@ function RenderDetallePlan(item, subplan) {
 }
 
 
-function cargarDetallesCobertura(item) {
-
-  console.log("subPlanItem",item)
-  let listaTemporalCoberturas = []
-
-  let cargarDetalleCob = async function () {
-      listCoberturas.forEach((data) => {
-
-      console.log("cobertura", data)
-      console.log("subplan", item)
-
-      if (data['id_sub_plan'] === item['id']) {
-
-        listaTemporalCoberturas.push(data)
-      }
-    })
-  };
-
-  cargarDetalleCob().then((data) => {
-    console.log("listaPreciosTemporalesFINALES", listaTemporalCoberturas)
-
-
-    listaTemporalCoberturas.find((item) => {
-
-      switch (item['codigo_cobertura']) {
-
-        case "CL-Daño-Total":
-          document.getElementById('cobertura_total').innerHTML = 'DAÑO PARCIAL (DEDUCIBLE DE ' + item['deducible'] + '  UF) ' 
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Daño-Total": item['deducible']
-          }
-          break;
-
-        case "CL-Daño-Parcial":
-          document.getElementById('cobertura_parcial').innerHTML = 'DAÑO TOTAL (DEDUCIBLE DE ' + item['deducible'] + '  UF) ' 
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Daño-Parcial": item['deducible']
-          }
-          break;
-
-        case "CL-Robo":
-          document.getElementById('cobertura_perdida').innerHTML = 'ROBO (DEDUCIBLE DE ' + item['deducible'] + '  UF) ' 
-          detallesExtras = {
-            ...detallesExtras,
-            "CL-Robo": item['deducible']
-          }
-          break;
-
-      }
-    })
-  })
-
-}
-
-
+ 
 
 
 const ObtenerDetallePoliza = () => {
@@ -402,6 +343,10 @@ const ObtenerDetallePoliza = () => {
     console.log("siniestro", dataSiniestro)
 
     itemDatosAsegurado = dataSiniestro['asegurado']
+    let infoExtraUser = dataSiniestro['user']
+    detallesExtras = dataSiniestro['detalles']
+     console.log("detallesExtras")
+
     itemRenderDetallePlan = RenderDetallePlan(dataSiniestro['plan'], dataSiniestro['subplan'])
 
     let listaImagenes = [];
@@ -480,7 +425,7 @@ const ObtenerDetallePoliza = () => {
                         <Grid lg={6}>
 
                           <Typography variant="h5" style={{ textTransform: 'uppercase' }}>
-                            NOMBRE:  {itemDatosAsegurado['nombre_persona'] + ' ' + itemDatosAsegurado['apellido_paterno'] + ' ' + itemDatosAsegurado['apellido_materno']}
+                            NOMBRE:  {itemDatosAsegurado['nombre_persona'] + ' ' + infoExtraUser['apellido_paterno'] + ' ' + infoExtraUser['apellido_materno']}
 
                           </Typography>
                         </Grid>
@@ -995,6 +940,12 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
 
                 let itemTemporal = JSON.parse(item['data_siniestro']);
 
+                let descripcionTx = itemTemporal['detalle']['descripcion_siniestro'];
+             
+                let descripcionFinal = '';
+                if (descripcionTx) { 
+                  descripcionFinal = descripcionTx.substr(0, 80) + "...";
+                }
 
                 console.log(itemTemporal)
 
@@ -1005,7 +956,7 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
 
                   <TableRow style={{ width: '100%' }} key={index}>
                     <TableCell  >
-                      <Typography variant="body2" gutterBottom>
+                      <Typography variant="p" gutterBottom>
                         {item['id']}
                       </Typography>
                     </TableCell>
@@ -1017,17 +968,26 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
                       />
                     </TableCell>
                     <TableCell component="th" scope="row"  >
-                      <Typography variant="body2" gutterBottom>
+                      <Typography variant="p" gutterBottom>
                         {moment(itemTemporal['detalle']['fecha_siniestro']).format("DD-MM-YYYY")}
                       </Typography>
                     </TableCell>
 
 
                     
-                    <TableCell component="th" scope="row" s >
-                      <Typography variant="body2" gutterBottom>
-                        {itemTemporal['detalle']['descripcion_siniestro']}
-                      </Typography>
+                    <TableCell component="th" scope="row"     >
+                      <Grid style={{
+                        padding: 2,
+                       
+                      }}>
+                        
+
+                        <Typography variant="p" gutterBottom>
+
+                          {descripcionFinal}
+                           
+                        </Typography>
+                        </Grid>
                     </TableCell>
 
                     <TableCell component="th" scope="row"  >

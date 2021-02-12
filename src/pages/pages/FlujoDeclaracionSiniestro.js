@@ -14,6 +14,7 @@ import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
 import moment from 'moment';
 
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 import {
 
@@ -81,6 +82,29 @@ const timeOut = (time) => new Promise((res) => setTimeout(res, time));
 
 
 
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'row',
+  },
+  sectionA: {
+    flex: 1,
+    padding: 4,
+    fontSize: 12
+  },
+  sectionB: {
+    flex: 2,
+    padding: 4,
+    fontSize: 12
+
+  },
+  texto: {
+
+    fontSize: 12
+
+  }
+});
+
+
 const initialValues = {
   firstName: "Lucy",
   lastName: "Lavender",
@@ -108,47 +132,58 @@ const validationSchema = Yup.object().shape({
 });
 
 
-function Project({ id, image, title, description, chip }) {
-  return (
-    <Card mb={6}>
-      {image ? <CardMedia image={image} title="Contemplative Reptile" /> : null}
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {title}
-        </Typography>
+const MyDocumentPdf = (props) => {
 
-        {chip}
+  let asegurado = props.object;
+   
+  console.log("SINIESTRO",asegurado)
+   return (<Document>
+    <Page size="A4" style={{ padding: 22 }}>
 
-        <Typography mb={4} component="p">
-          {description}
-        </Typography>
+      <View style={{ width: '100%', paddingTop: 22, marginBottom: 22, textAlign: 'center' }}>
+        <Text style={{ textTransform: 'uppercase' }}>DETALLE POLIZA</Text>
+      </View>
+       
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>FECHA DECLARACION</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>
+
+          </Text>
+         </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>MI CELULAR</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>
+
+          </Text>
+         </View>
+      </View>
+
+      <View style={styles.page} >
+        <View style={styles.sectionA}>
+          <Text>RESUMEN</Text>
+        </View>
+        <View style={styles.sectionB}>
+          <Text style={{ textTransform: 'uppercase' }}>
+          
+          </Text>
+        </View>
+      </View>
+  
+    </Page>
+ 
+
+  </Document>)
 
 
-      </CardContent>
-      <CardActions>
-
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/pages/detalle_seguro') }} size="small" color="primary">
-            COTIZACION
-          </Button>)} />
-
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push('/pages/flujo_compras') }} size="small" color="primary">
-            COMPRAR
-          </Button>
-        )} />
-
-        <Route render={({ history }) => (
-          <Button onClick={() => { history.push(`/pages/seguros/detalles/${id}`) }} size="small" color="primary">
-            DETALLES
-          </Button>
-        )} />
-
-      </CardActions>
-    </Card>
-  );
-}
-
+};
 
 function DefaultDropzone() {
   return (
@@ -554,8 +589,8 @@ function BasicForm() {
                         value={itemDatosAsegurado['descripcion_siniestro']}
                         onBlur={handleBlur}
                         onChange={event => SaveValue("descripcion_siniestro", event.target.value)}
-
                       />
+
                     </Grid>
 
 
@@ -767,16 +802,8 @@ function FlujoTerminadoRender() {
                                   <Typography variant="h2" gutterBottom>
                                     <h2>SINIESTRO DECLARADO</h2>
                                   </Typography>
-                                  <Typography variant="body2" gutterBottom>
-                                    This is the receipt for a payment of $268.85 (USD) you
-                                    made to Material App.
-
-                                   </Typography>
-                                  <Typography variant="body2" gutterBottom>
-
-                                    <a href="#">DESCARGAR PDF</a>
-                                  </Typography>
-
+                                  
+                                
                                 </div>
                               </Grid>
 
