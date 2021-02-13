@@ -1596,7 +1596,7 @@ function BasicForm(props) {
                   <Grid item md={6}>
 
 
-                    <select onChange={event => SaveValue("marca_equipo", event.target.value, setFormInicial)} style={{ width: '100%', height: '40px' }}>
+                    <select value={itemDatosAsegurado['marca_equipo']} onChange={event => SaveValue("marca_equipo", event.target.value, setFormInicial)} style={{ width: '100%', height: '40px' }}>
                       <option > SELECCIONAR MARCA </option>
                       <option value="samsung"> SAMSUNG </option>
                     </select>
@@ -1606,7 +1606,7 @@ function BasicForm(props) {
                   <Grid item md={6}>
 
 
-                    <select onChange={event => SaveValue("modelo_equipo", event.target.value, setFormInicial)} style={{ width: '100%', height: '40px' }}>
+                    <select value={itemDatosAsegurado['modelo_equipo']} onChange={event => SaveValue("modelo_equipo", event.target.value, setFormInicial)} style={{ width: '100%', height: '40px' }}>
                       <option > SELECCIONAR MODELO </option>
 
 
@@ -2520,7 +2520,7 @@ function getStepContent(step, fnClickButtonNext, fnCompleteStep, formInicial, se
        setQImagen('banner_10_off.png')
 
 
-      txBotonContinuar = 'CONTRATAR'
+      txBotonContinuar = 'COMPLETAR INFORMACION'
 
       return FormularioAnexos(formInicial, setFormInicial, fnClickButtonNext, fnCompleteStep);
 

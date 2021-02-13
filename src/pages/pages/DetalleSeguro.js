@@ -34,13 +34,13 @@ import {
   TableRow,
   Typography as MuiTypography,
 } from "@material-ui/core";
-
+import AddIcon from '@material-ui/icons/Add';
 import {
   Done as DoneIcon,
   Face as FaceIcon,
   NewReleases,
   Notifications,
-  BurstMode as BurstModeIcon,
+   BurstMode as BurstModeIcon,
   Description as DescriptionIcon,
   TagFaces as TagFacesIcon,
 } from "@material-ui/icons";
@@ -1072,6 +1072,11 @@ function RenderPantall() {
             label="POLIZA"
             onClick={handleClickFicha}
             m={1}
+          />
+          <Chip
+            avatar={<AddIcon />}
+            label="NUEVO SINIESTRO"
+            component="a" href="/pages/siniestro_global" clickable            m={1}
           />
 
           <Chip

@@ -1026,13 +1026,19 @@ function FlujoTerminadoRender() {
                                   
                           
 
-                                  
+                                  <Grid item lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                                    <Button
+                                      ml={2}
+                                      color="inherit"
+                                      component={Link}
+                                      to="/pages/mi_cuenta"
+                                    >
+                                      Ir a mi cuenta
+                </Button>
+                                  </Grid>
 
 
-                                  <Typography variant="body2" gutterBottom>
-
-                                     <a href="/pages/mi_cuenta"> Ir a mi cuenta</a>
-                                  </Typography>
+                                 
                                 </div>
                               </Grid>
 

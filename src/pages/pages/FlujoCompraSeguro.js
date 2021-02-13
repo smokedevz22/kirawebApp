@@ -108,10 +108,10 @@ let listPlanes = [];
 let listSubPlanes = [];
 let listCoberturas = [];
 
-let itemRender = 'cargando';
-let itemRenderSubPlan = 'cargando';
-let itemRenderDetallePlan = 'cargando'
-let itemRenderDetalleSubPlan = 'cargando'
+let itemRender = '';
+let itemRenderSubPlan = '';
+let itemRenderDetallePlan = ''
+let itemRenderDetalleSubPlan = ''
 
 let planSeleccionado = undefined;
 let subPlanSeleccionado = undefined;
@@ -1178,7 +1178,7 @@ const ListaRender = (functionRenderDetalle) => {
     </select >
   } else {
 
-    return productos && 'cargando...'
+    return productos && <Grid item lg={12} style={{display:'flex',justifyContent:'center'}}> <CircularProgress /></Grid>
 
   }
 }
@@ -1258,7 +1258,7 @@ listaSubPlanes.sort(compare)
     </select >
   } else {
 
-    return productos && 'cargando...'
+    return productos && ''
 
   }
 }
@@ -1838,11 +1838,16 @@ function FlujoTerminadoRender() {
                                 </Grid>
                           
                       
-                      <Typography variant="body2" gutterBottom>
-
-                        <a href="/pages/login"> Ir a mi cuenta </a>
-                      </Typography>
-
+                      <Grid item  lg={12} style={{display:'flex',justifyContent:'center'}}>
+                        <Button
+                          ml={2}
+                          color="inherit"
+                          component={Link}
+                          to="/pages/mi_cuenta"
+                        >
+                          Ir a mi cuenta
+                </Button>
+                      </Grid>
 
                             </Grid>
                           </CardContent>

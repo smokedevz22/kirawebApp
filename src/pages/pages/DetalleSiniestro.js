@@ -13,6 +13,8 @@ import AppBar from "../presentation/Landing/MenuUerBar";
 
 import Helmet from "react-helmet";
 
+import MailIcon from '@material-ui/icons/Mail';
+import CallIcon from '@material-ui/icons/Call';
 
 import {
   CardContent,
@@ -368,8 +370,13 @@ const ObtenerDetalleSiniestro = () => {
                           <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
                             RESUMEN
                           </Typography>
-                          <textarea style={{ width: '100%', border: 'none' }} rows="18">
-                            {dataSiniestro['detalle']['descripcion_siniestro']}
+
+
+                          <textarea variant="body2" disabled style={{ width: '100%', border: 'none', background: 'white' }} rows="18">
+                            <Typography style={{ marginTop: 6 }} variant="body2" gutterBottom  >
+
+                              {dataSiniestro['detalle']['descripcion_siniestro']}
+                            </Typography>
 
                           </textarea>
 
@@ -827,8 +834,18 @@ function RenderPantall() {
               onClick={handleClickNotificaciones}
               m={1}
             />
-
-
+            <Chip
+              avatar={<CallIcon />}
+              label="LLAMAR"
+              // onClick={handleClickNotificaciones}
+              m={1}
+            />
+            <Chip
+              avatar={<MailIcon />}
+              label="ENVIAR SINIESTRO"
+              //onClick={handleClickNotificaciones}
+              m={1}
+            />
 
 
           </Grid>

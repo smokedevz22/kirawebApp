@@ -5,6 +5,7 @@ import { Route } from 'react-router-dom'
 import AppBar from "../presentation/Landing/HomeBar";
 import { API } from "aws-amplify";
 import { Auth } from 'aws-amplify';
+import moment from 'moment';
 
 import Helmet from "react-helmet";
 
@@ -488,7 +489,15 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
           let itemTemporal = JSON.parse(item['data_siniestro']);
 
 
+          let data = ''
           console.log(itemTemporal)
+          if (itemTemporal['detalle']['descripcion_siniestro'].length > 60) {
+            data = itemTemporal['detalle']['descripcion_siniestro'].substring(0, 60) + "...";
+          }
+          else {
+            data = itemTemporal['detalle']['descripcion_siniestro']
+          }
+
 
           return (<TableRow style={{ width: '100%' }} key={index}>
             <TableCell  >
@@ -501,12 +510,13 @@ const ListaRenderSiniestros = (obtenerListaProductos) => {
 
             <TableCell component="th" scope="row"  >
               <Typography variant="body2" gutterBottom>
-                {itemTemporal['detalle']['fecha_siniestro']}
+                {moment(itemTemporal['detalle']['fecha_siniestro']).format("DD/MM/YYYY")
+                }
               </Typography>
             </TableCell>
             <TableCell component="th" scope="row" s >
               <Typography variant="body2" gutterBottom>
-                {itemTemporal['detalle']['descripcion_siniestro']}
+                {data}
               </Typography>
             </TableCell>
 
