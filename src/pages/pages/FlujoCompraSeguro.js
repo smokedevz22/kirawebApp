@@ -1837,17 +1837,18 @@ function FlujoTerminadoRender() {
  
                                 </Grid>
                           
-                      
-                      <Grid item  lg={12} style={{display:'flex',justifyContent:'center'}}>
+                         <Grid item  lg={12} style={{display:'flex',justifyContent:'center'}}>
                         <Button
                           ml={2}
-                          color="inherit"
+                           variant="contained"
+                          color="primary"
                           component={Link}
                           to="/pages/mi_cuenta"
                         >
                           Ir a mi cuenta
                 </Button>
                       </Grid>
+                   
 
                             </Grid>
                           </CardContent>

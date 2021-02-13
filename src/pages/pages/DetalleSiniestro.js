@@ -834,12 +834,7 @@ function RenderPantall() {
               onClick={handleClickNotificaciones}
               m={1}
             />
-            <Chip
-              avatar={<CallIcon />}
-              label="LLAMAR"
-              // onClick={handleClickNotificaciones}
-              m={1}
-            />
+
             <Chip
               avatar={<MailIcon />}
               label="ENVIAR SINIESTRO"

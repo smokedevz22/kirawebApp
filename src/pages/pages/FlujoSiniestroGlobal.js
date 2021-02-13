@@ -59,6 +59,7 @@ import { color, spacing } from "@material-ui/system";
 import { Alert as MuiAlert } from "@material-ui/lab";
 import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
 import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 
 
 moment.locale("es");
@@ -678,13 +679,15 @@ function BasicForm() {
 
                       <h4>Describa lo ocurrido</h4>
 
-                      <textarea
+                      <TextareaAutosize
                         rows="12"
                         placeholder="Ingrese descripcion de lo ocurrido..."
-                        style={{ width: '100%', padding:12 }}
+                        style={{ width: '100%', padding: 12, fontSize: 13, border: 'none', width:'100%'}}
                         name="descripcion_siniestro"
                         fullWidth
-                        value={itemDatosAsegurado['descripcion_siniestro']}
+                        style={{fontSize:16}}
+                        variant="body2"
+                        defaultValue={itemDatosAsegurado['descripcion_siniestro']}
                         onBlur={handleBlur}
                         onChange={event => SaveValue("descripcion_siniestro", event.target.value)}
 
@@ -920,10 +923,13 @@ function ResumenDetail() {
                                 <Typography style={{ marginRight: 4 }} variant="h6" gutterBottom  >
                                   RESUMEN
                           </Typography>
-                                <textarea disabled readonly rows="14" style={{ marginTop: 6, width:'100%' , border:'none', background:'transparent'}}   >
-                                  {itemDatosAsegurado['descripcion_siniestro']}
+                                <TextareaAutosize
+                                  disabled readonly rows="14"
+                    
+                                  style={{ marginTop: 6, width: '100%', border: 'none', background: 'transparent', fontSize:16}}  
+                                  defaultValue={itemDatosAsegurado['descripcion_siniestro']}
 
-                                </textarea>
+                               /> 
 
 
                               </Grid>
@@ -970,9 +976,12 @@ function FlujoTerminadoRender() {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
+
       onSubmit={handleSubmit}
     >
       {({
+
+        
         errors,
         handleBlur,
         handleChange,
@@ -1029,12 +1038,14 @@ function FlujoTerminadoRender() {
                                   <Grid item lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
                                     <Button
                                       ml={2}
-                                      color="inherit"
-                                      component={Link}
+                                       component={Link}
+                                      variant="contained"
+                                      color="primary"
+
                                       to="/pages/mi_cuenta"
                                     >
-                                      Ir a mi cuenta
-                </Button>
+                                     IR A MI CUENTA
+                                   </Button>
                                   </Grid>
 
 
